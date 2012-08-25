@@ -1,0 +1,7 @@
+name: Minecraft Player Killer
+main: me.stutiguias.mcpk.Mcpk
+version: 0.0.7
+author: Stutiguias
+commands:
+permissions:
+   
