@@ -14,14 +14,21 @@ import me.stutiguias.mcpk.PK;
  */
 public class MySql {
     		
+    public String dbHost;
+    public String dbPort;
+    public String dbDatabase;
+    
     public MySql(String dbHost, String dbUser, String dbPass, String dbPort, String dbDatabase) {
         try {
+             this.dbHost = dbHost;
+             this.dbDatabase = dbDatabase;
+             this.dbPort = dbPort;
              new JDCConnectionDriver("com.mysql.jdbc.Driver", "jdbc:mysql://"+ dbHost +":"+ dbPort +"/"+ dbDatabase, dbUser, dbPass);
         }catch(Exception e) { }
     }
     
     public Connection GetConnection() throws SQLException {
-         return DriverManager.getConnection("jdbc:mysql://localhost:3306/minecraft");
+         return DriverManager.getConnection("jdbc:mysql://"+ dbHost +":"+ dbPort +"/" + dbDatabase);
     }
     
     private boolean tableExists(String tableName) {
