@@ -13,7 +13,8 @@ import me.stutiguias.mcpk.PK;
  * @author Daniel
  */
 public class MySql {
-    		
+            
+    private McpkConnectionPool pool;
     public String dbHost;
     public String dbPort;
     public String dbDatabase;
@@ -23,17 +24,22 @@ public class MySql {
              this.dbHost = dbHost;
              this.dbDatabase = dbDatabase;
              this.dbPort = dbPort;
-             new JDCConnectionDriver("com.mysql.jdbc.Driver", "jdbc:mysql://"+ dbHost +":"+ dbPort +"/"+ dbDatabase, dbUser, dbPass);
+             pool = new McpkConnectionPool("com.mysql.jdbc.Driver", "jdbc:mysql://"+ dbHost +":"+ dbPort +"/"+ dbDatabase, dbUser, dbPass);
         }catch(Exception e) { }
     }
     
-    public Connection GetConnection() throws SQLException {
-         return DriverManager.getConnection("jdbc:mysql://"+ dbHost +":"+ dbPort +"/" + dbDatabase);
+    public McpkConnection GetConnection() throws SQLException {
+         try {
+            return pool.getConnection();
+        } catch (SQLException e) {
+          //  core.getPluginLogger().severe("Unable to connect to the database: "+e.getMessage());
+            return null;
+        } 
     }
     
     private boolean tableExists(String tableName) {
 		boolean exists = false;
-                Connection conn = null;
+                McpkConnection conn = null;
                 PreparedStatement st = null;
                 ResultSet rs = null;
 		try {
@@ -54,7 +60,7 @@ public class MySql {
     }
     
     private void executeRawSQL(String sql) {
-            Connection conn = null;
+            McpkConnection conn = null;
             Statement st = null;
             ResultSet rs = null;
 
@@ -70,7 +76,7 @@ public class MySql {
             }
     }
     
-    private void closeResources(Connection conn, Statement st, ResultSet rs) {
+    private void closeResources(McpkConnection conn, Statement st, ResultSet rs) {
             if (null != rs) {
                     try {
                             rs.close();
@@ -85,7 +91,7 @@ public class MySql {
             }
             if (null != conn) {
                     try {
-                            conn.close();
+                            conn.closeConnection();
                     } catch (SQLException e) {
                     }
             }
@@ -99,7 +105,7 @@ public class MySql {
     }
     
     public void createPlayer(String player, String pass, int pkCount, Date newbieCount) {
-            Connection conn = null;
+            McpkConnection conn = null;
             PreparedStatement st = null;
             ResultSet rs = null;
 
@@ -122,7 +128,7 @@ public class MySql {
     public PK getPlayer(String player) {
             PK _Player = null;
 
-            Connection conn = null;
+            McpkConnection conn = null;
             PreparedStatement st = null;
             ResultSet rs = null;
 
