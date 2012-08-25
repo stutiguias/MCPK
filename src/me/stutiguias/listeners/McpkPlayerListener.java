@@ -92,9 +92,9 @@ public class McpkPlayerListener implements Listener {
         }catch(Exception e){ }
         if(pkPlayer == null) {
             Date dt = now();
-            dt = addDays(dt, 2);
+            dt = addDays(dt, plugin.newbieprotectdays);
             plugin.DataBase.createPlayer(pl.getName(), "0", 0,dt); 
-            pl.sendMessage("Você esta protegido por até 2 dias ! Aproveite");
+            pl.sendMessage(plugin.protecmsg);
         }
         
     }

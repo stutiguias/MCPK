@@ -27,7 +27,8 @@ public class Mcpk extends JavaPlugin{
     public Map<String, PK> IsPk = new HashMap<String, PK>();
    
     public String msg;
-    
+    public int newbieprotectdays;
+    public String protecmsg;
     public boolean alertaboutpk;
     public int time;
     public int radius;
@@ -51,6 +52,8 @@ public class Mcpk extends JavaPlugin{
         radius = getConfig().getInt("Basic.Radius");
         long AlertPKFrequency = getConfig().getLong("Basic.AlertPKFrequency");
         msg = getConfig().getString("Basic.AlertMessage");
+        newbieprotectdays = getConfig().getInt("Protect.NewBieProtectDays");
+        protecmsg = getConfig().getString("Protect.Message");
         String dbHost = getConfig().getString("MySQL.Host");
         String dbUser = getConfig().getString("MySQL.Username");
         String dbPass = getConfig().getString("MySQL.Password");
@@ -100,6 +103,8 @@ public class Mcpk extends JavaPlugin{
                 getConfig().addDefault("Basic.Radius", 10);
                 getConfig().addDefault("Basic.AlertPKFrequency", 30L);
                 getConfig().addDefault("Basic.AlertMessage", "%player% is PK and is NEAR YOU");
+                getConfig().addDefault("Protect.NewBieProtectDays",2);
+                getConfig().addDefault("Protect.Message", "You r protect for 2 days! Have a nice day!");
                 pkmsg = new HashMap<Integer, String>();
                 pkmsg.put(2, "%player% first message");
                 pkmsg.put(3, "%player% second message");
