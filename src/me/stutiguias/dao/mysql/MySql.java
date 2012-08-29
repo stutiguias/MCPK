@@ -90,10 +90,7 @@ public class MySql {
                     }
             }
             if (null != conn) {
-                    try {
-                            conn.closeConnection();
-                    } catch (SQLException e) {
-                    }
+                   conn.close();
             }
     }
     
