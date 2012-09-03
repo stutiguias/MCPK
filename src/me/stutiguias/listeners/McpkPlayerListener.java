@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import me.stutiguias.mcpk.Mcpk;
 import me.stutiguias.mcpk.PK;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -42,7 +43,7 @@ public class McpkPlayerListener implements Listener {
             for(Map.Entry<Integer,String> announcekills : plugin.pkmsg.entrySet())
             {
                if(plugin.IsPk.get(killer).getKills() == announcekills.getKey()) { 
-                    plugin.getServer().broadcastMessage(announcekills.getValue().replace("%player%", killer));
+                    plugin.getServer().broadcastMessage(parseColor(announcekills.getValue().replace("%player%", killer)));
                }
             }
         }else{
@@ -53,6 +54,13 @@ public class McpkPlayerListener implements Listener {
         }
         
     
+    }
+    
+    private String parseColor(String message) {
+	 for (ChatColor color : ChatColor.values()) {
+            message = message.replaceAll(String.format("&%c", color.getChar()), color.toString());
+        }
+        return message;
     }
     
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)

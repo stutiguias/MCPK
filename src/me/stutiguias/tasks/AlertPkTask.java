@@ -5,6 +5,7 @@
 package me.stutiguias.tasks;
 
 import me.stutiguias.mcpk.Mcpk;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 /**
@@ -38,7 +39,7 @@ public class AlertPkTask implements Runnable {
                             (playerZ > PkPlayerZ - (double)plugin.radius) &&
                             (player.getName().equals(key) == false) 
                         ) {
-                            player.sendMessage(plugin.msg.replace("%player%", key));
+                            player.sendMessage(parseColor(plugin.msg.replace("%player%", key)));
                         }
                 }
             }
@@ -50,4 +51,10 @@ public class AlertPkTask implements Runnable {
         
     }
     
+    private String parseColor(String message) {
+	 for (ChatColor color : ChatColor.values()) {
+            message = message.replaceAll(String.format("&%c", color.getChar()), color.toString());
+        }
+        return message;
+    }
 }
