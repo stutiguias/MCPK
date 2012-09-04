@@ -1,11 +1,11 @@
 package me.stutiguias.mcpk;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import me.stutiguias.dao.mysql.MySql;
+import me.stutiguias.listeners.MCPKCommandListener;
 import me.stutiguias.listeners.McpkPlayerListener;
 import me.stutiguias.tasks.AlertPkTask;
 import org.bukkit.plugin.PluginManager;
@@ -27,6 +27,7 @@ public class Mcpk extends JavaPlugin{
     public Map<String, PK> IsPk = new HashMap<String, PK>();
    
     public String msg;
+    public Boolean usenewbieprotect;
     public int newbieprotectdays;
     public String protecmsg;
     public boolean alertaboutpk;
@@ -54,12 +55,14 @@ public class Mcpk extends JavaPlugin{
         msg = getConfig().getString("Basic.AlertMessage");
         newbieprotectdays = getConfig().getInt("Protect.NewBieProtectDays");
         protecmsg = getConfig().getString("Protect.Message");
+        usenewbieprotect = getConfig().getBoolean("Protect.UseNewBieProtect");
         String dbHost = getConfig().getString("MySQL.Host");
         String dbUser = getConfig().getString("MySQL.Username");
         String dbPass = getConfig().getString("MySQL.Password");
         String dbPort = getConfig().getString("MySQL.Port");
         String dbDatabase = getConfig().getString("MySQL.Database");
         getMessages();
+        getCommand("mcpk").setExecutor(new MCPKCommandListener(this));
         if(!dbPass.equalsIgnoreCase("password123")) {
           DataBase = new MySql(dbHost,dbUser,dbPass,dbPort,dbDatabase);
           DataBase.InitTables();
@@ -86,11 +89,19 @@ public class Mcpk extends JavaPlugin{
         }
         return pkmsg;
     }
+    
     @Override
     public void onDisable() {
 		getServer().getScheduler().cancelTasks(this);
 		log.log(Level.INFO, logPrefix + " Disabled.");
 	}
+    
+    public void OnReload() {
+        this.reloadConfig();
+        saveConfig();
+        getServer().getPluginManager().disablePlugin(this);
+        getServer().getPluginManager().enablePlugin(this);
+    }
     
     private void initConfig() {
 		getConfig().addDefault("MySQL.Host", "localhost");
@@ -103,8 +114,9 @@ public class Mcpk extends JavaPlugin{
                 getConfig().addDefault("Basic.Radius", 10);
                 getConfig().addDefault("Basic.AlertPKFrequency", 30L);
                 getConfig().addDefault("Basic.AlertMessage", "%player% is PK and is NEAR YOU");
+                getConfig().addDefault("Protect.UseNewBieProtect",true);
                 getConfig().addDefault("Protect.NewBieProtectDays",2);
-                getConfig().addDefault("Protect.Message", "You r protect for 2 days! Have a nice day!");
+                getConfig().addDefault("Protect.Message", "You r protect for %d% days! Until %date%!");
                 pkmsg = new HashMap<Integer, String>();
                 pkmsg.put(2, "%player% first message");
                 pkmsg.put(3, "%player% second message");

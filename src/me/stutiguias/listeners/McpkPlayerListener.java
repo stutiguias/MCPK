@@ -4,7 +4,6 @@ package me.stutiguias.listeners;
 import java.sql.Date;
 import java.util.Calendar;
 import java.util.Map;
-import java.util.logging.Level;
 import me.stutiguias.mcpk.Mcpk;
 import me.stutiguias.mcpk.PK;
 import org.bukkit.ChatColor;
@@ -65,6 +64,7 @@ public class McpkPlayerListener implements Listener {
     
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onDamage(EntityDamageEvent event){
+      if(!plugin.usenewbieprotect) return;
       if(event instanceof EntityDamageByEntityEvent) {
         EntityDamageByEntityEvent EDE = (EntityDamageByEntityEvent)event;
         Entity attacker;
@@ -97,12 +97,20 @@ public class McpkPlayerListener implements Listener {
         PK pkPlayer = null;
         try {
           pkPlayer = plugin.DataBase.getPlayer(pl.getName());
-        }catch(Exception e){ }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
         if(pkPlayer == null) {
             Date dt = now();
-            dt = addDays(dt, plugin.newbieprotectdays);
-            plugin.DataBase.createPlayer(pl.getName(), "0", 0,dt); 
-            pl.sendMessage(plugin.protecmsg);
+            if(!plugin.usenewbieprotect) {
+                plugin.DataBase.createPlayer(pl.getName(), "0", 0,dt); 
+                Mcpk.log.info("[MCPK] New Player Found " + pl.getName());
+            }else{
+                dt = addDays(dt, plugin.newbieprotectdays);
+                plugin.DataBase.createPlayer(pl.getName(), "0", 0,dt); 
+                pl.sendMessage(plugin.protecmsg.replace("%d%",String.valueOf(plugin.newbieprotectdays)).replace("%date%",dt.toString()));
+                Mcpk.log.info("[MCPK] New Player Found " + pl.getName() + " is protected until " + dt.toString());
+            }
         }
         
     }
