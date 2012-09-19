@@ -30,8 +30,8 @@ public class AlertPkTask implements Runnable {
                 {
                     Player pkPlayer =  plugin.getServer().getPlayer(key);
                     if(pkPlayer != null) {
-                        Double PkPlayerX = plugin.getServer().getPlayer(key).getLocation().getX();
-                        Double PkPlayerZ = plugin.getServer().getPlayer(key).getLocation().getZ();
+                        Double PkPlayerX = pkPlayer.getLocation().getX();
+                        Double PkPlayerZ = pkPlayer.getLocation().getZ();
                         for (Player player : playerList) {
                                 Double playerX = player.getLocation().getX();
                                 Double playerZ = player.getLocation().getZ();
