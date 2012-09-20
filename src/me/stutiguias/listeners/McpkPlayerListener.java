@@ -74,7 +74,12 @@ public class McpkPlayerListener implements Listener {
         }else {
            attacker = EDE.getDamager();
         }
-        Entity defender = EDE.getEntity();
+        Entity defender;
+        try {
+            defender = EDE.getEntity();
+        }catch(Exception e) {
+            return;
+        }
         
         if(attacker instanceof Player && defender instanceof Player) {
             Player df = (Player)defender;
