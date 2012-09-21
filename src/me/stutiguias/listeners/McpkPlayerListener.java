@@ -66,32 +66,37 @@ public class McpkPlayerListener implements Listener {
     public void onDamage(EntityDamageEvent event){
       if(!plugin.usenewbieprotect) return;
       if(event instanceof EntityDamageByEntityEvent) {
-        EntityDamageByEntityEvent EDE = (EntityDamageByEntityEvent)event;
         Entity attacker;
-        if(event.getCause() == DamageCause.PROJECTILE)
-        {
-           attacker = ((Projectile) EDE.getDamager()).getShooter();
-        }else {
-           attacker = EDE.getDamager();
-        }
         Entity defender;
-        try {
-            defender = EDE.getEntity();
-        }catch(Exception e) {
-            return;
-        }
         
-        if(attacker instanceof Player && defender instanceof Player) {
-            Player df = (Player)defender;
-            Player at = (Player)attacker;
-            PK dfPkPlayer = plugin.DataBase.getPlayer(df.getName());
-            PK atPkPlayer = plugin.DataBase.getPlayer(at.getName());
-            Date dt = now();
-            if(dt.before(dfPkPlayer.getNewBie()) || dt.before(atPkPlayer.getNewBie())) {
-                event.setCancelled(true);
-                event.setDamage(0);
+        try {
+            EntityDamageByEntityEvent EDE = (EntityDamageByEntityEvent)event;
+            if(event.getCause() == DamageCause.PROJECTILE)
+            {
+                attacker = ((Projectile) EDE.getDamager()).getShooter();
+            }else {
+                attacker = EDE.getDamager();
             }
+            defender = EDE.getEntity();
+            if(attacker == null) return;
+            if(defender == null) return;
+            if(attacker instanceof Player && defender instanceof Player) {
+                Player df = (Player)defender;
+                Player at = (Player)attacker;
+                PK dfPkPlayer = plugin.DataBase.getPlayer(df.getName());
+                PK atPkPlayer = plugin.DataBase.getPlayer(at.getName());
+                Date dt = now();
+                if(dfPkPlayer == null) return;
+                if(atPkPlayer == null) return;
+                if(dt.before(dfPkPlayer.getNewBie()) || dt.before(atPkPlayer.getNewBie())) {
+                    event.setCancelled(true);
+                    event.setDamage(0);
+                }
+            }
+        }catch(Exception e) {
+            Mcpk.log.warning("[MCPK]" + e.getMessage());
         }
+
          
       }
     }
