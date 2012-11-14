@@ -1,6 +1,8 @@
 package me.stutiguias.mcpk;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,6 +35,7 @@ public class Mcpk extends JavaPlugin{
     public boolean alertaboutpk;
     public int time;
     public int radius;
+    public int turnpk;
     public HashMap<Integer, String> pkmsg = new HashMap<Integer, String>();
     
     public Mcpk(){
@@ -48,11 +51,14 @@ public class Mcpk extends JavaPlugin{
         log.log(Level.INFO,logPrefix + " initializing....");
 
 	initConfig();
+        
         alertaboutpk = getConfig().getBoolean("Basic.AlertAboutPK");
-        time = getConfig().getInt("Basic.Time");
+        time = getConfig().getInt("Basic.Time") * 1000;
         radius = getConfig().getInt("Basic.Radius");
+        turnpk = getConfig().getInt("Basic.HowMuchForTurnPk");
         long AlertPKFrequency = getConfig().getLong("Basic.AlertPKFrequency");
         msg = getConfig().getString("Basic.AlertMessage");
+        
         newbieprotectdays = getConfig().getInt("Protect.NewBieProtectDays");
         protecmsg = getConfig().getString("Protect.Message");
         usenewbieprotect = getConfig().getBoolean("Protect.UseNewBieProtect");
@@ -85,7 +91,7 @@ public class Mcpk extends JavaPlugin{
         pkmsg = new HashMap<Integer, String>();
         for (String key : getConfig().getConfigurationSection("Message.").getKeys(false)){
           pkmsg.put(Integer.parseInt(key), getConfig().getString("Message." + key));
-          log.log(Level.INFO, logPrefix + "Kill Number " + key + " set to " + getConfig().getString("Message." + key));
+          log.log(Level.INFO, logPrefix + "Kill Number {0} set to {1}", new Object[]{key, getConfig().getString("Message." + key)});
         }
         return pkmsg;
     }
@@ -106,13 +112,14 @@ public class Mcpk extends JavaPlugin{
     private void initConfig() {
 		getConfig().addDefault("MySQL.Host", "localhost");
 		getConfig().addDefault("MySQL.Username", "root");
-		getConfig().addDefault("MySQL.Password", "password123");
+		getConfig().addDefault("MySQL.Password", "password_here");
 		getConfig().addDefault("MySQL.Port", "3306");
 		getConfig().addDefault("MySQL.Database", "minecraft");
                 getConfig().addDefault("Basic.AlertAboutPK", true);
-		getConfig().addDefault("Basic.Time", 5000);
+		getConfig().addDefault("Basic.Time", 25);
                 getConfig().addDefault("Basic.Radius", 10);
                 getConfig().addDefault("Basic.AlertPKFrequency", 30L);
+                getConfig().addDefault("Basic.HowMuchForTurnPk", 3);
                 getConfig().addDefault("Basic.AlertMessage", "%player% is PK and is NEAR YOU");
                 getConfig().addDefault("Protect.UseNewBieProtect",true);
                 getConfig().addDefault("Protect.NewBieProtectDays",2);

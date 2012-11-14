@@ -4,7 +4,11 @@
  */
 package me.stutiguias.tasks;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import me.stutiguias.mcpk.Mcpk;
+import me.stutiguias.mcpk.PK;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -24,9 +28,20 @@ public class AlertPkTask implements Runnable {
     public void run() {
       try{
             Player[] playerList = plugin.getServer().getOnlinePlayers();
-            for(String key : plugin.IsPk.keySet())
+            
+            for(Iterator it = plugin.IsPk.entrySet().iterator();it.hasNext();)
             {         
-                if(plugin.getServer().getOnlinePlayers().length > 0)
+                // key=value separator this by Map.Entry to get key and value
+                Map.Entry m =(Map.Entry)it.next();
+              
+                // getKey is used to get key of Map
+                String key=(String)m.getKey();
+
+                // getValue is used to get value of key in Map
+                PK value=(PK)m.getValue();
+                System.out.print(plugin.turnpk);
+                System.out.print(value.getKills());
+                if(plugin.getServer().getOnlinePlayers().length > 0 && value.getKills() >= plugin.turnpk)
                 {
                     Player pkPlayer =  plugin.getServer().getPlayer(key);
                     if(pkPlayer != null) {
@@ -47,12 +62,13 @@ public class AlertPkTask implements Runnable {
                     }
                 }
 
-                if(plugin.getCurrentMilli() > plugin.IsPk.get(key).getTime())
+                if(plugin.getCurrentMilli() > plugin.IsPk.get(key).getTime()) {
                     plugin.IsPk.remove(key);
+                }
 
             }
       } catch (Exception ex) {
-         
+         ex.printStackTrace();
       }        
         
         

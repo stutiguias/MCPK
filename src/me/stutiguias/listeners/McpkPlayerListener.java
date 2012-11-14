@@ -4,6 +4,7 @@ package me.stutiguias.listeners;
 import java.sql.Date;
 import java.util.Calendar;
 import java.util.Map;
+import java.util.logging.Level;
 import me.stutiguias.mcpk.Mcpk;
 import me.stutiguias.mcpk.PK;
 import org.bukkit.ChatColor;
@@ -34,7 +35,9 @@ public class McpkPlayerListener implements Listener {
     
     @EventHandler(priority = EventPriority.NORMAL)
     public void PlayerDeath(PlayerDeathEvent event) {
-        if(!(event.getEntity().getKiller() instanceof Player)) return;
+        if(!(event.getEntity().getKiller() instanceof Player)) {
+            return;
+        }
         String killer = event.getEntity().getKiller().getName();
         if(plugin.IsPk.containsKey(killer)){
             plugin.IsPk.get(killer).setTime(plugin.getCurrentMilli() + plugin.time);
@@ -64,7 +67,9 @@ public class McpkPlayerListener implements Listener {
     
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onDamage(EntityDamageEvent event){
-      if(!plugin.usenewbieprotect) return;
+      if(!plugin.usenewbieprotect) {
+            return;
+        }
       if(event instanceof EntityDamageByEntityEvent) {
         Entity attacker;
         Entity defender;
@@ -78,23 +83,31 @@ public class McpkPlayerListener implements Listener {
                 attacker = EDE.getDamager();
             }
             defender = EDE.getEntity();
-            if(attacker == null) return;
-            if(defender == null) return;
+            if(attacker == null) {
+                return;
+            }
+            if(defender == null) {
+                return;
+            }
             if(attacker instanceof Player && defender instanceof Player) {
                 Player df = (Player)defender;
                 Player at = (Player)attacker;
                 PK dfPkPlayer = plugin.DataBase.getPlayer(df.getName());
                 PK atPkPlayer = plugin.DataBase.getPlayer(at.getName());
                 Date dt = now();
-                if(dfPkPlayer == null) return;
-                if(atPkPlayer == null) return;
+                if(dfPkPlayer == null) {
+                    return;
+                }
+                if(atPkPlayer == null) {
+                    return;
+                }
                 if(dt.before(dfPkPlayer.getNewBie()) || dt.before(atPkPlayer.getNewBie())) {
                     event.setCancelled(true);
                     event.setDamage(0);
                 }
             }
         }catch(Exception e) {
-            Mcpk.log.warning("[MCPK]" + e.getMessage());
+            Mcpk.log.log(Level.WARNING, "[MCPK] {0}", e.getMessage());
         }
 
          
@@ -108,18 +121,18 @@ public class McpkPlayerListener implements Listener {
         try {
           pkPlayer = plugin.DataBase.getPlayer(pl.getName());
         }catch(Exception e){
-            e.printStackTrace();
+            Mcpk.log.log(Level.WARNING, "[MCPK] Error get Player from Database: {0}", e.getMessage());
         }
         if(pkPlayer == null) {
             Date dt = now();
             if(!plugin.usenewbieprotect) {
                 plugin.DataBase.createPlayer(pl.getName(), "0", 0,dt); 
-                Mcpk.log.info("[MCPK] New Player Found " + pl.getName());
+                Mcpk.log.log(Level.INFO, "[MCPK] New Player Found {0}", pl.getName());
             }else{
                 dt = addDays(dt, plugin.newbieprotectdays);
                 plugin.DataBase.createPlayer(pl.getName(), "0", 0,dt); 
                 pl.sendMessage(plugin.protecmsg.replace("%d%",String.valueOf(plugin.newbieprotectdays)).replace("%date%",dt.toString()));
-                Mcpk.log.info("[MCPK] New Player Found " + pl.getName() + " is protected until " + dt.toString());
+                Mcpk.log.log(Level.INFO, "[MCPK] New Player Found {0} is protected until {1}", new Object[]{pl.getName(), dt.toString()});
             }
         }
         
