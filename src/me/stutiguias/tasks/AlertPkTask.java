@@ -39,8 +39,6 @@ public class AlertPkTask implements Runnable {
 
                 // getValue is used to get value of key in Map
                 PK value=(PK)m.getValue();
-                System.out.print(plugin.turnpk);
-                System.out.print(value.getKills());
                 if(plugin.getServer().getOnlinePlayers().length > 0 && value.getKills() >= plugin.turnpk)
                 {
                     Player pkPlayer =  plugin.getServer().getPlayer(key);
