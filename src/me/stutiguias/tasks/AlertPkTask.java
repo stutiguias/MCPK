@@ -4,7 +4,6 @@
  */
 package me.stutiguias.tasks;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import me.stutiguias.mcpk.Mcpk;
@@ -39,6 +38,7 @@ public class AlertPkTask implements Runnable {
 
                 // getValue is used to get value of key in Map
                 PK value=(PK)m.getValue();
+                
                 if(plugin.getServer().getOnlinePlayers().length > 0 && value.getKills() >= plugin.turnpk)
                 {
                     Player pkPlayer =  plugin.getServer().getPlayer(key);
@@ -61,6 +61,12 @@ public class AlertPkTask implements Runnable {
                 }
 
                 if(plugin.getCurrentMilli() > plugin.IsPk.get(key).getTime()) {
+                    Player _PKiller = plugin.getServer().getPlayer(key);
+                    String[] playersgroups = plugin.IsPk.get(key).getPkOldGroups();
+                    for (int i = 0; i < playersgroups.length; i++) {
+                         plugin.permission.playerAddGroup(_PKiller, playersgroups[i]);
+                    }
+                    plugin.permission.playerRemoveGroup(_PKiller, plugin.GroupPk);
                     plugin.IsPk.remove(key);
                 }
 

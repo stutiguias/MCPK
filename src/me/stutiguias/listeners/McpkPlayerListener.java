@@ -39,9 +39,21 @@ public class McpkPlayerListener implements Listener {
             return;
         }
         String killer = event.getEntity().getKiller().getName();
+        Player _Pkiller = event.getEntity().getKiller();
         if(plugin.IsPk.containsKey(killer)){
             plugin.IsPk.get(killer).setTime(plugin.getCurrentMilli() + plugin.time);
-            plugin.IsPk.get(killer).addKills(1);      
+            plugin.IsPk.get(killer).addKills(1);   
+            
+            if(plugin.IsPk.get(killer).getKills() == plugin.turnpk && plugin.ChangePkGroup) {
+               // change player group
+               String[] playersgroups = plugin.permission.getPlayerGroups(_Pkiller);
+               for (int i = 0; i < playersgroups.length; i++) {
+                   plugin.permission.playerRemoveGroup(_Pkiller, playersgroups[i]);
+               }
+               plugin.IsPk.get(killer).setPkOldGroups(playersgroups);
+               plugin.permission.playerAddGroup(_Pkiller, plugin.GroupPk);
+            }
+            
             for(Map.Entry<Integer,String> announcekills : plugin.pkmsg.entrySet())
             {
                if(plugin.IsPk.get(killer).getKills() == announcekills.getKey()) { 

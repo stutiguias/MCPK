@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>me.stutiguias</groupId>
   <artifactId>Mcpk</artifactId>
-  <version>0.2</version>
+  <version>0.3</version>
   <name>Mcpk</name>
   <description>Minecraft Player Killer</description>
   
@@ -26,6 +26,14 @@
       <version>${bukkit.version}</version>
     </dependency>
 
+    <dependency>
+      <groupId>net.milkbowl.vault</groupId>
+      <artifactId>Vault</artifactId>
+      <version>1.2.18</version>
+	  <scope>system</scope>
+      <systemPath>${project.basedir}/lib/Vault.jar</systemPath>
+    </dependency>
+    
   </dependencies>
   
   <build>

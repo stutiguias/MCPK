@@ -1,8 +1,6 @@
 package me.stutiguias.mcpk;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -10,7 +8,10 @@ import me.stutiguias.dao.mysql.MySql;
 import me.stutiguias.listeners.MCPKCommandListener;
 import me.stutiguias.listeners.McpkPlayerListener;
 import me.stutiguias.tasks.AlertPkTask;
+import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.permission.Permission;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -37,6 +38,11 @@ public class Mcpk extends JavaPlugin{
     public int radius;
     public int turnpk;
     public HashMap<Integer, String> pkmsg = new HashMap<Integer, String>();
+    public Boolean ChangePkGroup;
+    public String GroupPk;
+    //Vault
+    public Permission permission = null;
+    public Economy economy = null;
     
     public Mcpk(){
    
@@ -58,6 +64,8 @@ public class Mcpk extends JavaPlugin{
         turnpk = getConfig().getInt("Basic.HowMuchForTurnPk");
         long AlertPKFrequency = getConfig().getLong("Basic.AlertPKFrequency");
         msg = getConfig().getString("Basic.AlertMessage");
+        ChangePkGroup = getConfig().getBoolean("Basic.ChangeGroupIfPK");
+        GroupPk = getConfig().getString("Basic.WhatGroupChangePK");
         
         newbieprotectdays = getConfig().getInt("Protect.NewBieProtectDays");
         protecmsg = getConfig().getString("Protect.Message");
@@ -83,6 +91,10 @@ public class Mcpk extends JavaPlugin{
         
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(playerlistener, this);
+        
+        // Setup Vault 
+        setupEconomy();
+        setupPermissions();
         
         log.log(Level.INFO,logPrefix + " done.");
     }
@@ -121,6 +133,8 @@ public class Mcpk extends JavaPlugin{
                 getConfig().addDefault("Basic.AlertPKFrequency", 30L);
                 getConfig().addDefault("Basic.HowMuchForTurnPk", 3);
                 getConfig().addDefault("Basic.AlertMessage", "%player% is PK and is NEAR YOU");
+                getConfig().addDefault("Basic.ChangeGroupIfPK",false);
+                getConfig().addDefault("Basic.WhatGroupChangePK","pk");
                 getConfig().addDefault("Protect.UseNewBieProtect",true);
                 getConfig().addDefault("Protect.NewBieProtectDays",2);
                 getConfig().addDefault("Protect.Message", "You r protect for %d% days! Until %date%!");
@@ -132,4 +146,19 @@ public class Mcpk extends JavaPlugin{
 		getConfig().options().copyDefaults(true);
 		saveConfig();
 	}
+    
+        private boolean setupPermissions() {
+            RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
+            permission = rsp.getProvider();
+            return permission != null;
+        }
+
+	private Boolean setupEconomy() {
+		RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(Economy.class);
+		if (economyProvider != null) {
+			economy = economyProvider.getProvider();
+		}
+		return (economy != null);
+	}
+        
 }

@@ -13,6 +13,9 @@ public class PK {
     private long time;
     private int kills;
     private Date newBie;
+    private String[] PkOldGroups;
+    
+    
     /**
      * @return the name
      */
@@ -85,6 +88,20 @@ public class PK {
      */
     public void setNewBie(Date newBie) {
         this.newBie = newBie;
+    }
+
+    /**
+     * @return the PkOldGroups
+     */
+    public String[] getPkOldGroups() {
+        return PkOldGroups;
+    }
+
+    /**
+     * @param PkOldGroups the PkOldGroups to set
+     */
+    public void setPkOldGroups(String[] PkOldGroups) {
+        this.PkOldGroups = PkOldGroups;
     }
     
 }
