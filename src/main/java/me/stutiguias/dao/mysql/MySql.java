@@ -5,6 +5,7 @@
 package me.stutiguias.dao.mysql;
 
 import java.sql.*;
+import java.util.logging.Level;
 import me.stutiguias.mcpk.Mcpk;
 import me.stutiguias.mcpk.PK;
 
@@ -51,7 +52,7 @@ public class MySql {
 				exists = true;
 			}
 		} catch (SQLException e) {
-			Mcpk.log.warning(Mcpk.logPrefix + "Unable to check if table exists: " + tableName);
+			Mcpk.log.log(Level.WARNING,Mcpk.logPrefix + "Unable to check if table exists: {0}", tableName);
 			Mcpk.log.warning(e.getMessage());
 		} finally {
 			closeResources(conn, st, rs);
@@ -69,7 +70,7 @@ public class MySql {
                     st = conn.createStatement();
                     st.executeUpdate(sql);
             } catch (SQLException e) {
-                    Mcpk.log.warning(Mcpk.logPrefix + "Exception executing raw SQL" + sql);
+                    Mcpk.log.log(Level.WARNING,Mcpk.logPrefix + "Exception executing raw SQL {0}", sql);
                     Mcpk.log.warning(e.getMessage());
             } finally {
                     closeResources(conn, st, rs);
@@ -141,11 +142,32 @@ public class MySql {
                             _Player.setNewBie(rs.getDate("newbieCount"));
                     }
             } catch (SQLException e) {
-                    Mcpk.log.warning(Mcpk.logPrefix + "Unable to get player " + player);
+                    Mcpk.log.log(Level.WARNING,Mcpk.logPrefix + "Unable to get player {0}", player);
                     Mcpk.log.warning(e.getMessage());
             } finally {
                     closeResources(conn, st, rs);
             }
             return _Player;
+    }
+    
+    public boolean UpdateKill(String player,Integer kill) {
+        	McpkConnection conn = null;
+		PreparedStatement st = null;
+		ResultSet rs = null;
+
+		try {
+                        conn = GetConnection();
+			st = conn.prepareStatement("UPDATE MCPK_player SET pkCount = ? WHERE name = ?");
+			st.setInt(1, kill);
+			st.setString(2, player);
+			st.executeUpdate();
+                        return true;
+		} catch (SQLException e) {
+			Mcpk.log.log(Level.WARNING, "{0} Unable to update item quantity in DB", Mcpk.logPrefix);
+			Mcpk.log.warning(e.getMessage());
+                        return false;
+		} finally {
+			closeResources(conn, st, rs);
+		}
     }
 }

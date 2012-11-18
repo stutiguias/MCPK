@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import me.stutiguias.mcpk.Mcpk;
 import me.stutiguias.mcpk.PK;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -19,6 +20,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.ItemStack;
 
 /**
  *
@@ -44,6 +46,20 @@ public class McpkPlayerListener implements Listener {
             plugin.IsPk.get(killer).setTime(plugin.getCurrentMilli() + plugin.time);
             plugin.IsPk.get(killer).addKills(1);   
             
+            if(plugin.pkbonus.get(plugin.IsPk.get(killer).getKills()) != null) {
+                String bonus = plugin.pkbonus.get(plugin.IsPk.get(killer).getKills());
+                String[] ids = bonus.split(",");
+                for (int i = 0; i < ids.length; i++) {
+                    int amount = 1;
+                    short data = 0;
+                    ItemStack Item = new ItemStack(Integer.parseInt(ids[i]), amount , data );
+                    _Pkiller.getInventory().addItem(Item);
+                    _Pkiller.updateInventory();
+                }
+                _Pkiller.sendMessage("Bonus for kill");
+            }
+            
+            // if turn pk and config setting is true to change group pk
             if(plugin.IsPk.get(killer).getKills() == plugin.turnpk && plugin.ChangePkGroup) {
                // change player group
                String[] playersgroups = plugin.permission.getPlayerGroups(_Pkiller);
@@ -63,11 +79,14 @@ public class McpkPlayerListener implements Listener {
         }else{
             PK newpk = new PK();
             newpk.setName(killer);
+            newpk.setKills(1);
             newpk.setTime(plugin.getCurrentMilli() + plugin.time);
             plugin.IsPk.put(killer, newpk);
         }
-        
     
+        int kills = plugin.DataBase.getPlayer(killer).getKills();
+        plugin.DataBase.UpdateKill(killer, kills + 1);
+        
     }
     
     private String parseColor(String message) {
@@ -81,7 +100,8 @@ public class McpkPlayerListener implements Listener {
     public void onDamage(EntityDamageEvent event){
       if(!plugin.usenewbieprotect) {
             return;
-        }
+      }
+      
       if(event instanceof EntityDamageByEntityEvent) {
         Entity attacker;
         Entity defender;
@@ -131,7 +151,7 @@ public class McpkPlayerListener implements Listener {
         Player pl = event.getPlayer();
         PK pkPlayer = null;
         try {
-          pkPlayer = plugin.DataBase.getPlayer(pl.getName());
+            pkPlayer = plugin.DataBase.getPlayer(pl.getName());
         }catch(Exception e){
             Mcpk.log.log(Level.WARNING, "[MCPK] Error get Player from Database: {0}", e.getMessage());
         }

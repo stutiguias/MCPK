@@ -1,6 +1,8 @@
 package me.stutiguias.mcpk;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,7 +32,7 @@ public class Mcpk extends JavaPlugin{
     public MySql DataBase;
     
     public Map<String, PK> IsPk = new HashMap<String, PK>();
-   
+    
     public String msg;
     public Boolean usenewbieprotect;
     public int newbieprotectdays;
@@ -40,6 +42,7 @@ public class Mcpk extends JavaPlugin{
     public int radius;
     public int turnpk;
     public HashMap<Integer, String> pkmsg = new HashMap<Integer, String>();
+    public HashMap<Integer, String> pkbonus = new HashMap<Integer, String>();
     public Boolean ChangePkGroup;
     public String GroupPk;
     //Vault
@@ -78,6 +81,7 @@ public class Mcpk extends JavaPlugin{
         String dbPort = getConfig().getString("MySQL.Port");
         String dbDatabase = getConfig().getString("MySQL.Database");
         getMessages();
+        getBonusForPK();
         getCommand("mcpk").setExecutor(new MCPKCommandListener(this));
         if(!dbPass.equalsIgnoreCase("password123")) {
           DataBase = new MySql(dbHost,dbUser,dbPass,dbPort,dbDatabase);
@@ -105,13 +109,20 @@ public class Mcpk extends JavaPlugin{
         log.log(Level.INFO,logPrefix + " done.");
     }
     
-    public HashMap getMessages(){
+    public void getMessages(){
         pkmsg = new HashMap<Integer, String>();
         for (String key : getConfig().getConfigurationSection("Message.").getKeys(false)){
           pkmsg.put(Integer.parseInt(key), getConfig().getString("Message." + key));
           log.log(Level.INFO, logPrefix + "Kill Number {0} set to {1}", new Object[]{key, getConfig().getString("Message." + key)});
         }
-        return pkmsg;
+    }
+    
+    public void getBonusForPK() {
+        pkbonus = new HashMap<Integer, String>();
+        for (String key : getConfig().getConfigurationSection("Bonus.ForPkOnTime.").getKeys(false)){
+          pkbonus.put(Integer.parseInt(key), getConfig().getString("Bonus.ForPkOnTime." + key));
+          log.log(Level.INFO, logPrefix + "Bonus for PK kill number {0} set to {1}", new Object[]{key, getConfig().getString("BonusForPk." + key)});
+        }
     }
     
     @Override
@@ -142,6 +153,11 @@ public class Mcpk extends JavaPlugin{
                 getConfig().addDefault("Basic.ChangeGroupIfPK",false);
                 getConfig().addDefault("Basic.WhatGroupChangePK","pk");
                 getConfig().addDefault("UseTagAPI",false);
+                pkbonus = new HashMap<Integer, String>();
+                pkbonus.put(2, "34,35,36");
+                pkbonus.put(3, "45");
+                pkbonus.put(4, "56,57,58");
+                getConfig().addDefault("Bonus.ForPkOnTime", pkbonus);
                 getConfig().addDefault("Protect.UseNewBieProtect",true);
                 getConfig().addDefault("Protect.NewBieProtectDays",2);
                 getConfig().addDefault("Protect.Message", "You r protect for %d% days! Until %date%!");
