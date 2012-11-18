@@ -13,7 +13,12 @@
       <id>bukkit-repo</id>
       <url>http://repo.bukkit.org/content/groups/public/</url>
     </repository>
-	
+    
+    <!-- TagApi -->
+    <repository>
+      <id>tagapi</id>
+      <url>http://repo.kitteh.org/content/repositories/public/</url>
+    </repository>
   </repositories>
   
 
@@ -25,7 +30,13 @@
       <artifactId>bukkit</artifactId>
       <version>${bukkit.version}</version>
     </dependency>
-
+    
+    <dependency>
+      <groupId>org.kitteh</groupId>
+      <artifactId>tagapi</artifactId>
+      <version>1.7.1</version>
+    </dependency>
+    
     <dependency>
       <groupId>net.milkbowl.vault</groupId>
       <artifactId>Vault</artifactId>

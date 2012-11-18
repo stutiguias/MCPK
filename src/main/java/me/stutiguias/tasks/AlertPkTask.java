@@ -63,11 +63,14 @@ public class AlertPkTask implements Runnable {
                 if(plugin.getCurrentMilli() > plugin.IsPk.get(key).getTime()) {
                     Player _PKiller = plugin.getServer().getPlayer(key);
                     String[] playersgroups = plugin.IsPk.get(key).getPkOldGroups();
-                    for (int i = 0; i < playersgroups.length; i++) {
-                         plugin.permission.playerAddGroup(_PKiller, playersgroups[i]);
+                    if(playersgroups != null) {
+                        for (int i = 0; i < playersgroups.length; i++) {
+                             plugin.permission.playerAddGroup(_PKiller, playersgroups[i]);
+                        }
                     }
                     plugin.permission.playerRemoveGroup(_PKiller, plugin.GroupPk);
                     plugin.IsPk.remove(key);
+                    
                 }
 
             }

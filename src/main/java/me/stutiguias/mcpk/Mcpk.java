@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import me.stutiguias.dao.mysql.MySql;
 import me.stutiguias.listeners.MCPKCommandListener;
 import me.stutiguias.listeners.McpkPlayerListener;
+import me.stutiguias.listeners.TagApiPlayerListener;
 import me.stutiguias.tasks.AlertPkTask;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -24,6 +25,7 @@ public class Mcpk extends JavaPlugin{
     public static final Logger log = Logger.getLogger("Minecraft");
     
     public final McpkPlayerListener playerlistener = new McpkPlayerListener(this);
+    public final TagApiPlayerListener tagapi = new TagApiPlayerListener(this);
     
     public MySql DataBase;
     
@@ -91,6 +93,10 @@ public class Mcpk extends JavaPlugin{
         
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(playerlistener, this);
+        if(getConfig().getBoolean("UseTagAPI")) {
+            pm.registerEvents(tagapi, this);
+            log.info(logPrefix + " Using TagApi");
+        }
         
         // Setup Vault 
         setupEconomy();
@@ -135,6 +141,7 @@ public class Mcpk extends JavaPlugin{
                 getConfig().addDefault("Basic.AlertMessage", "%player% is PK and is NEAR YOU");
                 getConfig().addDefault("Basic.ChangeGroupIfPK",false);
                 getConfig().addDefault("Basic.WhatGroupChangePK","pk");
+                getConfig().addDefault("UseTagAPI",false);
                 getConfig().addDefault("Protect.UseNewBieProtect",true);
                 getConfig().addDefault("Protect.NewBieProtectDays",2);
                 getConfig().addDefault("Protect.Message", "You r protect for %d% days! Until %date%!");
