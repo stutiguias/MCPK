@@ -7,7 +7,7 @@ package me.stutiguias.dao.mysql;
 import java.sql.*;
 import java.util.logging.Level;
 import me.stutiguias.mcpk.Mcpk;
-import me.stutiguias.mcpk.PK;
+import me.stutiguias.mcpk.MCPlayer;
 
 /**
  *
@@ -99,7 +99,7 @@ public class MySql {
         if (!tableExists("MCPK_player")) {
 			Mcpk.log.info(Mcpk.logPrefix + "Creating table MCPK_player");
 			executeRawSQL("CREATE TABLE MCPK_player (id INTEGER PRIMARY KEY AUTO_INCREMENT, name VARCHAR(255), pass VARCHAR(255), pkCount INTEGER, newbieCount DATETIME);");
-		}
+        }
     }
     
     public void createPlayer(String player, String pass, int pkCount, Date newbieCount) {
@@ -123,8 +123,8 @@ public class MySql {
             }
     }
         
-    public PK getPlayer(String player) {
-            PK _Player = null;
+    public MCPlayer getPlayer(String player) {
+            MCPlayer _Player = null;
 
             McpkConnection conn = null;
             PreparedStatement st = null;
@@ -136,7 +136,7 @@ public class MySql {
                     st.setString(1, player);
                     rs = st.executeQuery();
                     while (rs.next()) {
-                            _Player = new PK();
+                            _Player = new MCPlayer();
                             _Player.setName(rs.getString("name"));
                             _Player.setKills(rs.getInt("pkCount"));
                             _Player.setNewBie(rs.getDate("newbieCount"));

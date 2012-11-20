@@ -5,8 +5,10 @@ import java.sql.Date;
 import java.util.Calendar;
 import java.util.Map;
 import java.util.logging.Level;
+import javax.jws.soap.SOAPBinding;
+import me.stutiguias.mcpk.Bonus;
 import me.stutiguias.mcpk.Mcpk;
-import me.stutiguias.mcpk.PK;
+import me.stutiguias.mcpk.MCPlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -29,10 +31,11 @@ import org.bukkit.inventory.ItemStack;
 public class McpkPlayerListener implements Listener {
     
     private final Mcpk plugin;
-
+    private Bonus _Bonus;
+    
     public McpkPlayerListener(Mcpk plugin){
         this.plugin = plugin;
-        
+        _Bonus = new Bonus(plugin);
     }
     
     @EventHandler(priority = EventPriority.NORMAL)
@@ -42,58 +45,43 @@ public class McpkPlayerListener implements Listener {
         }
         String killer = event.getEntity().getKiller().getName();
         Player _Pkiller = event.getEntity().getKiller();
-        if(plugin.IsPk.containsKey(killer)){
-            plugin.IsPk.get(killer).setTime(plugin.getCurrentMilli() + plugin.time);
-            plugin.IsPk.get(killer).addKills(1);   
+        
+        // Add the kill
+        plugin.MCPlayers.get(killer).addKills(1); 
+        int kills = plugin.DataBase.getPlayer(killer).getKills();
+        plugin.DataBase.UpdateKill(killer, kills + 1);
+        
+        
+        if(plugin.MCPlayers.get(killer).getKills() >= plugin.turnpk) {
+            plugin.MCPlayers.get(killer).setIsPK(Boolean.TRUE);
+        }
+        
+        if(plugin.MCPlayers.get(killer).getIsPK()){
             
-            if(plugin.pkbonus.get(plugin.IsPk.get(killer).getKills()) != null) {
-                String bonus = plugin.pkbonus.get(plugin.IsPk.get(killer).getKills());
-                String[] ids = bonus.split(",");
-                for (int i = 0; i < ids.length; i++) {
-                    int amount = 1;
-                    short data = 0;
-                    ItemStack Item = new ItemStack(Integer.parseInt(ids[i]), amount , data );
-                    _Pkiller.getInventory().addItem(Item);
-                    _Pkiller.updateInventory();
-                }
-                _Pkiller.sendMessage("Bonus for kill");
-            }
+            if(plugin.MCPlayers.get(killer).getPKMsg()) _Pkiller.sendMessage("You have total of " + plugin.DataBase.getPlayer(killer).getKills() + " kill(s)");
             
+            plugin.MCPlayers.get(killer).setTime(plugin.getCurrentMilli() + plugin.time);
+            _Bonus.getBonusForPK(killer,_Pkiller);
+       
             // if turn pk and config setting is true to change group pk
-            if(plugin.IsPk.get(killer).getKills() == plugin.turnpk && plugin.ChangePkGroup) {
+            if(plugin.ChangePkGroup) {
                // change player group
                String[] playersgroups = plugin.permission.getPlayerGroups(_Pkiller);
                for (int i = 0; i < playersgroups.length; i++) {
                    plugin.permission.playerRemoveGroup(_Pkiller, playersgroups[i]);
                }
-               plugin.IsPk.get(killer).setPkOldGroups(playersgroups);
+               plugin.MCPlayers.get(killer).setPkOldGroups(playersgroups);
                plugin.permission.playerAddGroup(_Pkiller, plugin.GroupPk);
             }
             
             for(Map.Entry<Integer,String> announcekills : plugin.pkmsg.entrySet())
             {
-               if(plugin.IsPk.get(killer).getKills() == announcekills.getKey()) { 
-                    plugin.getServer().broadcastMessage(parseColor(announcekills.getValue().replace("%player%", killer)));
+               if(plugin.MCPlayers.get(killer).getKills() == announcekills.getKey()) { 
+                    plugin.getServer().broadcastMessage(plugin.parseColor(announcekills.getValue().replace("%player%", killer)));
                }
             }
-        }else{
-            PK newpk = new PK();
-            newpk.setName(killer);
-            newpk.setKills(1);
-            newpk.setTime(plugin.getCurrentMilli() + plugin.time);
-            plugin.IsPk.put(killer, newpk);
         }
-    
-        int kills = plugin.DataBase.getPlayer(killer).getKills();
-        plugin.DataBase.UpdateKill(killer, kills + 1);
         
-    }
-    
-    private String parseColor(String message) {
-	 for (ChatColor color : ChatColor.values()) {
-            message = message.replaceAll(String.format("&%c", color.getChar()), color.toString());
-        }
-        return message;
     }
     
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -124,8 +112,8 @@ public class McpkPlayerListener implements Listener {
             if(attacker instanceof Player && defender instanceof Player) {
                 Player df = (Player)defender;
                 Player at = (Player)attacker;
-                PK dfPkPlayer = plugin.DataBase.getPlayer(df.getName());
-                PK atPkPlayer = plugin.DataBase.getPlayer(at.getName());
+                MCPlayer dfPkPlayer = plugin.DataBase.getPlayer(df.getName());
+                MCPlayer atPkPlayer = plugin.DataBase.getPlayer(at.getName());
                 Date dt = now();
                 if(dfPkPlayer == null) {
                     return;
@@ -149,13 +137,13 @@ public class McpkPlayerListener implements Listener {
     @EventHandler(priority= EventPriority.NORMAL)
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player pl = event.getPlayer();
-        PK pkPlayer = null;
+        MCPlayer _MCPlayer = null;
         try {
-            pkPlayer = plugin.DataBase.getPlayer(pl.getName());
+            _MCPlayer = plugin.DataBase.getPlayer(pl.getName());
         }catch(Exception e){
             Mcpk.log.log(Level.WARNING, "[MCPK] Error get Player from Database: {0}", e.getMessage());
         }
-        if(pkPlayer == null) {
+        if(_MCPlayer == null) {
             Date dt = now();
             if(!plugin.usenewbieprotect) {
                 plugin.DataBase.createPlayer(pl.getName(), "0", 0,dt); 
@@ -166,6 +154,14 @@ public class McpkPlayerListener implements Listener {
                 pl.sendMessage(plugin.protecmsg.replace("%d%",String.valueOf(plugin.newbieprotectdays)).replace("%date%",dt.toString()));
                 Mcpk.log.log(Level.INFO, "[MCPK] New Player Found {0} is protected until {1}", new Object[]{pl.getName(), dt.toString()});
             }
+            _MCPlayer = new MCPlayer(pl.getName(),dt);
+            plugin.MCPlayers.put(pl.getName(),_MCPlayer);
+        }else {
+            _MCPlayer.setKills(0);
+            _MCPlayer.setAlertMsg(Boolean.TRUE);
+            _MCPlayer.setPKMsg(Boolean.TRUE);
+            _MCPlayer.setIsPK(Boolean.FALSE);
+            plugin.MCPlayers.put(pl.getName(), _MCPlayer);
         }
         
     }

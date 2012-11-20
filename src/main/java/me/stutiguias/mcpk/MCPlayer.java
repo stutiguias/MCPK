@@ -6,7 +6,7 @@ import java.util.Date;
  *
  * @author Stutiguias
  */
-public class PK {
+public class MCPlayer {
     
     private int index;
     private String name;
@@ -14,7 +14,21 @@ public class PK {
     private int kills;
     private Date newBie;
     private String[] PkOldGroups;
+    private Boolean PKMsg;
+    private Boolean AlertMsg;
+    private Boolean isPK;
     
+    public MCPlayer() {
+        
+    }
+    
+    public MCPlayer(String name,Date newBie) {
+        this.name = name;
+        time = 0;
+        kills = 0;
+        this.newBie = newBie;
+        isPK = false;
+    }
     
     /**
      * @return the name
@@ -102,6 +116,48 @@ public class PK {
      */
     public void setPkOldGroups(String[] PkOldGroups) {
         this.PkOldGroups = PkOldGroups;
+    }
+
+    /**
+     * @return the PKMsg
+     */
+    public Boolean getPKMsg() {
+        return PKMsg;
+    }
+
+    /**
+     * @param PKMsg the PKMsg to set
+     */
+    public void setPKMsg(Boolean PKMsg) {
+        this.PKMsg = PKMsg;
+    }
+
+    /**
+     * @return the AlertMsg
+     */
+    public Boolean getAlertMsg() {
+        return AlertMsg;
+    }
+
+    /**
+     * @param AlertMsg the AlertMsg to set
+     */
+    public void setAlertMsg(Boolean AlertMsg) {
+        this.AlertMsg = AlertMsg;
+    }
+
+    /**
+     * @return the isPK
+     */
+    public Boolean getIsPK() {
+        return isPK;
+    }
+
+    /**
+     * @param isPK the isPK to set
+     */
+    public void setIsPK(Boolean isPK) {
+        this.isPK = isPK;
     }
     
 }

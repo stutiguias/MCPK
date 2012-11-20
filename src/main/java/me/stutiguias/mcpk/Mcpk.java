@@ -13,6 +13,7 @@ import me.stutiguias.listeners.TagApiPlayerListener;
 import me.stutiguias.tasks.AlertPkTask;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -31,7 +32,7 @@ public class Mcpk extends JavaPlugin{
     
     public MySql DataBase;
     
-    public Map<String, PK> IsPk = new HashMap<String, PK>();
+    public Map<String, MCPlayer> MCPlayers = new HashMap<String, MCPlayer>();
     
     public String msg;
     public Boolean usenewbieprotect;
@@ -41,10 +42,13 @@ public class Mcpk extends JavaPlugin{
     public int time;
     public int radius;
     public int turnpk;
+    public Boolean UseTagAPI;
     public HashMap<Integer, String> pkmsg = new HashMap<Integer, String>();
     public HashMap<Integer, String> pkbonus = new HashMap<Integer, String>();
+    public Boolean UseBonusForPK;
     public Boolean ChangePkGroup;
     public String GroupPk;
+    
     //Vault
     public Permission permission = null;
     public Economy economy = null;
@@ -71,6 +75,7 @@ public class Mcpk extends JavaPlugin{
         msg = getConfig().getString("Basic.AlertMessage");
         ChangePkGroup = getConfig().getBoolean("Basic.ChangeGroupIfPK");
         GroupPk = getConfig().getString("Basic.WhatGroupChangePK");
+        UseBonusForPK = getConfig().getBoolean("Bonus.UseBonusForPk");
         
         newbieprotectdays = getConfig().getInt("Protect.NewBieProtectDays");
         protecmsg = getConfig().getString("Protect.Message");
@@ -97,7 +102,8 @@ public class Mcpk extends JavaPlugin{
         
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(playerlistener, this);
-        if(getConfig().getBoolean("UseTagAPI")) {
+        UseTagAPI = getConfig().getBoolean("UseTagAPI"); 
+        if(UseTagAPI) {
             pm.registerEvents(tagapi, this);
             log.info(logPrefix + " Using TagApi");
         }
@@ -153,6 +159,7 @@ public class Mcpk extends JavaPlugin{
                 getConfig().addDefault("Basic.ChangeGroupIfPK",false);
                 getConfig().addDefault("Basic.WhatGroupChangePK","pk");
                 getConfig().addDefault("UseTagAPI",false);
+                getConfig().addDefault("Bonus.UseBonusForPk",false);
                 pkbonus = new HashMap<Integer, String>();
                 pkbonus.put(2, "34,35,36");
                 pkbonus.put(3, "45");
@@ -184,4 +191,10 @@ public class Mcpk extends JavaPlugin{
 		return (economy != null);
 	}
         
+        public String parseColor(String message) {
+             for (ChatColor color : ChatColor.values()) {
+                message = message.replaceAll(String.format("&%c", color.getChar()), color.toString());
+            }
+            return message;
+        }
 }

@@ -112,7 +112,7 @@ public class McpkConnectionPool {
             public void run() {
                     while (true) {
                             try {
-                                    Thread.sleep(300000);
+                                Thread.sleep(300000);
                             } catch (final InterruptedException e) {
                             }
                             reapConnections();

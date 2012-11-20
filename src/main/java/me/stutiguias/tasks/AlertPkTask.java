@@ -7,9 +7,9 @@ package me.stutiguias.tasks;
 import java.util.Iterator;
 import java.util.Map;
 import me.stutiguias.mcpk.Mcpk;
-import me.stutiguias.mcpk.PK;
-import org.bukkit.ChatColor;
+import me.stutiguias.mcpk.MCPlayer;
 import org.bukkit.entity.Player;
+import org.kitteh.tag.TagAPI;
 
 /**
  *
@@ -28,7 +28,7 @@ public class AlertPkTask implements Runnable {
       try{
             Player[] playerList = plugin.getServer().getOnlinePlayers();
             
-            for(Iterator it = plugin.IsPk.entrySet().iterator();it.hasNext();)
+            for(Iterator it = plugin.MCPlayers.entrySet().iterator();it.hasNext();)
             {         
                 // key=value separator this by Map.Entry to get key and value
                 Map.Entry m =(Map.Entry)it.next();
@@ -37,40 +37,30 @@ public class AlertPkTask implements Runnable {
                 String key=(String)m.getKey();
 
                 // getValue is used to get value of key in Map
-                PK value=(PK)m.getValue();
+                MCPlayer Killer =(MCPlayer)m.getValue();
                 
-                if(plugin.getServer().getOnlinePlayers().length > 0 && value.getKills() >= plugin.turnpk)
+                Player pkPlayer = plugin.getServer().getPlayer(key);
+                
+                if(plugin.getServer().getOnlinePlayers().length > 0 && Killer.getIsPK())
                 {
-                    Player pkPlayer =  plugin.getServer().getPlayer(key);
                     if(pkPlayer != null) {
-                        Double PkPlayerX = pkPlayer.getLocation().getX();
-                        Double PkPlayerZ = pkPlayer.getLocation().getZ();
-                        for (Player player : playerList) {
-                                Double playerX = player.getLocation().getX();
-                                Double playerZ = player.getLocation().getZ();
-                                if ((playerX < PkPlayerX + (double)plugin.radius) &&
-                                    (playerX > PkPlayerX - (double)plugin.radius) &&
-                                    (playerZ < PkPlayerZ + (double)plugin.radius) &&
-                                    (playerZ > PkPlayerZ - (double)plugin.radius) &&
-                                    (player.getName().equals(key) == false) 
-                                ) {
-                                    player.sendMessage(parseColor(plugin.msg.replace("%player%", key)));
-                                }
-                        }
+                            WarningPlayer(pkPlayer, playerList, key);
+                            Integer timeleft = Integer.parseInt(String.valueOf(plugin.MCPlayers.get(key).getTime() - plugin.getCurrentMilli()));
+                            timeleft = timeleft / 1000;
+                            if(timeleft > 1 && Killer.getPKMsg()) pkPlayer.sendMessage("Time left on PK Status " + timeleft);
                     }
                 }
 
-                if(plugin.getCurrentMilli() > plugin.IsPk.get(key).getTime()) {
+                if(plugin.getCurrentMilli() > plugin.MCPlayers.get(key).getTime()) {
                     Player _PKiller = plugin.getServer().getPlayer(key);
-                    String[] playersgroups = plugin.IsPk.get(key).getPkOldGroups();
+                    String[] playersgroups = plugin.MCPlayers.get(key).getPkOldGroups();
                     if(playersgroups != null) {
                         for (int i = 0; i < playersgroups.length; i++) {
                              plugin.permission.playerAddGroup(_PKiller, playersgroups[i]);
                         }
                     }
                     plugin.permission.playerRemoveGroup(_PKiller, plugin.GroupPk);
-                    plugin.IsPk.remove(key);
-                    
+                    plugin.MCPlayers.get(key).setIsPK(Boolean.FALSE);
                 }
 
             }
@@ -81,10 +71,22 @@ public class AlertPkTask implements Runnable {
         
     }
     
-    private String parseColor(String message) {
-	 for (ChatColor color : ChatColor.values()) {
-            message = message.replaceAll(String.format("&%c", color.getChar()), color.toString());
+    public void WarningPlayer(Player pkPlayer,Player[] playerList,String key) {
+        Double PkPlayerX = pkPlayer.getLocation().getX();
+        Double PkPlayerZ = pkPlayer.getLocation().getZ();
+        for (Player player : playerList) {
+                Double playerX = player.getLocation().getX();
+                Double playerZ = player.getLocation().getZ();
+                if ((playerX < PkPlayerX + (double)plugin.radius) &&
+                    (playerX > PkPlayerX - (double)plugin.radius) &&
+                    (playerZ < PkPlayerZ + (double)plugin.radius) &&
+                    (playerZ > PkPlayerZ - (double)plugin.radius) &&
+                     plugin.MCPlayers.get(player.getName()).getAlertMsg() &&
+                    (player.getName().equals(key) == false) 
+                ) {
+                    player.sendMessage(plugin.parseColor(plugin.msg.replace("%player%", key)));
+                }
         }
-        return message;
     }
+    
 }
