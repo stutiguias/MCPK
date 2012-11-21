@@ -10,13 +10,14 @@ public class MCPlayer {
     
     private int index;
     private String name;
-    private long time;
+    private long PKTime;
     private int kills;
-    private Date newBie;
+    private Date newBieProtectUntil;
     private String[] PkOldGroups;
     private Boolean PKMsg;
     private Boolean AlertMsg;
     private Boolean isPK;
+    private Boolean ProtectAlreadyLeft;
     
     public MCPlayer() {
         
@@ -24,9 +25,9 @@ public class MCPlayer {
     
     public MCPlayer(String name,Date newBie) {
         this.name = name;
-        time = 0;
+        PKTime = 0;
         kills = 0;
-        this.newBie = newBie;
+        this.newBieProtectUntil = newBie;
         isPK = false;
     }
     
@@ -47,15 +48,15 @@ public class MCPlayer {
     /**
      * @return the time
      */
-    public long getTime() {
-        return time;
+    public long getPKTime() {
+        return PKTime;
     }
 
     /**
      * @param time the time to set
      */
-    public void setTime(long time) {
-        this.time = time;
+    public void setPKTime(long PKTime) {
+        this.PKTime = PKTime;
     }
 
     /**
@@ -93,15 +94,15 @@ public class MCPlayer {
     /**
      * @return the newBie
      */
-    public Date getNewBie() {
-        return newBie;
+    public Date getNewBieProtectUntil() {
+        return newBieProtectUntil;
     }
 
     /**
      * @param newBie the newBie to set
      */
-    public void setNewBie(Date newBie) {
-        this.newBie = newBie;
+    public void setNewBieProtectUntil(Date newBieProtectUntil) {
+        this.newBieProtectUntil = newBieProtectUntil;
     }
 
     /**
@@ -158,6 +159,20 @@ public class MCPlayer {
      */
     public void setIsPK(Boolean isPK) {
         this.isPK = isPK;
+    }
+
+    /**
+     * @return the ProtectAlreadyLeft
+     */
+    public Boolean getProtectAlreadyLeft() {
+        return ProtectAlreadyLeft;
+    }
+
+    /**
+     * @param ProtectAlreadyLeft the ProtectAlreadyLeft to set
+     */
+    public void setProtectAlreadyLeft(Boolean ProtectAlreadyLeft) {
+        this.ProtectAlreadyLeft = ProtectAlreadyLeft;
     }
     
 }

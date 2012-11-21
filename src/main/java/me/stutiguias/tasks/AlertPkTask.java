@@ -45,7 +45,7 @@ public class AlertPkTask implements Runnable {
                 {
                     if(pkPlayer != null) {
                             WarningPlayer(pkPlayer, playerList, key);
-                            Integer timeleft = Integer.parseInt(String.valueOf(plugin.MCPlayers.get(key).getTime() - plugin.getCurrentMilli()));
+                            Integer timeleft = Integer.parseInt(String.valueOf(plugin.MCPlayers.get(key).getPKTime() - plugin.getCurrentMilli()));
                             timeleft = timeleft / 1000;
                             if(timeleft > 1 && Killer.getPKMsg()) pkPlayer.sendMessage("Time left on PK Status " + timeleft);
                     }
@@ -53,7 +53,7 @@ public class AlertPkTask implements Runnable {
                     continue;
                 }
 
-                if(plugin.getCurrentMilli() > plugin.MCPlayers.get(key).getTime()) {
+                if(plugin.getCurrentMilli() > plugin.MCPlayers.get(key).getPKTime()) {
                     Player _PKiller = plugin.getServer().getPlayer(key);
                     String[] playersgroups = plugin.MCPlayers.get(key).getPkOldGroups();
                     if(playersgroups != null) {

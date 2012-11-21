@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import me.stutiguias.dao.mysql.MySql;
 import me.stutiguias.listeners.MCPKCommandListener;
+import me.stutiguias.listeners.McpkOnDeathListener;
 import me.stutiguias.listeners.McpkPlayerListener;
 import me.stutiguias.listeners.TagApiPlayerListener;
 import me.stutiguias.tasks.AlertPkTask;
@@ -26,14 +27,12 @@ public class Mcpk extends JavaPlugin{
     
     public static final String logPrefix = "[MCPK]";
     public static final Logger log = Logger.getLogger("Minecraft");
-    
-    public final McpkPlayerListener playerlistener = new McpkPlayerListener(this);
-    public final TagApiPlayerListener tagapi = new TagApiPlayerListener(this);
-    
+        
     public MySql DataBase;
     
     public Map<String, MCPlayer> MCPlayers = new HashMap<String, MCPlayer>();
     
+    public Comuns _Comuns;
     public String msg;
     public Boolean usenewbieprotect;
     public String NewbieProtectTime;
@@ -66,6 +65,8 @@ public class Mcpk extends JavaPlugin{
         log.log(Level.INFO,logPrefix + " initializing....");
 
 	initConfig();
+        
+        _Comuns  = new Comuns();
         
         alertaboutpk = getConfig().getBoolean("Basic.AlertAboutPK");
         time = getConfig().getInt("Basic.Time") * 1000;
@@ -101,10 +102,11 @@ public class Mcpk extends JavaPlugin{
         }
         
         PluginManager pm = getServer().getPluginManager();
-        pm.registerEvents(playerlistener, this);
+        pm.registerEvents(new McpkPlayerListener(this), this);
+        pm.registerEvents(new McpkOnDeathListener(this), this);
         UseTagAPI = getConfig().getBoolean("UseTagAPI"); 
         if(UseTagAPI) {
-            pm.registerEvents(tagapi, this);
+            pm.registerEvents(new TagApiPlayerListener(this), this);
             log.info(logPrefix + " Using TagApi");
         }
         

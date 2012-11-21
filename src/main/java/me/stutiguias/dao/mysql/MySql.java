@@ -139,7 +139,7 @@ public class MySql {
                             _Player = new MCPlayer();
                             _Player.setName(rs.getString("name"));
                             _Player.setKills(rs.getInt("pkCount"));
-                            _Player.setNewBie(rs.getTimestamp("newbieCount"));
+                            _Player.setNewBieProtectUntil(rs.getTimestamp("newbieCount"));
                     }
             } catch (SQLException e) {
                     Mcpk.log.log(Level.WARNING,Mcpk.logPrefix + "Unable to get player {0}", player);
