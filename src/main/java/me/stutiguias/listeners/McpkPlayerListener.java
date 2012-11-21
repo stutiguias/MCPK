@@ -20,6 +20,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 /**
  *
@@ -128,6 +129,11 @@ public class McpkPlayerListener implements Listener {
     }
     
     @EventHandler(priority= EventPriority.NORMAL)
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        plugin.MCPlayers.remove(event.getPlayer().getName());
+    }
+    
+    @EventHandler(priority= EventPriority.NORMAL)
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player pl = event.getPlayer();
         MCPlayer _MCPlayer = null;
@@ -143,9 +149,10 @@ public class McpkPlayerListener implements Listener {
                 Mcpk.log.log(Level.INFO, "[MCPK] New Player Found {0}", pl.getName());
             }else{
                 dt = addTime(plugin.NewbieProtectTime);
-                plugin.DataBase.createPlayer(pl.getName(), "0", 0,new Timestamp(dt.getTime())); 
-                pl.sendMessage(plugin.protecmsg.replace("%d%",String.valueOf(plugin.NewbieProtectTime)).replace("%date%",dt.toString()));
-                Mcpk.log.log(Level.INFO, "[MCPK] New Player Found {0} is protected until {1}", new Object[]{pl.getName(), dt.toString()});
+                Timestamp ProtectUntil = new Timestamp(dt.getTime());
+                plugin.DataBase.createPlayer(pl.getName(), "0", 0,ProtectUntil); 
+                pl.sendMessage(plugin.protecmsg.replace("%d%",String.valueOf(plugin.NewbieProtectTime)).replace("%date%",ProtectUntil.toString()));
+                Mcpk.log.log(Level.INFO, "[MCPK] New Player Found {0} is protected until {1}", new Object[]{pl.getName(),ProtectUntil.toString()});
             }
             _MCPlayer = new MCPlayer(pl.getName(),dt);
             plugin.MCPlayers.put(pl.getName(),_MCPlayer);

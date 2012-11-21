@@ -96,7 +96,7 @@ public class MySql {
     }
     
     public void InitTables() {
-        if (!tableExists("MCPK_player")) {
+        if (!tableExists("MCPlayer")) {
 			Mcpk.log.info(Mcpk.logPrefix + "Creating table MCPK_player");
 			executeRawSQL("CREATE TABLE MCPlayer (id INTEGER PRIMARY KEY AUTO_INCREMENT, name VARCHAR(255), pass VARCHAR(255), pkCount INTEGER, newbieCount TIMESTAMP);");
         }
