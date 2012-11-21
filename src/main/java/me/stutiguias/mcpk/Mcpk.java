@@ -10,11 +10,13 @@ import me.stutiguias.dao.mysql.MySql;
 import me.stutiguias.listeners.MCPKCommandListener;
 import me.stutiguias.listeners.McpkOnDeathListener;
 import me.stutiguias.listeners.McpkPlayerListener;
+import me.stutiguias.listeners.McpkProtectListener;
 import me.stutiguias.listeners.TagApiPlayerListener;
 import me.stutiguias.tasks.AlertPkTask;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.ChatColor;
+import org.bukkit.event.EventPriority;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -102,8 +104,11 @@ public class Mcpk extends JavaPlugin{
         }
         
         PluginManager pm = getServer().getPluginManager();
+        
         pm.registerEvents(new McpkPlayerListener(this), this);
         pm.registerEvents(new McpkOnDeathListener(this), this);
+        pm.registerEvents(new McpkProtectListener(this), this);
+        
         UseTagAPI = getConfig().getBoolean("UseTagAPI"); 
         if(UseTagAPI) {
             pm.registerEvents(new TagApiPlayerListener(this), this);

@@ -65,7 +65,8 @@ public class McpkProtectListener implements Listener {
                 if(dfPkPlayer == null || atPkPlayer == null) {
                     return;
                 }
-                if(dt.before(dfPkPlayer.getNewBieProtectUntil()) || dt.before(atPkPlayer.getNewBieProtectUntil())) {
+                if(dt.before(dfPkPlayer.getNewBieProtectUntil()) ||
+                   dt.before(atPkPlayer.getNewBieProtectUntil())) {
                     at.sendMessage("This player is protect until " + dfPkPlayer.getNewBieProtectUntil().toString());
                     df.sendMessage("This player is protect until " + dfPkPlayer.getNewBieProtectUntil().toString());
                     event.setCancelled(true);
