@@ -98,11 +98,11 @@ public class MySql {
     public void InitTables() {
         if (!tableExists("MCPK_player")) {
 			Mcpk.log.info(Mcpk.logPrefix + "Creating table MCPK_player");
-			executeRawSQL("CREATE TABLE MCPK_player (id INTEGER PRIMARY KEY AUTO_INCREMENT, name VARCHAR(255), pass VARCHAR(255), pkCount INTEGER, newbieCount DATETIME);");
+			executeRawSQL("CREATE TABLE MCPK_player (id INTEGER PRIMARY KEY AUTO_INCREMENT, name VARCHAR(255), pass VARCHAR(255), pkCount INTEGER, newbieCount TIMESTAMP);");
         }
     }
     
-    public void createPlayer(String player, String pass, int pkCount, Date newbieCount) {
+    public void createPlayer(String player, String pass, int pkCount, Timestamp newbieCount) {
             McpkConnection conn = null;
             PreparedStatement st = null;
             ResultSet rs = null;
@@ -113,7 +113,7 @@ public class MySql {
                     st.setString(1, player);
                     st.setString(2, pass);
                     st.setDouble(3, pkCount);
-                    st.setDate(4, newbieCount);
+                    st.setTimestamp(4, newbieCount);
                     st.executeUpdate();
             } catch (SQLException e) {
                     Mcpk.log.warning(Mcpk.logPrefix + "Unable to update player permissions in DB");
@@ -139,7 +139,7 @@ public class MySql {
                             _Player = new MCPlayer();
                             _Player.setName(rs.getString("name"));
                             _Player.setKills(rs.getInt("pkCount"));
-                            _Player.setNewBie(rs.getDate("newbieCount"));
+                            _Player.setNewBie(rs.getTimestamp("newbieCount"));
                     }
             } catch (SQLException e) {
                     Mcpk.log.log(Level.WARNING,Mcpk.logPrefix + "Unable to get player {0}", player);

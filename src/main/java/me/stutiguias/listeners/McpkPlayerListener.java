@@ -2,15 +2,13 @@
 package me.stutiguias.listeners;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Map;
 import java.util.logging.Level;
-import javax.jws.soap.SOAPBinding;
 import me.stutiguias.mcpk.Bonus;
 import me.stutiguias.mcpk.Mcpk;
 import me.stutiguias.mcpk.MCPlayer;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -22,7 +20,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.inventory.ItemStack;
 
 /**
  *
@@ -103,10 +100,7 @@ public class McpkPlayerListener implements Listener {
                 attacker = EDE.getDamager();
             }
             defender = EDE.getEntity();
-            if(attacker == null) {
-                return;
-            }
-            if(defender == null) {
+            if(attacker == null || defender == null) {
                 return;
             }
             if(attacker instanceof Player && defender instanceof Player) {
@@ -115,13 +109,12 @@ public class McpkPlayerListener implements Listener {
                 MCPlayer dfPkPlayer = plugin.DataBase.getPlayer(df.getName());
                 MCPlayer atPkPlayer = plugin.DataBase.getPlayer(at.getName());
                 Date dt = now();
-                if(dfPkPlayer == null) {
-                    return;
-                }
-                if(atPkPlayer == null) {
+                if(dfPkPlayer == null || atPkPlayer == null) {
                     return;
                 }
                 if(dt.before(dfPkPlayer.getNewBie()) || dt.before(atPkPlayer.getNewBie())) {
+                    at.sendMessage("This player is protect until " + dfPkPlayer.getNewBie().toString());
+                    df.sendMessage("This player is protect until " + dfPkPlayer.getNewBie().toString());
                     event.setCancelled(true);
                     event.setDamage(0);
                 }
@@ -146,12 +139,12 @@ public class McpkPlayerListener implements Listener {
         if(_MCPlayer == null) {
             Date dt = now();
             if(!plugin.usenewbieprotect) {
-                plugin.DataBase.createPlayer(pl.getName(), "0", 0,dt); 
+                plugin.DataBase.createPlayer(pl.getName(), "0", 0,new Timestamp(dt.getTime())); 
                 Mcpk.log.log(Level.INFO, "[MCPK] New Player Found {0}", pl.getName());
             }else{
-                dt = addDays(dt, plugin.newbieprotectdays);
-                plugin.DataBase.createPlayer(pl.getName(), "0", 0,dt); 
-                pl.sendMessage(plugin.protecmsg.replace("%d%",String.valueOf(plugin.newbieprotectdays)).replace("%date%",dt.toString()));
+                dt = addTime(plugin.NewbieProtectTime);
+                plugin.DataBase.createPlayer(pl.getName(), "0", 0,new Timestamp(dt.getTime())); 
+                pl.sendMessage(plugin.protecmsg.replace("%d%",String.valueOf(plugin.NewbieProtectTime)).replace("%date%",dt.toString()));
                 Mcpk.log.log(Level.INFO, "[MCPK] New Player Found {0} is protected until {1}", new Object[]{pl.getName(), dt.toString()});
             }
             _MCPlayer = new MCPlayer(pl.getName(),dt);
@@ -166,11 +159,12 @@ public class McpkPlayerListener implements Listener {
         
     }
     
-    public Date addDays(Date date, int days)
+    public Date addTime(String Time)
     {
         Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        cal.add(Calendar.DATE, days); //minus number would decrement the days
+        if(Time.contains("m")) {
+            cal.add(Calendar.MINUTE, Integer.parseInt(Time.replace("m","")) );    
+        }
         java.sql.Date dataSql = new java.sql.Date(cal.getTime().getTime()); 
         return dataSql;
     }

@@ -49,6 +49,8 @@ public class AlertPkTask implements Runnable {
                             timeleft = timeleft / 1000;
                             if(timeleft > 1 && Killer.getPKMsg()) pkPlayer.sendMessage("Time left on PK Status " + timeleft);
                     }
+                }else{
+                    continue;
                 }
 
                 if(plugin.getCurrentMilli() > plugin.MCPlayers.get(key).getTime()) {

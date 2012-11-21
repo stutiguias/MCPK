@@ -36,7 +36,7 @@ public class Mcpk extends JavaPlugin{
     
     public String msg;
     public Boolean usenewbieprotect;
-    public int newbieprotectdays;
+    public String NewbieProtectTime;
     public String protecmsg;
     public boolean alertaboutpk;
     public int time;
@@ -77,7 +77,7 @@ public class Mcpk extends JavaPlugin{
         GroupPk = getConfig().getString("Basic.WhatGroupChangePK");
         UseBonusForPK = getConfig().getBoolean("Bonus.UseBonusForPk");
         
-        newbieprotectdays = getConfig().getInt("Protect.NewBieProtectDays");
+        NewbieProtectTime = getConfig().getString("Protect.NewBieProtectTime");
         protecmsg = getConfig().getString("Protect.Message");
         usenewbieprotect = getConfig().getBoolean("Protect.UseNewBieProtect");
         String dbHost = getConfig().getString("MySQL.Host");
@@ -127,7 +127,7 @@ public class Mcpk extends JavaPlugin{
         pkbonus = new HashMap<Integer, String>();
         for (String key : getConfig().getConfigurationSection("Bonus.ForPkOnTime.").getKeys(false)){
           pkbonus.put(Integer.parseInt(key), getConfig().getString("Bonus.ForPkOnTime." + key));
-          log.log(Level.INFO, logPrefix + "Bonus for PK kill number {0} set to {1}", new Object[]{key, getConfig().getString("BonusForPk." + key)});
+          log.log(Level.INFO, logPrefix + "Bonus for PK kill number {0} set to {1}", new Object[]{key, getConfig().getString("Bonus.ForPkOnTime." + key)});
         }
     }
     
@@ -166,8 +166,8 @@ public class Mcpk extends JavaPlugin{
                 pkbonus.put(4, "56,57,58");
                 getConfig().addDefault("Bonus.ForPkOnTime", pkbonus);
                 getConfig().addDefault("Protect.UseNewBieProtect",true);
-                getConfig().addDefault("Protect.NewBieProtectDays",2);
-                getConfig().addDefault("Protect.Message", "You r protect for %d% days! Until %date%!");
+                getConfig().addDefault("Protect.NewBieProtectTime","10m");
+                getConfig().addDefault("Protect.Message", "You r protect for %d%! Until %date%!");
                 pkmsg = new HashMap<Integer, String>();
                 pkmsg.put(2, "%player% first message");
                 pkmsg.put(3, "%player% second message");
