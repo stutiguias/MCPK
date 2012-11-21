@@ -98,7 +98,7 @@ public class MySql {
     public void InitTables() {
         if (!tableExists("MCPK_player")) {
 			Mcpk.log.info(Mcpk.logPrefix + "Creating table MCPK_player");
-			executeRawSQL("CREATE TABLE MCPK_player (id INTEGER PRIMARY KEY AUTO_INCREMENT, name VARCHAR(255), pass VARCHAR(255), pkCount INTEGER, newbieCount TIMESTAMP);");
+			executeRawSQL("CREATE TABLE MCPlayer (id INTEGER PRIMARY KEY AUTO_INCREMENT, name VARCHAR(255), pass VARCHAR(255), pkCount INTEGER, newbieCount TIMESTAMP);");
         }
     }
     
@@ -109,7 +109,7 @@ public class MySql {
 
             try {
                     conn = GetConnection();
-                    st = conn.prepareStatement("INSERT INTO MCPK_player (name, pass, pkCount, newbieCount) VALUES (?, ?, ?, ?)");
+                    st = conn.prepareStatement("INSERT INTO MCPlayer (name, pass, pkCount, newbieCount) VALUES (?, ?, ?, ?)");
                     st.setString(1, player);
                     st.setString(2, pass);
                     st.setDouble(3, pkCount);
@@ -132,7 +132,7 @@ public class MySql {
 
             try {
                     conn = GetConnection();
-                    st = conn.prepareStatement("SELECT name, pass, pkCount, newbieCount FROM MCPK_player WHERE name = ?");
+                    st = conn.prepareStatement("SELECT name, pass, pkCount, newbieCount FROM MCPlayer WHERE name = ?");
                     st.setString(1, player);
                     rs = st.executeQuery();
                     while (rs.next()) {
@@ -157,7 +157,7 @@ public class MySql {
 
 		try {
                         conn = GetConnection();
-			st = conn.prepareStatement("UPDATE MCPK_player SET pkCount = ? WHERE name = ?");
+			st = conn.prepareStatement("UPDATE MCPlayer SET pkCount = ? WHERE name = ?");
 			st.setInt(1, kill);
 			st.setString(2, player);
 			st.executeUpdate();
