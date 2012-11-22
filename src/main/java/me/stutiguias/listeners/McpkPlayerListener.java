@@ -1,7 +1,6 @@
 
 package me.stutiguias.listeners;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.logging.Level;
 import me.stutiguias.mcpk.MCPlayer;
@@ -36,21 +35,21 @@ public class McpkPlayerListener implements Listener {
         Player pl = event.getPlayer();
         MCPlayer _MCPlayer = null;
         try {
-            _MCPlayer = getPlayer(pl);
+            _MCPlayer = plugin.DB.getPlayer(pl);
         }catch(Exception e){
             Mcpk.logger.log(Level.WARNING, "[MCPK] Error get Player from Database: {0}", e.getMessage());
         }
         if(_MCPlayer == null) {
-            Date dt = plugin._Comuns.now();
-            _MCPlayer = new MCPlayer(pl.getName(),dt);
+            _MCPlayer = new MCPlayer(pl.getName(),plugin._Comuns.now());
             if(!plugin.usenewbieprotect) {
-                plugin.DataBase.createPlayer(pl.getName(), "0", 0,new Timestamp(dt.getTime())); 
+                plugin.DB.CreatePlayer(pl,new Timestamp(plugin._Comuns.now().getTime()));
                 _MCPlayer.setProtectAlreadyLeft(Boolean.TRUE);
                 Mcpk.logger.log(Level.INFO, "[MCPK] New Player {0}", pl.getName());
             }else{
                 Timestamp ProtectUntil = ProtectUntil();
                 
-                plugin.DataBase.createPlayer(pl.getName(), "0", 0,ProtectUntil); 
+                plugin.DB.CreatePlayer(pl, ProtectUntil);
+                
                 _MCPlayer.setNewBieProtectUntil(ProtectUntil);
                 _MCPlayer.setProtectAlreadyLeft(Boolean.FALSE);
                 
@@ -65,20 +64,13 @@ public class McpkPlayerListener implements Listener {
             _MCPlayer.setIsPK(Boolean.FALSE);
             if(plugin._Comuns.now().before(_MCPlayer.getNewBieProtectUntil())) {
                 _MCPlayer.setProtectAlreadyLeft(Boolean.FALSE);
+                pl.sendMessage(plugin.protecmsg.replace("%d%",String.valueOf(plugin.NewbieProtectTime)).replace("%date%",_MCPlayer.getNewBieProtectUntil().toString()));
             }else{
                 _MCPlayer.setProtectAlreadyLeft(Boolean.TRUE);
             }
             plugin.MCPlayers.put(pl.getName(), _MCPlayer);
         }
         
-    }
-    
-    public MCPlayer getPlayer(Player pl) {
-        if(plugin.UseMySQL) {
-            return plugin.DataBase.getPlayer(pl.getName());
-        }else{
-            return plugin._FileDB.LoadPlayerFile(pl);
-        }
     }
     
     public Timestamp ProtectUntil() {

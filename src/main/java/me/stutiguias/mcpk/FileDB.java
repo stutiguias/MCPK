@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -23,7 +22,7 @@ public class FileDB {
     
     Mcpk plugin;
     File PlayerFile;
-    String Path = "plugins"+ File.separator +"Mcmmorankup"+ File.separator +"userdata";
+    String Path = "plugins"+ File.separator +"Minecraft Player Killer"+ File.separator +"userdata";
     YamlConfiguration PlayerYML;
     
     public FileDB(){
@@ -67,6 +66,19 @@ public class FileDB {
         }
     }
     
+    public void CreatePlayer(Player player,Timestamp newBieProtectUntil) {
+        try {
+            PlayerFile = new File( Path + File.separator + player.getName() +".yml");
+            PlayerFile.createNewFile();
+            LoadYML();
+            SetupYML(0,newBieProtectUntil);
+            SaveYML();
+        } catch (IOException ex) {
+            Mcpk.logger.log(Level.INFO, "{0} Error Creating new YML player File", Mcpk.logPrefix);
+            Mcpk.logger.log(Level.INFO, "{0}", ex.getMessage());
+        }
+    }
+    
     private void SetupYML(int kills,Timestamp newBieProtectUntil) {
         PlayerYML.set("kills", kills);
         PlayerYML.set("NewbieProtectUntil", newBieProtectUntil);
@@ -76,8 +88,8 @@ public class FileDB {
         return PlayerYML.getInt("kills");
     }
     
-    public Timestamp getNewbieProtectUntil() {
-        return (Timestamp)PlayerYML.get("NewbieProtectUntil");
+    public Date getNewbieProtectUntil() {
+        return (Date)PlayerYML.get("NewbieProtectUntil");
     }
     
     public void CheckDiretory() {

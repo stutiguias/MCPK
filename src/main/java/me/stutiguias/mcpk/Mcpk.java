@@ -34,7 +34,7 @@ public class Mcpk extends JavaPlugin{
     
     public Map<String, MCPlayer> MCPlayers = new HashMap<String, MCPlayer>();
     
-    public Boolean UseMySQL;
+    public DBAccessor DB;
     public Comuns _Comuns;
     public FileDB _FileDB;
     public String msg;
@@ -85,8 +85,9 @@ public class Mcpk extends JavaPlugin{
         NewbieProtectTime = getConfig().getString("Protect.NewBieProtectTime");
         protecmsg = getConfig().getString("Protect.Message");
         usenewbieprotect = getConfig().getBoolean("Protect.UseNewBieProtect");
-        UseMySQL = getConfig().getBoolean("MySQL.Use");
-        if(UseMySQL) {
+        DB = new DBAccessor(this);
+        DB.setUseMySql(getConfig().getBoolean("MySQL.Use"));
+        if(DB.getUseMySql()) {
             String dbHost = getConfig().getString("MySQL.Host");
             String dbUser = getConfig().getString("MySQL.Username");
             String dbPass = getConfig().getString("MySQL.Password");
