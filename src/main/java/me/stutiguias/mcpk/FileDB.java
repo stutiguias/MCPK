@@ -84,6 +84,11 @@ public class FileDB {
         PlayerYML.set("NewbieProtectUntil", newBieProtectUntil);
     }
     
+    public void setKills(int Kills) {
+        PlayerYML.set("kills", Kills);
+        SaveYML();
+    }
+    
     public int getKills() {
         return PlayerYML.getInt("kills");
     }

@@ -35,6 +35,14 @@ public class DBAccessor {
             plugin._FileDB.CreatePlayer(pl, Protect);
         }
     }
+    
+    public void UpdateKill(Player pl,int Kills) {
+        if(getUseMySql()) {
+            plugin.DataBase.UpdateKill(pl.getName(), Kills);
+        }else{
+            plugin._FileDB.setKills(Kills);
+        }
+    }
 
     /**
      * @return the UseMySql

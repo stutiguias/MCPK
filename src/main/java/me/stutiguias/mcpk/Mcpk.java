@@ -1,8 +1,6 @@
 package me.stutiguias.mcpk;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,7 +14,6 @@ import me.stutiguias.tasks.AlertPkTask;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.ChatColor;
-import org.bukkit.event.EventPriority;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -85,6 +82,7 @@ public class Mcpk extends JavaPlugin{
         NewbieProtectTime = getConfig().getString("Protect.NewBieProtectTime");
         protecmsg = getConfig().getString("Protect.Message");
         usenewbieprotect = getConfig().getBoolean("Protect.UseNewBieProtect");
+        
         DB = new DBAccessor(this);
         DB.setUseMySql(getConfig().getBoolean("MySQL.Use"));
         if(DB.getUseMySql()) {

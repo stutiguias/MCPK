@@ -37,8 +37,8 @@ public class McpkOnDeathListener implements Listener {
         
         // Add the kill
         plugin.MCPlayers.get(killer).addKills(1); 
-        int kills = plugin.DataBase.getPlayer(killer).getKills();
-        plugin.DataBase.UpdateKill(killer, kills + 1);
+        int kills = plugin.DB.getPlayer(_Pkiller).getKills();
+        plugin.DB.UpdateKill(_Pkiller, kills + 1);
         
         
         if(plugin.MCPlayers.get(killer).getKills() >= plugin.turnpk) {
