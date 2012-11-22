@@ -74,7 +74,7 @@ public class McpkProtectListener implements Listener {
                 }
             }
         }catch(Exception e) {
-            Mcpk.log.log(Level.WARNING, "[MCPK] {0}", e.getMessage());
+            Mcpk.logger.log(Level.WARNING, "[MCPK] {0}", e.getMessage());
         }
 
          

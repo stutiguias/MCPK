@@ -52,8 +52,8 @@ public class MySql {
 				exists = true;
 			}
 		} catch (SQLException e) {
-			Mcpk.log.log(Level.WARNING,Mcpk.logPrefix + "Unable to check if table exists: {0}", tableName);
-			Mcpk.log.warning(e.getMessage());
+			Mcpk.logger.log(Level.WARNING,Mcpk.logPrefix + "Unable to check if table exists: {0}", tableName);
+			Mcpk.logger.warning(e.getMessage());
 		} finally {
 			closeResources(conn, st, rs);
 		}
@@ -70,8 +70,8 @@ public class MySql {
                     st = conn.createStatement();
                     st.executeUpdate(sql);
             } catch (SQLException e) {
-                    Mcpk.log.log(Level.WARNING,Mcpk.logPrefix + "Exception executing raw SQL {0}", sql);
-                    Mcpk.log.warning(e.getMessage());
+                    Mcpk.logger.log(Level.WARNING,Mcpk.logPrefix + "Exception executing raw SQL {0}", sql);
+                    Mcpk.logger.warning(e.getMessage());
             } finally {
                     closeResources(conn, st, rs);
             }
@@ -97,7 +97,7 @@ public class MySql {
     
     public void InitTables() {
         if (!tableExists("MCPlayer")) {
-			Mcpk.log.info(Mcpk.logPrefix + "Creating table MCPK_player");
+			Mcpk.logger.info(Mcpk.logPrefix + "Creating table MCPK_player");
 			executeRawSQL("CREATE TABLE MCPlayer (id INTEGER PRIMARY KEY AUTO_INCREMENT, name VARCHAR(255), pass VARCHAR(255), pkCount INTEGER, newbieCount TIMESTAMP);");
         }
     }
@@ -116,8 +116,8 @@ public class MySql {
                     st.setTimestamp(4, newbieCount);
                     st.executeUpdate();
             } catch (SQLException e) {
-                    Mcpk.log.warning(Mcpk.logPrefix + "Unable to update player permissions in DB");
-                    Mcpk.log.warning(e.getMessage());
+                    Mcpk.logger.warning(Mcpk.logPrefix + "Unable to update player permissions in DB");
+                    Mcpk.logger.warning(e.getMessage());
             } finally {
                     closeResources(conn, st, rs);
             }
@@ -142,8 +142,8 @@ public class MySql {
                             _Player.setNewBieProtectUntil(rs.getTimestamp("newbieCount"));
                     }
             } catch (SQLException e) {
-                    Mcpk.log.log(Level.WARNING,Mcpk.logPrefix + "Unable to get player {0}", player);
-                    Mcpk.log.warning(e.getMessage());
+                    Mcpk.logger.log(Level.WARNING,Mcpk.logPrefix + "Unable to get player {0}", player);
+                    Mcpk.logger.warning(e.getMessage());
             } finally {
                     closeResources(conn, st, rs);
             }
@@ -163,8 +163,8 @@ public class MySql {
 			st.executeUpdate();
                         return true;
 		} catch (SQLException e) {
-			Mcpk.log.log(Level.WARNING, "{0} Unable to update item quantity in DB", Mcpk.logPrefix);
-			Mcpk.log.warning(e.getMessage());
+			Mcpk.logger.log(Level.WARNING, "{0} Unable to update item quantity in DB", Mcpk.logPrefix);
+			Mcpk.logger.warning(e.getMessage());
                         return false;
 		} finally {
 			closeResources(conn, st, rs);

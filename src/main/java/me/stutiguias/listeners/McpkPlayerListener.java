@@ -38,7 +38,7 @@ public class McpkPlayerListener implements Listener {
         try {
             _MCPlayer = plugin.DataBase.getPlayer(pl.getName());
         }catch(Exception e){
-            Mcpk.log.log(Level.WARNING, "[MCPK] Error get Player from Database: {0}", e.getMessage());
+            Mcpk.logger.log(Level.WARNING, "[MCPK] Error get Player from Database: {0}", e.getMessage());
         }
         if(_MCPlayer == null) {
             Date dt = plugin._Comuns.now();
@@ -46,7 +46,7 @@ public class McpkPlayerListener implements Listener {
             if(!plugin.usenewbieprotect) {
                 plugin.DataBase.createPlayer(pl.getName(), "0", 0,new Timestamp(dt.getTime())); 
                 _MCPlayer.setProtectAlreadyLeft(Boolean.TRUE);
-                Mcpk.log.log(Level.INFO, "[MCPK] New Player {0}", pl.getName());
+                Mcpk.logger.log(Level.INFO, "[MCPK] New Player {0}", pl.getName());
             }else{
                 dt = plugin._Comuns.addTime(plugin.NewbieProtectTime);
                 Timestamp ProtectUntil = new Timestamp(dt.getTime());
@@ -56,7 +56,7 @@ public class McpkPlayerListener implements Listener {
                 _MCPlayer.setProtectAlreadyLeft(Boolean.FALSE);
                 
                 pl.sendMessage(plugin.protecmsg.replace("%d%",String.valueOf(plugin.NewbieProtectTime)).replace("%date%",ProtectUntil.toString()));
-                Mcpk.log.log(Level.INFO, "[MCPK] New Player {0} and is protected until {1}", new Object[]{pl.getName(),ProtectUntil.toString()});
+                Mcpk.logger.log(Level.INFO, "[MCPK] New Player {0} and is protected until {1}", new Object[]{pl.getName(),ProtectUntil.toString()});
             }
             plugin.MCPlayers.put(pl.getName(),_MCPlayer);
         }else {

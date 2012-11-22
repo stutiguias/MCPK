@@ -28,13 +28,14 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class Mcpk extends JavaPlugin{
     
     public static final String logPrefix = "[MCPK]";
-    public static final Logger log = Logger.getLogger("Minecraft");
+    public static final Logger logger = Logger.getLogger("Minecraft");
         
     public MySql DataBase;
     
     public Map<String, MCPlayer> MCPlayers = new HashMap<String, MCPlayer>();
     
     public Comuns _Comuns;
+    public FileDB _FileDB;
     public String msg;
     public Boolean usenewbieprotect;
     public String NewbieProtectTime;
@@ -64,7 +65,7 @@ public class Mcpk extends JavaPlugin{
         
     @Override
     public void onEnable(){
-        log.log(Level.INFO,logPrefix + " initializing....");
+        logger.log(Level.INFO,logPrefix + " initializing....");
 
 	initConfig();
         
@@ -90,12 +91,14 @@ public class Mcpk extends JavaPlugin{
         String dbDatabase = getConfig().getString("MySQL.Database");
         getMessages();
         getBonusForPK();
+        
         getCommand("mcpk").setExecutor(new MCPKCommandListener(this));
-        if(!dbPass.equalsIgnoreCase("password123")) {
+        
+        if(!dbPass.equalsIgnoreCase("password_here")) {
           DataBase = new MySql(dbHost,dbUser,dbPass,dbPort,dbDatabase);
           DataBase.InitTables();
         }else{
-          log.log(Level.INFO,logPrefix + " Configure your MYSQL table.");
+          logger.log(Level.INFO,"{0} Configure your MYSQL table.",logPrefix);
           onDisable();
         }
         
@@ -112,21 +115,21 @@ public class Mcpk extends JavaPlugin{
         UseTagAPI = getConfig().getBoolean("UseTagAPI"); 
         if(UseTagAPI) {
             pm.registerEvents(new TagApiPlayerListener(this), this);
-            log.info(logPrefix + " Using TagApi");
+            logger.info(logPrefix + " Using TagApi");
         }
         
         // Setup Vault 
         setupEconomy();
         setupPermissions();
         
-        log.log(Level.INFO,logPrefix + " done.");
+        logger.log(Level.INFO,logPrefix + " done.");
     }
     
     public void getMessages(){
         pkmsg = new HashMap<Integer, String>();
         for (String key : getConfig().getConfigurationSection("Message").getKeys(false)){
           pkmsg.put(Integer.parseInt(key), getConfig().getString("Message." + key));
-          log.log(Level.INFO, logPrefix + "Kill Number {0} set to {1}", new Object[]{key, getConfig().getString("Message." + key)});
+          logger.log(Level.INFO, logPrefix + "Kill Number {0} set to {1}", new Object[]{key, getConfig().getString("Message." + key)});
         }
     }
     
@@ -134,14 +137,14 @@ public class Mcpk extends JavaPlugin{
         pkbonus = new HashMap<Integer, String>();
         for (String key : getConfig().getConfigurationSection("Bonus.ForPkOnTime").getKeys(false)){
           pkbonus.put(Integer.parseInt(key), getConfig().getString("Bonus.ForPkOnTime." + key));
-          log.log(Level.INFO, logPrefix + "Bonus for PK kill number {0} set to {1}", new Object[]{key, getConfig().getString("Bonus.ForPkOnTime." + key)});
+          logger.log(Level.INFO, logPrefix + "Bonus for PK kill number {0} set to {1}", new Object[]{key, getConfig().getString("Bonus.ForPkOnTime." + key)});
         }
     }
     
     @Override
     public void onDisable() {
 		getServer().getScheduler().cancelTasks(this);
-		log.log(Level.INFO, logPrefix + " Disabled.");
+		logger.log(Level.INFO, logPrefix + " Disabled.");
 	}
     
     public void OnReload() {
