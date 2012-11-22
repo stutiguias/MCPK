@@ -7,6 +7,7 @@ package me.stutiguias.mcpk;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,8 +25,12 @@ public class FileDB {
     File PlayerFile;
     String Path = "plugins"+ File.separator +"Mcmmorankup"+ File.separator +"userdata";
     YamlConfiguration PlayerYML;
+    
+    public FileDB(){
+        
+    }
             
-    public FileDB(Mcpk instance,Player player,int kills,Date newBieProtectUntil) {
+    public FileDB(Mcpk instance,Player player,int kills,Timestamp newBieProtectUntil) {
     
         plugin = instance;
 
@@ -43,9 +48,36 @@ public class FileDB {
         }
     }
     
-    private void SetupYML(int kills,Date newBieProtectUntil) {
+    public MCPlayer LoadPlayerFile(Player player) {
+        try {
+            PlayerFile = new File( Path + File.separator + player.getName() +".yml");
+            PlayerYML = new YamlConfiguration();
+            PlayerYML.load(PlayerFile);
+            Mcpk.logger.log(Level.INFO,"{0} {1} Profile Found",new Object[] { Mcpk.logPrefix,player.getName() });
+            MCPlayer _MCPlayer = new MCPlayer();
+            _MCPlayer.setKills(getKills());
+            _MCPlayer.setNewBieProtectUntil(getNewbieProtectUntil());
+            return _MCPlayer;
+        } catch (FileNotFoundException ex) {
+           return null;
+        } catch (IOException ex) {
+           return null;
+        } catch (InvalidConfigurationException ex) {
+           return null;
+        }
+    }
+    
+    private void SetupYML(int kills,Timestamp newBieProtectUntil) {
         PlayerYML.set("kills", kills);
         PlayerYML.set("NewbieProtectUntil", newBieProtectUntil);
+    }
+    
+    public int getKills() {
+        return PlayerYML.getInt("kills");
+    }
+    
+    public Timestamp getNewbieProtectUntil() {
+        return (Timestamp)PlayerYML.get("NewbieProtectUntil");
     }
     
     public void CheckDiretory() {

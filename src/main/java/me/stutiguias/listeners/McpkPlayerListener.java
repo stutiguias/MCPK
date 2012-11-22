@@ -36,7 +36,7 @@ public class McpkPlayerListener implements Listener {
         Player pl = event.getPlayer();
         MCPlayer _MCPlayer = null;
         try {
-            _MCPlayer = plugin.DataBase.getPlayer(pl.getName());
+            _MCPlayer = getPlayer(pl);
         }catch(Exception e){
             Mcpk.logger.log(Level.WARNING, "[MCPK] Error get Player from Database: {0}", e.getMessage());
         }
@@ -48,8 +48,7 @@ public class McpkPlayerListener implements Listener {
                 _MCPlayer.setProtectAlreadyLeft(Boolean.TRUE);
                 Mcpk.logger.log(Level.INFO, "[MCPK] New Player {0}", pl.getName());
             }else{
-                dt = plugin._Comuns.addTime(plugin.NewbieProtectTime);
-                Timestamp ProtectUntil = new Timestamp(dt.getTime());
+                Timestamp ProtectUntil = ProtectUntil();
                 
                 plugin.DataBase.createPlayer(pl.getName(), "0", 0,ProtectUntil); 
                 _MCPlayer.setNewBieProtectUntil(ProtectUntil);
@@ -74,5 +73,16 @@ public class McpkPlayerListener implements Listener {
         
     }
     
+    public MCPlayer getPlayer(Player pl) {
+        if(plugin.UseMySQL) {
+            return plugin.DataBase.getPlayer(pl.getName());
+        }else{
+            return plugin._FileDB.LoadPlayerFile(pl);
+        }
+    }
+    
+    public Timestamp ProtectUntil() {
+        return new Timestamp(plugin._Comuns.addTime(plugin.NewbieProtectTime).getTime());
+    }
 
 }

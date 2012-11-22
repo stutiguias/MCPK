@@ -34,6 +34,7 @@ public class Mcpk extends JavaPlugin{
     
     public Map<String, MCPlayer> MCPlayers = new HashMap<String, MCPlayer>();
     
+    public Boolean UseMySQL;
     public Comuns _Comuns;
     public FileDB _FileDB;
     public String msg;
@@ -84,23 +85,24 @@ public class Mcpk extends JavaPlugin{
         NewbieProtectTime = getConfig().getString("Protect.NewBieProtectTime");
         protecmsg = getConfig().getString("Protect.Message");
         usenewbieprotect = getConfig().getBoolean("Protect.UseNewBieProtect");
-        String dbHost = getConfig().getString("MySQL.Host");
-        String dbUser = getConfig().getString("MySQL.Username");
-        String dbPass = getConfig().getString("MySQL.Password");
-        String dbPort = getConfig().getString("MySQL.Port");
-        String dbDatabase = getConfig().getString("MySQL.Database");
+        UseMySQL = getConfig().getBoolean("MySQL.Use");
+        if(UseMySQL) {
+            String dbHost = getConfig().getString("MySQL.Host");
+            String dbUser = getConfig().getString("MySQL.Username");
+            String dbPass = getConfig().getString("MySQL.Password");
+            String dbPort = getConfig().getString("MySQL.Port");
+            String dbDatabase = getConfig().getString("MySQL.Database");
+            DataBase = new MySql(dbHost,dbUser,dbPass,dbPort,dbDatabase);
+            DataBase.InitTables();
+        }else{
+            _FileDB = new FileDB();
+            _FileDB.CheckDiretory();
+        }
+        
         getMessages();
         getBonusForPK();
         
         getCommand("mcpk").setExecutor(new MCPKCommandListener(this));
-        
-        if(!dbPass.equalsIgnoreCase("password_here")) {
-          DataBase = new MySql(dbHost,dbUser,dbPass,dbPort,dbDatabase);
-          DataBase.InitTables();
-        }else{
-          logger.log(Level.INFO,"{0} Configure your MYSQL table.",logPrefix);
-          onDisable();
-        }
         
         if(alertaboutpk) {
             getServer().getScheduler().scheduleAsyncRepeatingTask(this, new AlertPkTask(this), AlertPKFrequency, AlertPKFrequency);
@@ -155,6 +157,7 @@ public class Mcpk extends JavaPlugin{
     }
     
     private void initConfig() {
+                getConfig().addDefault("MySQL.Use", false);
 		getConfig().addDefault("MySQL.Host", "localhost");
 		getConfig().addDefault("MySQL.Username", "root");
 		getConfig().addDefault("MySQL.Password", "password_here");
