@@ -5,6 +5,7 @@
 package me.stutiguias.mcpk;
 
 import java.sql.Timestamp;
+import me.stutiguias.dao.mysql.MySql;
 import org.bukkit.entity.Player;
 
 /**
@@ -15,32 +16,42 @@ public class DBAccessor {
     
     private Boolean UseMySql;
     Mcpk plugin;
+    private FileDB _FileDB;
+    private MySql DataBase;
     
-    public DBAccessor(Mcpk instance) {
-       plugin = instance;    
+    public DBAccessor(Mcpk instance,Boolean UseMySql,String dbHost,String dbUser,String dbPass,String dbPort,String dbDatabase) {
+        plugin = instance;    
+        this.UseMySql = UseMySql;
+        if(UseMySql) {
+            DataBase = new MySql(dbHost,dbUser,dbPass,dbPort,dbDatabase);
+            DataBase.InitTables();
+        }else{
+            _FileDB = new FileDB();
+            _FileDB.CheckDiretory();
+        }
     }
     
     public MCPlayer getPlayer(Player pl) {
         if(getUseMySql()) {
-            return plugin.DataBase.getPlayer(pl.getName());
+            return DataBase.getPlayer(pl.getName());
         }else{
-            return plugin._FileDB.LoadPlayerFile(pl);
+            return _FileDB.LoadPlayerFile(pl);
         }
     }
     
     public void CreatePlayer(Player pl,Timestamp Protect) {
         if(getUseMySql()) {
-            plugin.DataBase.createPlayer(pl.getName(), "0", 0, Protect); 
+            DataBase.createPlayer(pl.getName(), "0", 0, Protect); 
         }else{
-            plugin._FileDB.CreatePlayer(pl, Protect);
+            _FileDB.CreatePlayer(pl, Protect);
         }
     }
     
     public void UpdateKill(Player pl,int Kills) {
         if(getUseMySql()) {
-            plugin.DataBase.UpdateKill(pl.getName(), Kills);
+            DataBase.UpdateKill(pl.getName(), Kills);
         }else{
-            plugin._FileDB.setKills(Kills);
+            _FileDB.setKills(Kills);
         }
     }
 

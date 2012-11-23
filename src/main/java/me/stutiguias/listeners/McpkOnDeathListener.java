@@ -47,7 +47,7 @@ public class McpkOnDeathListener implements Listener {
         
         if(plugin.MCPlayers.get(killer).getIsPK()){
             
-            if(plugin.MCPlayers.get(killer).getPKMsg()) _Pkiller.sendMessage("You have total of " + plugin.DataBase.getPlayer(killer).getKills() + " kill(s)");
+            if(plugin.MCPlayers.get(killer).getPKMsg()) _Pkiller.sendMessage("You have total of " + plugin.DB.getPlayer(_Pkiller).getKills() + " kill(s)");
             
             plugin.MCPlayers.get(killer).setPKTime(plugin.getCurrentMilli() + plugin.time);
             _Bonus.getBonusForPK(killer,_Pkiller);

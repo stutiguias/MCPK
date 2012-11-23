@@ -26,14 +26,11 @@ public class Mcpk extends JavaPlugin{
     
     public static final String logPrefix = "[MCPK]";
     public static final Logger logger = Logger.getLogger("Minecraft");
-        
-    public MySql DataBase;
-    
+
     public Map<String, MCPlayer> MCPlayers = new HashMap<String, MCPlayer>();
     
     public DBAccessor DB;
     public Comuns _Comuns;
-    public FileDB _FileDB;
     public String msg;
     public Boolean usenewbieprotect;
     public String NewbieProtectTime;
@@ -83,20 +80,13 @@ public class Mcpk extends JavaPlugin{
         protecmsg = getConfig().getString("Protect.Message");
         usenewbieprotect = getConfig().getBoolean("Protect.UseNewBieProtect");
         
-        DB = new DBAccessor(this);
-        DB.setUseMySql(getConfig().getBoolean("MySQL.Use"));
-        if(DB.getUseMySql()) {
-            String dbHost = getConfig().getString("MySQL.Host");
-            String dbUser = getConfig().getString("MySQL.Username");
-            String dbPass = getConfig().getString("MySQL.Password");
-            String dbPort = getConfig().getString("MySQL.Port");
-            String dbDatabase = getConfig().getString("MySQL.Database");
-            DataBase = new MySql(dbHost,dbUser,dbPass,dbPort,dbDatabase);
-            DataBase.InitTables();
-        }else{
-            _FileDB = new FileDB();
-            _FileDB.CheckDiretory();
-        }
+        String dbHost = getConfig().getString("MySQL.Host");
+        String dbUser = getConfig().getString("MySQL.Username");
+        String dbPass = getConfig().getString("MySQL.Password");
+        String dbPort = getConfig().getString("MySQL.Port");
+        String dbDatabase = getConfig().getString("MySQL.Database");
+        DB = new DBAccessor(this,getConfig().getBoolean("MySQL.Use"),dbHost,dbUser,dbPass,dbPort,dbDatabase);
+
         
         getMessages();
         getBonusForPK();
