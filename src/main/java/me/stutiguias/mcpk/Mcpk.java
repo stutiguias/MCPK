@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import me.stutiguias.dao.mysql.MySql;
 import me.stutiguias.listeners.MCPKCommandListener;
 import me.stutiguias.listeners.McpkOnDeathListener;
 import me.stutiguias.listeners.McpkPlayerListener;
@@ -86,8 +85,7 @@ public class Mcpk extends JavaPlugin{
         String dbPort = getConfig().getString("MySQL.Port");
         String dbDatabase = getConfig().getString("MySQL.Database");
         DB = new DBAccessor(this,getConfig().getBoolean("MySQL.Use"),dbHost,dbUser,dbPass,dbPort,dbDatabase);
-
-        
+     
         getMessages();
         getBonusForPK();
         
@@ -186,11 +184,11 @@ public class Mcpk extends JavaPlugin{
         }
 
 	private Boolean setupEconomy() {
-		RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(Economy.class);
-		if (economyProvider != null) {
-			economy = economyProvider.getProvider();
-		}
-		return (economy != null);
+            RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(Economy.class);
+            if (economyProvider != null) {
+                    economy = economyProvider.getProvider();
+            }
+            return (economy != null);
 	}
         
         public String parseColor(String message) {

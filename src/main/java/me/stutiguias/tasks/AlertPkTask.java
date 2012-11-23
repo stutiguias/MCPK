@@ -6,10 +6,9 @@ package me.stutiguias.tasks;
 
 import java.util.Iterator;
 import java.util.Map;
-import me.stutiguias.mcpk.Mcpk;
 import me.stutiguias.mcpk.MCPlayer;
+import me.stutiguias.mcpk.Mcpk;
 import org.bukkit.entity.Player;
-import org.kitteh.tag.TagAPI;
 
 /**
  *
@@ -46,8 +45,10 @@ public class AlertPkTask implements Runnable {
                     if(pkPlayer != null) {
                             WarningPlayer(pkPlayer, playerList, key);
                             Integer timeleft = Integer.parseInt(String.valueOf(plugin.MCPlayers.get(key).getPKTime() - plugin.getCurrentMilli()));
-                            timeleft = timeleft / 1000;
-                            if(timeleft > 1 && Killer.getPKMsg()) pkPlayer.sendMessage("Time left on PK Status " + timeleft);
+                            if(timeleft > 1000 && Killer.getPKMsg()) {
+                                timeleft = timeleft / 1000;
+                                pkPlayer.sendMessage("Time left on PK Status " + timeleft);
+                            }
                     }
                 }else{
                     continue;
