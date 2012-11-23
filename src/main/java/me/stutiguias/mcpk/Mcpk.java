@@ -118,7 +118,7 @@ public class Mcpk extends JavaPlugin{
         pkmsg = new HashMap<Integer, String>();
         for (String key : getConfig().getConfigurationSection("Message").getKeys(false)){
           pkmsg.put(Integer.parseInt(key), getConfig().getString("Message." + key));
-          logger.log(Level.INFO, logPrefix + "Kill Number {0} set to {1}", new Object[]{key, getConfig().getString("Message." + key)});
+          logger.log(Level.INFO, logPrefix + " Kill Number {0} set to {1}", new Object[]{key, getConfig().getString("Message." + key)});
         }
     }
     
@@ -126,7 +126,7 @@ public class Mcpk extends JavaPlugin{
         pkbonus = new HashMap<Integer, String>();
         for (String key : getConfig().getConfigurationSection("Bonus.ForPkOnTime").getKeys(false)){
           pkbonus.put(Integer.parseInt(key), getConfig().getString("Bonus.ForPkOnTime." + key));
-          logger.log(Level.INFO, logPrefix + "Bonus for PK kill number {0} set to {1}", new Object[]{key, getConfig().getString("Bonus.ForPkOnTime." + key)});
+          logger.log(Level.INFO, logPrefix + " Bonus for PK kill number {0} set to {1}", new Object[]{key, getConfig().getString("Bonus.ForPkOnTime." + key)});
         }
     }
     

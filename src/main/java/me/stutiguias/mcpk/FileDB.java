@@ -82,6 +82,26 @@ public class FileDB {
     private void SetupYML(int kills,Timestamp newBieProtectUntil) {
         PlayerYML.set("kills", kills);
         PlayerYML.set("NewbieProtectUntil", newBieProtectUntil);
+        PlayerYML.set("PKMsg",true);
+        PlayerYML.set("AlertMsg",true);
+    }
+    
+    public Boolean getPKMsg() {
+        return PlayerYML.getBoolean("PKMsg");
+    }
+    
+    public void setPKMsg(Boolean PKMsg) {
+        PlayerYML.set("PKMsg", PKMsg);
+        SaveYML();
+    }
+    
+    public Boolean getAlertMsg() {
+        return PlayerYML.getBoolean("AlertMsg");
+    }
+    
+    public void setAlertMsg(Boolean AlertMsg) {
+        PlayerYML.set("AlertMsg", AlertMsg);
+        SaveYML();
     }
     
     public void setKills(int Kills) {

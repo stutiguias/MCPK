@@ -41,6 +41,7 @@ public class McpkPlayerListener implements Listener {
         }
         if(_MCPlayer == null) {
             _MCPlayer = new MCPlayer(pl.getName(),plugin._Comuns.now());
+            
             if(!plugin.usenewbieprotect) {
                 plugin.DB.CreatePlayer(pl,new Timestamp(plugin._Comuns.now().getTime()));
                 _MCPlayer.setProtectAlreadyLeft(Boolean.TRUE);
@@ -52,19 +53,25 @@ public class McpkPlayerListener implements Listener {
                 
                 _MCPlayer.setNewBieProtectUntil(ProtectUntil);
                 _MCPlayer.setProtectAlreadyLeft(Boolean.FALSE);
-                
-                pl.sendMessage(plugin.protecmsg.replace("%d%",String.valueOf(plugin.NewbieProtectTime)).replace("%date%",ProtectUntil.toString()));
+                SendProtectMessage(pl,ProtectUntil.toString());
                 Mcpk.logger.log(Level.INFO, "[MCPK] New Player {0} and is protected until {1}", new Object[]{pl.getName(),ProtectUntil.toString()});
             }
+            
+            _MCPlayer.setAlertMsg(Boolean.TRUE);
+            plugin.DB.SetAlertMsg(pl, Boolean.TRUE);
+            _MCPlayer.setPKMsg(Boolean.TRUE);
+            plugin.DB.SetPKMsg(pl, Boolean.TRUE);
+            
             plugin.MCPlayers.put(pl.getName(),_MCPlayer);
+            
         }else {
             _MCPlayer.setKills(0);
-            _MCPlayer.setAlertMsg(Boolean.TRUE);
-            _MCPlayer.setPKMsg(Boolean.TRUE);
+            _MCPlayer.setAlertMsg(plugin.DB.getAlertMsg(pl));
+            _MCPlayer.setPKMsg(plugin.DB.getPKMsg(pl));
             _MCPlayer.setIsPK(Boolean.FALSE);
             if(plugin._Comuns.now().before(_MCPlayer.getNewBieProtectUntil())) {
                 _MCPlayer.setProtectAlreadyLeft(Boolean.FALSE);
-                pl.sendMessage(plugin.protecmsg.replace("%d%",String.valueOf(plugin.NewbieProtectTime)).replace("%date%",_MCPlayer.getNewBieProtectUntil().toString()));
+                SendProtectMessage(pl, _MCPlayer.getNewBieProtectUntil().toString() );
             }else{
                 _MCPlayer.setProtectAlreadyLeft(Boolean.TRUE);
             }
@@ -76,5 +83,9 @@ public class McpkPlayerListener implements Listener {
     public Timestamp ProtectUntil() {
         return new Timestamp(plugin._Comuns.addTime(plugin.NewbieProtectTime).getTime());
     }
-
+    
+    private void SendProtectMessage(Player pl,String Date) {
+        String Time = String.valueOf(plugin.NewbieProtectTime).replace("m","");
+        pl.sendMessage(plugin.protecmsg.replace("%d%", Time).replace("%date%",Date));
+    }
 }

@@ -6,8 +6,10 @@ package me.stutiguias.dao.mysql;
 
 import java.sql.*;
 import java.util.logging.Level;
+import me.stutiguias.mcpk.Comuns;
 import me.stutiguias.mcpk.Mcpk;
 import me.stutiguias.mcpk.MCPlayer;
+import org.bukkit.plugin.Plugin;
 
 /**
  *
@@ -97,8 +99,12 @@ public class MySql {
     
     public void InitTables() {
         if (!tableExists("MCPlayer")) {
-			Mcpk.logger.info(Mcpk.logPrefix + "Creating table MCPK_player");
-			executeRawSQL("CREATE TABLE MCPlayer (id INTEGER PRIMARY KEY AUTO_INCREMENT, name VARCHAR(255), pass VARCHAR(255), pkCount INTEGER, newbieCount TIMESTAMP);");
+            Mcpk.logger.info(Mcpk.logPrefix + "Creating table MCPK_player");
+            executeRawSQL("CREATE TABLE MCPlayer (id INTEGER PRIMARY KEY AUTO_INCREMENT, name VARCHAR(255), pass VARCHAR(255), pkCount INTEGER, newbieCount TIMESTAMP);");
+        }
+        if (!tableExists("MCSettings")) {
+            Mcpk.logger.info(Mcpk.logPrefix + "Creating table MCSettings");
+            executeRawSQL("CREATE TABLE MCSettings (id INTEGER PRIMARY KEY AUTO_INCREMENT, playerid INTEGER, playerdetail VARCHAR(255), playerval VARCHAR(255), since TIMESTAMP);");
         }
     }
     
@@ -132,11 +138,12 @@ public class MySql {
 
             try {
                     conn = GetConnection();
-                    st = conn.prepareStatement("SELECT name, pass, pkCount, newbieCount FROM MCPlayer WHERE name = ?");
+                    st = conn.prepareStatement("SELECT id,name, pass, pkCount, newbieCount FROM MCPlayer WHERE name = ?");
                     st.setString(1, player);
                     rs = st.executeQuery();
                     while (rs.next()) {
                             _Player = new MCPlayer();
+                            _Player.setIndex(rs.getInt("id"));
                             _Player.setName(rs.getString("name"));
                             _Player.setKills(rs.getInt("pkCount"));
                             _Player.setNewBieProtectUntil(rs.getTimestamp("newbieCount"));
@@ -169,5 +176,73 @@ public class MySql {
 		} finally {
 			closeResources(conn, st, rs);
 		}
+    }
+    
+    public String GetDetails(Integer PlayerId,String Detail) {
+            String val = null;
+            McpkConnection conn = null;
+            PreparedStatement st = null;
+            ResultSet rs = null;
+
+            try {
+                    conn = GetConnection();
+                    st = conn.prepareStatement("SELECT playerval FROM MCSettings WHERE playerid = ? and playerdetail = ?");
+                    st.setInt(1, PlayerId);
+                    st.setString(2, Detail);
+                    rs = st.executeQuery();
+                    while (rs.next()) {
+                            val = rs.getString("playerval");
+                    }
+            } catch (SQLException e) {
+                    Mcpk.logger.log(Level.WARNING,Mcpk.logPrefix + "Unable to get detail {0}{1}", new Object[] { Detail,PlayerId });
+                    Mcpk.logger.warning(e.getMessage());
+            } finally {
+                    closeResources(conn, st, rs);
+            }
+            return val;
+    }
+    
+    public void SetDetails(Integer PlayerId,String Detail,String Val) {
+            McpkConnection conn = null;
+            PreparedStatement st = null;
+            ResultSet rs = null;
+
+            try {
+                    conn = GetConnection();
+                    st = conn.prepareStatement("INSERT INTO MCSettings (playerid, playerdetail, playerval, since) VALUES (?, ?, ?, ?)");
+                    st.setInt(1, PlayerId);
+                    st.setString(2, Detail);
+                    st.setString(3, Val);
+                    Timestamp since = new Timestamp(new Comuns().now().getTime());
+                    st.setTimestamp(4,since);
+                    st.executeUpdate();
+            } catch (SQLException e) {
+                    Mcpk.logger.warning(Mcpk.logPrefix + "Unable to Set Detail");
+                    Mcpk.logger.warning(e.getMessage());
+            } finally {
+                    closeResources(conn, st, rs);
+            }
+    }
+    
+    public Boolean UpdateDetails(Integer PlayerId,String Detail,String Val) {
+            McpkConnection conn = null;
+            PreparedStatement st = null;
+            ResultSet rs = null;
+
+            try {
+                    conn = GetConnection();
+                    st = conn.prepareStatement("UPDATE MCSettings SET playerval = ? WHERE playerid = ? and playerdetail = ?");
+                    st.setString(1, Val);
+                    st.setInt(2, PlayerId);
+                    st.setString(3, Detail);
+                    st.executeUpdate();
+                    return true;
+            } catch (SQLException e) {
+                    Mcpk.logger.log(Level.WARNING, "{0} Unable to update details", Mcpk.logPrefix);
+                    Mcpk.logger.warning(e.getMessage());
+                    return false;
+            } finally {
+                    closeResources(conn, st, rs);
+            }
     }
 }

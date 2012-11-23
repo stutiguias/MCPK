@@ -55,6 +55,68 @@ public class DBAccessor {
         }
     }
 
+    public Boolean SetPKMsg(Player pl,Boolean PKMsg) {
+        if(getUseMySql()) {
+            Integer index = DataBase.getPlayer(pl.getName()).getIndex();
+            DataBase.SetDetails(index,"PKMsg",PKMsg.toString());
+            return true;
+        }else{
+            _FileDB.setPKMsg(PKMsg);
+            return true;
+        }
+    }
+    
+    public Boolean UpdatePKMsg(Player pl,Boolean PKMsg) {
+        if(getUseMySql()) {
+            Integer index = DataBase.getPlayer(pl.getName()).getIndex();
+            DataBase.UpdateDetails(index,"PKMsg",PKMsg.toString());
+            return true;
+        }else{
+            _FileDB.setPKMsg(PKMsg);
+            return true;
+        }
+    }
+    
+    public Boolean getPKMsg(Player pl) {
+        if(getUseMySql()) {
+            Integer index = DataBase.getPlayer(pl.getName()).getIndex();
+            return Boolean.parseBoolean(DataBase.GetDetails(index,"PKMsg"));
+        }else{
+            return _FileDB.getPKMsg();
+        }
+    }
+    
+    public Boolean SetAlertMsg(Player pl,Boolean AlertMsg) {
+        if(getUseMySql()) {
+            Integer index = DataBase.getPlayer(pl.getName()).getIndex();
+            DataBase.SetDetails(index,"AlertMsg",AlertMsg.toString());
+            return true;
+        }else{
+            _FileDB.setAlertMsg(AlertMsg);
+            return true;
+        }
+    }
+    
+    public Boolean UpdateAlertMsg(Player pl,Boolean AlertMsg) {
+        if(getUseMySql()) {
+            Integer index = DataBase.getPlayer(pl.getName()).getIndex();
+            DataBase.UpdateDetails(index,"AlertMsg",AlertMsg.toString());
+            return true;
+        }else{
+            _FileDB.setAlertMsg(AlertMsg);
+            return true;
+        }
+    }
+    
+    public Boolean getAlertMsg(Player pl) {
+        if(getUseMySql()) {
+            Integer index = DataBase.getPlayer(pl.getName()).getIndex();
+            return Boolean.parseBoolean(DataBase.GetDetails(index,"AlertMsg"));
+        }else{
+            return _FileDB.getAlertMsg();
+        }
+    }
+    
     /**
      * @return the UseMySql
      */
