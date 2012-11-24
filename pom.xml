@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>me.stutiguias</groupId>
   <artifactId>Mcpk</artifactId>
-  <version>0.4-DEV</version>
+  <version>0.4</version>
   <name>Mcpk</name>
   <description>Minecraft Player Killer</description>
   
@@ -83,6 +83,6 @@
   </build>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <bukkit.version>1.4.2-R0.2</bukkit.version>
+    <bukkit.version>1.4.5-R0.2</bukkit.version>
   </properties>
 </project>

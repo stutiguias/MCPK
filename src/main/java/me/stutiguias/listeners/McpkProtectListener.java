@@ -61,7 +61,7 @@ public class McpkProtectListener implements Listener {
                 }
                 MCPlayer dfPkPlayer = plugin.MCPlayers.get(df.getName());
                 MCPlayer atPkPlayer = plugin.MCPlayers.get(at.getName());
-                Date dt = plugin._Comuns.now();
+                Date dt = plugin.comuns.now();
                 if(dfPkPlayer == null || atPkPlayer == null) {
                     return;
                 }
