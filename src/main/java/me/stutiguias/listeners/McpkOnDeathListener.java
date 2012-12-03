@@ -56,8 +56,10 @@ public class McpkOnDeathListener implements Listener {
             if(plugin.ChangePkGroup) {
                // change player group
                String[] playersgroups = plugin.permission.getPlayerGroups(_Pkiller);
-               for (int i = 0; i < playersgroups.length; i++) {
-                   plugin.permission.playerRemoveGroup(_Pkiller, playersgroups[i]);
+               if(plugin.RemoveAllOtherGroup) {
+                    for (int i = 0; i < playersgroups.length; i++) {
+                        plugin.permission.playerRemoveGroup(_Pkiller, playersgroups[i]);
+                    }
                }
                plugin.MCPlayers.get(killer).setPkOldGroups(playersgroups);
                plugin.permission.playerAddGroup(_Pkiller, plugin.GroupPk);

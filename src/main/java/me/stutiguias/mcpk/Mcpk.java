@@ -4,11 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import me.stutiguias.listeners.MCPKCommandListener;
-import me.stutiguias.listeners.McpkOnDeathListener;
-import me.stutiguias.listeners.McpkPlayerListener;
-import me.stutiguias.listeners.McpkProtectListener;
-import me.stutiguias.listeners.TagApiPlayerListener;
+import me.stutiguias.listeners.*;
 import me.stutiguias.tasks.AlertPkTask;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -43,6 +39,7 @@ public class Mcpk extends JavaPlugin{
     public HashMap<Integer, String> pkbonus = new HashMap<Integer, String>();
     public Boolean UseBonusForPK;
     public Boolean ChangePkGroup;
+    public Boolean RemoveAllOtherGroup;
     public String GroupPk;
     
     public String language;
@@ -77,6 +74,7 @@ public class Mcpk extends JavaPlugin{
         ChangePkGroup = getConfig().getBoolean("Basic.ChangeGroupIfPK");
         GroupPk = getConfig().getString("Basic.WhatGroupChangePK");
         UseBonusForPK = getConfig().getBoolean("Bonus.UseBonusForPk");
+        RemoveAllOtherGroup = getConfig().getBoolean("Basic.RemoveAllOthersGroup");
         
         NewbieProtectTime = getConfig().getString("Protect.NewBieProtectTime");
         usenewbieprotect = getConfig().getBoolean("Protect.UseNewBieProtect");
@@ -155,6 +153,7 @@ public class Mcpk extends JavaPlugin{
                 getConfig().addDefault("Basic.AlertPKFrequency", 30L);
                 getConfig().addDefault("Basic.HowMuchForTurnPk", 3);
                 getConfig().addDefault("Basic.ChangeGroupIfPK",false);
+                getConfig().addDefault("Basic.RemoveAllOthersGroup", false);
                 getConfig().addDefault("Basic.WhatGroupChangePK","pk");
                 getConfig().addDefault("Basic.Language","eng");
                 
