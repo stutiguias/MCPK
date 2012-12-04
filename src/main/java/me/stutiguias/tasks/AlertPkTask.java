@@ -64,6 +64,7 @@ public class AlertPkTask implements Runnable {
                     }
                     plugin.permission.playerRemoveGroup(_PKiller, plugin.GroupPk);
                     plugin.MCPlayers.get(key).setIsPK(Boolean.FALSE);
+                    plugin.MCPlayers.get(key).setKills(0);
                 }
 
             }

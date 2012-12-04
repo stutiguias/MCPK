@@ -7,4 +7,6 @@ commands:
      description: Command MCPK reload
      usage: /mcpk reload
 permissions:
-   
+     mcpk.command.leftpk:
+        description: Allow Command Remove PK Status
+        default: false

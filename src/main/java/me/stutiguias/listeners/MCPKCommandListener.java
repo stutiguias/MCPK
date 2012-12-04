@@ -37,7 +37,18 @@ public class MCPKCommandListener implements CommandExecutor {
             PKMsg(cs);
             return true;
         }
+        if(args[0].equalsIgnoreCase("removepk") && plugin.permission.has(plugin.getServer().getPlayer(cs.getName()).getWorld(),cs.getName(),"mcpk.command.leftpk")) {
+            RemovePkStatus(cs);
+            return true;
+        }
         return false;
+    }
+    
+    public void RemovePkStatus(CommandSender cs) {
+        Player player = plugin.getServer().getPlayer(cs.getName());
+        plugin.MCPlayers.get(player.getName()).setKills(0);
+        plugin.MCPlayers.get(player.getName()).setIsPK(Boolean.FALSE);
+        player.sendMessage(plugin.parseColor("You remove the mcpk status"));
     }
     
     public void Reload(CommandSender cs) {
