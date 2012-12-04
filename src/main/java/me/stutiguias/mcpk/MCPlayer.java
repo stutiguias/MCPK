@@ -18,6 +18,7 @@ public class MCPlayer {
     private Boolean AlertMsg;
     private Boolean isPK;
     private Boolean ProtectAlreadyLeft;
+    private Boolean KillPk;
     
     public MCPlayer() {
         
@@ -29,6 +30,7 @@ public class MCPlayer {
         kills = 0;
         this.newBieProtectUntil = newBie;
         isPK = false;
+        KillPk = false;
     }
     
     /**
@@ -173,6 +175,20 @@ public class MCPlayer {
      */
     public void setProtectAlreadyLeft(Boolean ProtectAlreadyLeft) {
         this.ProtectAlreadyLeft = ProtectAlreadyLeft;
+    }
+
+    /**
+     * @return the KillPk
+     */
+    public Boolean getKillPk() {
+        return KillPk;
+    }
+
+    /**
+     * @param KillPk the KillPk to set
+     */
+    public void setKillPk(Boolean KillPk) {
+        this.KillPk = KillPk;
     }
     
 }

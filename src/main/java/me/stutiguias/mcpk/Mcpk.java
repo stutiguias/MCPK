@@ -34,8 +34,10 @@ public class Mcpk extends JavaPlugin{
     public int time;
     public int radius;
     public int turnpk;
+    
     public Boolean UseTagAPI;
-
+    public Boolean TurnGreenAfterKillPk;
+            
     public HashMap<Integer, String> pkbonus = new HashMap<Integer, String>();
     public Boolean UseBonusForPK;
     public Boolean ChangePkGroup;
@@ -99,12 +101,10 @@ public class Mcpk extends JavaPlugin{
         
         PluginManager pm = getServer().getPluginManager();
         
-        pm.registerEvents(new McpkPlayerListener(this), this);
-        pm.registerEvents(new McpkOnDeathListener(this), this);
-        pm.registerEvents(new McpkProtectListener(this), this);
-
         // TagAPI Config
-        UseTagAPI = getConfig().getBoolean("UseTagAPI"); 
+        UseTagAPI = getConfig().getBoolean("TagAPI.Use"); 
+        TurnGreenAfterKillPk = getConfig().getBoolean("TagAPI.TurnGreenAfterKillPk"); 
+        
         if(UseTagAPI) {
             pm.registerEvents(new TagApiPlayerListener(this), this);
             logger.info(logPrefix + " Using TagApi");
@@ -113,6 +113,10 @@ public class Mcpk extends JavaPlugin{
         // Setup Vault 
         setupEconomy();
         setupPermissions();
+        
+        pm.registerEvents(new McpkPlayerListener(this), this);
+        pm.registerEvents(new McpkOnDeathListener(this), this);
+        pm.registerEvents(new McpkProtectListener(this), this);
         
         logger.log(Level.INFO,logPrefix + " done.");
     }
@@ -157,7 +161,8 @@ public class Mcpk extends JavaPlugin{
                 getConfig().addDefault("Basic.WhatGroupChangePK","pk");
                 getConfig().addDefault("Basic.Language","eng");
                 
-                getConfig().addDefault("UseTagAPI",false);
+                getConfig().addDefault("TagAPI.Use",false);
+                getConfig().addDefault("TagAPI.TurnGreenAfterKillPk",false);
                 
                 getConfig().addDefault("Bonus.UseBonusForPk",false);
                 pkbonus = new HashMap<Integer, String>();

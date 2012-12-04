@@ -32,6 +32,9 @@ public class McpkOnDeathListener implements Listener {
         if(!(event.getEntity().getKiller() instanceof Player)) {
             return;
         }
+        if(!(event.getEntity() instanceof Player)) {
+            return;
+        }
         String killer = event.getEntity().getKiller().getName();
         Player _Pkiller = event.getEntity().getKiller();
         
@@ -71,6 +74,8 @@ public class McpkOnDeathListener implements Listener {
                     plugin.getServer().broadcastMessage(plugin.parseColor(announcekills.getValue().replace("%player%", killer)));
                }
             }
+        }else if (plugin.MCPlayers.get(event.getEntity().getName()).getIsPK()){
+            plugin.MCPlayers.get(event.getEntity().getKiller().getName()).setKillPk(Boolean.TRUE);
         }
         
     }

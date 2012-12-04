@@ -24,10 +24,13 @@ public class TagApiPlayerListener implements Listener {
     
     @EventHandler
     public void onNameTag(PlayerReceiveNameTagEvent event) {
-        if(plugin.MCPlayers.get(event.getNamedPlayer().getName()).getIsPK()) {
-            event.setTag( ChatColor.RED + event.getNamedPlayer().getName() );
+        String Name = event.getNamedPlayer().getName();
+        if(plugin.MCPlayers.get(Name).getIsPK()) {
+            event.setTag( ChatColor.RED + Name );
+        }else if(plugin.TurnGreenAfterKillPk && plugin.MCPlayers.get(Name).getKillPk() && !plugin.MCPlayers.get(Name).getIsPK()){
+            event.setTag( ChatColor.GREEN + Name );
         }else{
-            event.setTag( event.getNamedPlayer().getName() );
+            event.setTag( Name );
         }
     }
     
