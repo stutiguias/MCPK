@@ -83,6 +83,10 @@
   </build>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+<<<<<<< HEAD
     <bukkit.version>1.5.1-R0.1</bukkit.version>
+=======
+    <bukkit.version>1.4.7-R1.0</bukkit.version>
+>>>>>>> 5b9d8beea59d71093b2322c2f56c94c50666fa49
   </properties>
 </project>
