@@ -25,23 +25,24 @@ public class MCPKCommandListener implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender cs, Command cmnd, String string, String[] args) {
-        if(args[0].equalsIgnoreCase("reload")) {
-            Reload(cs);
-            return true;
+        switch(args[0]) {
+            case "reload":
+                 Reload(cs);
+                 return true;
+            case "alertmsg":
+                AlertMsg(cs);
+                return true;
+            case "pkmsg":
+                PKMsg(cs);
+                return true;
+            case "removepk":
+                if(!plugin.hasPermission(cs.getName(),"mcpk.command.leftpk"))
+                    return false;
+                RemovePkStatus(cs);
+                return true;
+            default:
+                return false;
         }
-        if(args[0].equalsIgnoreCase("alertmsg")) {
-            AlertMsg(cs);
-            return true;
-        }
-        if(args[0].equalsIgnoreCase("pkmsg")) {
-            PKMsg(cs);
-            return true;
-        }
-        if(args[0].equalsIgnoreCase("removepk") && plugin.permission.has(plugin.getServer().getPlayer(cs.getName()).getWorld(),cs.getName(),"mcpk.command.leftpk")) {
-            RemovePkStatus(cs);
-            return true;
-        }
-        return false;
     }
     
     public void RemovePkStatus(CommandSender cs) {

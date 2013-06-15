@@ -52,7 +52,7 @@ public class McpkOnDeathListener implements Listener {
             
             if(plugin.MCPlayers.get(killer).getPKMsg()) _Pkiller.sendMessage("You have total of " + plugin.DB.getPlayer(_Pkiller).getKills() + " kill(s)");
             
-            plugin.MCPlayers.get(killer).setPKTime(plugin.getCurrentMilli() + plugin.time);
+            plugin.MCPlayers.get(killer).setPKTime(plugin.GetCurrentMilli() + plugin.time);
             _Bonus.getBonusForPK(killer,_Pkiller);
        
             // if turn pk and config setting is true to change group pk

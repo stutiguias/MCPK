@@ -4,7 +4,6 @@
  */
 package me.stutiguias.tasks;
 
-import java.util.Iterator;
 import java.util.Map;
 import me.stutiguias.mcpk.MCPlayer;
 import me.stutiguias.mcpk.Mcpk;
@@ -26,25 +25,18 @@ public class AlertPkTask implements Runnable {
     public void run() {
       try{
             Player[] playerList = plugin.getServer().getOnlinePlayers();
-            
-            for(Iterator it = plugin.MCPlayers.entrySet().iterator();it.hasNext();)
-            {         
-                // key=value separator this by Map.Entry to get key and value
-                Map.Entry m =(Map.Entry)it.next();
-              
-                // getKey is used to get key of Map
+            for (Map.Entry m : plugin.MCPlayers.entrySet()) {
                 String key=(String)m.getKey();
 
                 // getValue is used to get value of key in Map
                 MCPlayer Killer =(MCPlayer)m.getValue();
-                
+
                 Player pkPlayer = plugin.getServer().getPlayer(key);
-                
                 if(plugin.getServer().getOnlinePlayers().length > 0 && Killer.getIsPK())
                 {
                     if(pkPlayer != null) {
                             WarningPlayer(pkPlayer, playerList, key);
-                            Integer timeleft = Integer.parseInt(String.valueOf(plugin.MCPlayers.get(key).getPKTime() - plugin.getCurrentMilli()));
+                            Integer timeleft = Integer.parseInt(String.valueOf(plugin.MCPlayers.get(key).getPKTime() - plugin.GetCurrentMilli()));
                             if(timeleft > 1000 && Killer.getPKMsg()) {
                                 timeleft = timeleft / 1000;
                                 pkPlayer.sendMessage("Time left on PK Status " + timeleft);
@@ -54,7 +46,7 @@ public class AlertPkTask implements Runnable {
                     continue;
                 }
 
-                if(plugin.getCurrentMilli() > plugin.MCPlayers.get(key).getPKTime()) {
+                if(plugin.GetCurrentMilli() > plugin.MCPlayers.get(key).getPKTime()) {
                     Player _PKiller = plugin.getServer().getPlayer(key);
                     String[] playersgroups = plugin.MCPlayers.get(key).getPkOldGroups();
                     if(playersgroups != null && plugin.RemoveAllOtherGroup) {
@@ -66,7 +58,6 @@ public class AlertPkTask implements Runnable {
                     plugin.MCPlayers.get(key).setIsPK(Boolean.FALSE);
                     plugin.MCPlayers.get(key).setKills(0);
                 }
-
             }
       } catch (Exception ex) {
          ex.printStackTrace();

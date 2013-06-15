@@ -1,0 +1,43 @@
+#Setup Mysql If you want to use Mysql set true
+MySQL:
+  Use: false
+  Host: localhost
+  Username: root
+  Password: password_here
+  Port: '3306'
+  Database: minecraft
+Basic:
+  #Send Broadcast message to near players
+  AlertAboutPK: true
+  #Time the Player will be a PK  ( seconds )
+  TimeOnPK: 25
+  # Radius of warning
+  Radius: 10
+  # Warning Frequency
+  AlertPKFrequency: 30
+  # How Much the player need to kill to turn into PK
+  HowMuchForTurnPk: 3
+  # Change Group if Player turn into PK
+  ChangeGroupIfPK: false
+  # Remove all others group if player turn into PK
+  RemoveAllOthersGroup: false
+  # What Group to change if you choose yes on last one
+  WhatGroupChangePK: pk
+  # Set language file you use 
+  Language: eng
+# Use TagAPI plugin
+TagAPI:
+  Use: false
+  TurnGreenAfterKillPk: false
+Bonus:
+  UseBonusForPk: false
+  # NumberOfKill : Id_Item,Id_Item
+  ForPkOnTime:
+    '2': 34,35,36
+    '3': '45'
+    '4': 56,57,58
+Protect:
+  # If you want to protect newbie players
+  UseNewBieProtect: true
+  # Time on minutes
+  NewBieProtectTime: 10m

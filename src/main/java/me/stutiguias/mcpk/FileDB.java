@@ -19,40 +19,16 @@ import org.bukkit.entity.Player;
  * @author Daniel
  */
 public class FileDB {
-    
-    Mcpk plugin;
-    File PlayerFile;
-    String Path = "plugins"+ File.separator +"Minecraft Player Killer"+ File.separator +"userdata";
-    YamlConfiguration PlayerYML;
-    
-    public FileDB(){
-        
-    }
-            
-    public FileDB(Mcpk instance,Player player,int kills,Timestamp newBieProtectUntil) {
-    
-        plugin = instance;
 
-        try {
-            PlayerFile = new File( Path + File.separator + player.getName() +".yml");
-            if(PlayerFile.createNewFile()) {
-                LoadYML();
-                SetupYML(kills,newBieProtectUntil);
-            }else{
-                LoadYML();
-            }
-        } catch (IOException ex) {
-            Mcpk.logger.log(Level.INFO, "{0} Error Creating new YML player File", Mcpk.logPrefix);
-            Mcpk.logger.log(Level.INFO, "{0}", ex.getMessage());
-        }
-    }
+    private File PlayerFile;
+    private String Path = "plugins"+ File.separator +"Minecraft Player Killer"+ File.separator +"userdata";
+    private YamlConfiguration PlayerYML;
     
     public MCPlayer LoadPlayerFile(Player player) {
         try {
             PlayerFile = new File( Path + File.separator + player.getName() +".yml");
             PlayerYML = new YamlConfiguration();
             PlayerYML.load(PlayerFile);
-            Mcpk.logger.log(Level.INFO,"{0} {1} Profile Found",new Object[] { Mcpk.logPrefix,player.getName() });
             MCPlayer _MCPlayer = new MCPlayer();
             _MCPlayer.setKills(getKills());
             _MCPlayer.setNewBieProtectUntil(getNewbieProtectUntil());

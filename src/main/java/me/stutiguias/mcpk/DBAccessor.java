@@ -15,12 +15,10 @@ import org.bukkit.entity.Player;
 public class DBAccessor {
     
     private Boolean UseMySql;
-    Mcpk plugin;
     private FileDB _FileDB;
     private MySql DataBase;
     
-    public DBAccessor(Mcpk instance,Boolean UseMySql,String dbHost,String dbUser,String dbPass,String dbPort,String dbDatabase) {
-        plugin = instance;    
+    public DBAccessor(Boolean UseMySql,String dbHost,String dbUser,String dbPass,String dbPort,String dbDatabase) {  
         this.UseMySql = UseMySql;
         if(UseMySql) {
             DataBase = new MySql(dbHost,dbUser,dbPass,dbPort,dbDatabase);

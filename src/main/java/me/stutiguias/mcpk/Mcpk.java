@@ -1,5 +1,6 @@
 package me.stutiguias.mcpk;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -9,6 +10,7 @@ import me.stutiguias.tasks.AlertPkTask;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -46,62 +48,65 @@ public class Mcpk extends JavaPlugin{
     
     public String language;
     public Translate translate;
+    public ConfigAccessor config;
     
     //Vault
     public Permission permission = null;
     public Economy economy = null;
-    
-    public Mcpk(){
    
-    }
-    
-    public long getCurrentMilli() {
+    public long GetCurrentMilli() {
             return System.currentTimeMillis();
     }
         
     @Override
     public void onEnable(){
         logger.log(Level.INFO,logPrefix + " initializing....");
-
-	initConfig();
+        try{
+            config = new ConfigAccessor(this,"config.yml");
+            config.setupConfig();
+        }catch(IOException ex) {
+            ex.printStackTrace();
+        }
+        
+        FileConfiguration fc = config.getConfig();
         
         comuns  = new Comuns();
         
-        alertaboutpk = getConfig().getBoolean("Basic.AlertAboutPK");
-        time = getConfig().getInt("Basic.TimeOnPK") * 1000;
-        radius = getConfig().getInt("Basic.Radius");
-        turnpk = getConfig().getInt("Basic.HowMuchForTurnPk");
-        long AlertPKFrequency = getConfig().getLong("Basic.AlertPKFrequency");
+        alertaboutpk = fc.getBoolean("Basic.AlertAboutPK");
+        if(alertaboutpk) {
+            long AlertPKFrequency = getConfig().getLong("Basic.AlertPKFrequency");
+            getServer().getScheduler().runTaskTimerAsynchronously(this, new AlertPkTask(this), AlertPKFrequency, AlertPKFrequency);
+        }
+        time =         fc.getInt("Basic.TimeOnPK") * 1000;
+        radius =       fc.getInt("Basic.Radius");
+        turnpk =       fc.getInt("Basic.HowMuchForTurnPk");
 
-        ChangePkGroup = getConfig().getBoolean("Basic.ChangeGroupIfPK");
-        GroupPk = getConfig().getString("Basic.WhatGroupChangePK");
-        UseBonusForPK = getConfig().getBoolean("Bonus.UseBonusForPk");
-        RemoveAllOtherGroup = getConfig().getBoolean("Basic.RemoveAllOthersGroup");
+        ChangePkGroup =         fc.getBoolean("Basic.ChangeGroupIfPK");
+        GroupPk =               fc.getString("Basic.WhatGroupChangePK");
+        UseBonusForPK =         fc.getBoolean("Bonus.UseBonusForPk");
+        RemoveAllOtherGroup =   fc.getBoolean("Basic.RemoveAllOthersGroup");
         
-        NewbieProtectTime = getConfig().getString("Protect.NewBieProtectTime");
-        usenewbieprotect = getConfig().getBoolean("Protect.UseNewBieProtect");
+        NewbieProtectTime =     fc.getString("Protect.NewBieProtectTime");
+        usenewbieprotect =      fc.getBoolean("Protect.UseNewBieProtect");
         
-        String dbHost = getConfig().getString("MySQL.Host");
-        String dbUser = getConfig().getString("MySQL.Username");
-        String dbPass = getConfig().getString("MySQL.Password");
-        String dbPort = getConfig().getString("MySQL.Port");
-        String dbDatabase = getConfig().getString("MySQL.Database");
-        DB = new DBAccessor(this,getConfig().getBoolean("MySQL.Use"),dbHost,dbUser,dbPass,dbPort,dbDatabase);
+        String dbHost       = fc.getString("MySQL.Host");
+        String dbUser       = fc.getString("MySQL.Username");
+        String dbPass       = fc.getString("MySQL.Password");
+        String dbPort       = fc.getString("MySQL.Port");
+        String dbDatabase   = fc.getString("MySQL.Database");
+        boolean dbMySqlUse  = fc.getBoolean("MySQL.Use");
+        
+        DB = new DBAccessor(dbMySqlUse,dbHost,dbUser,dbPass,dbPort,dbDatabase);
              
         language = getConfig().getString("Basic.Language");
         translate = new Translate(this, language);
         
-        getBonusForPK();
+        GetBonusForPK();
         
         getCommand("mcpk").setExecutor(new MCPKCommandListener(this));
         
-        if(alertaboutpk) {
-            getServer().getScheduler().scheduleAsyncRepeatingTask(this, new AlertPkTask(this), AlertPKFrequency, AlertPKFrequency);
-        }
-        
         PluginManager pm = getServer().getPluginManager();
-        
-        // TagAPI Config
+ 
         UseTagAPI = getConfig().getBoolean("TagAPI.Use"); 
         TurnGreenAfterKillPk = getConfig().getBoolean("TagAPI.TurnGreenAfterKillPk"); 
         
@@ -109,8 +114,7 @@ public class Mcpk extends JavaPlugin{
             pm.registerEvents(new TagApiPlayerListener(this), this);
             logger.info(logPrefix + " Using TagApi");
         }
-       
-        // Setup Vault 
+   
         setupEconomy();
         setupPermissions();
         
@@ -121,11 +125,13 @@ public class Mcpk extends JavaPlugin{
         logger.log(Level.INFO,logPrefix + " done.");
     }
     
-    public void getBonusForPK() {
+    public void GetBonusForPK() {
         pkbonus = new HashMap<Integer, String>();
-        for (String key : getConfig().getConfigurationSection("Bonus.ForPkOnTime").getKeys(false)){
-          pkbonus.put(Integer.parseInt(key), getConfig().getString("Bonus.ForPkOnTime." + key));
-          logger.log(Level.INFO, logPrefix + " Bonus for PK kill number {0} set to {1}", new Object[]{key, getConfig().getString("Bonus.ForPkOnTime." + key)});
+        for (String key : config.getConfig().getConfigurationSection("Bonus.ForPkOnTime").getKeys(false)){
+          Integer qtdDeaths = Integer.parseInt(key);
+          String Bonus = getConfig().getString("Bonus.ForPkOnTime." + key);
+          pkbonus.put(qtdDeaths,Bonus);
+          logger.log(Level.INFO, logPrefix + " Bonus PK-kill {0} set to {1}", new Object[]{key, getConfig().getString("Bonus.ForPkOnTime." + key)});
         }
     }
     
@@ -133,7 +139,7 @@ public class Mcpk extends JavaPlugin{
     public void onDisable() {
 		getServer().getScheduler().cancelTasks(this);
 		logger.log(Level.INFO, logPrefix + " Disabled.");
-	}
+    }
     
     public void OnReload() {
         this.reloadConfig();
@@ -142,61 +148,28 @@ public class Mcpk extends JavaPlugin{
         getServer().getPluginManager().enablePlugin(this);
     }
     
-    private void initConfig() {
-                
-                getConfig().addDefault("MySQL.Use", false);
-		getConfig().addDefault("MySQL.Host", "localhost");
-		getConfig().addDefault("MySQL.Username", "root");
-		getConfig().addDefault("MySQL.Password", "password_here");
-		getConfig().addDefault("MySQL.Port", "3306");
-		getConfig().addDefault("MySQL.Database", "minecraft");
-                
-                getConfig().addDefault("Basic.AlertAboutPK", true);
-		getConfig().addDefault("Basic.TimeOnPK", 25);
-                getConfig().addDefault("Basic.Radius", 10);
-                getConfig().addDefault("Basic.AlertPKFrequency", 30L);
-                getConfig().addDefault("Basic.HowMuchForTurnPk", 3);
-                getConfig().addDefault("Basic.ChangeGroupIfPK",false);
-                getConfig().addDefault("Basic.RemoveAllOthersGroup", false);
-                getConfig().addDefault("Basic.WhatGroupChangePK","pk");
-                getConfig().addDefault("Basic.Language","eng");
-                
-                getConfig().addDefault("TagAPI.Use",false);
-                getConfig().addDefault("TagAPI.TurnGreenAfterKillPk",false);
-                
-                getConfig().addDefault("Bonus.UseBonusForPk",false);
-                pkbonus = new HashMap<Integer, String>();
-                pkbonus.put(2, "34,35,36");
-                pkbonus.put(3, "45");
-                pkbonus.put(4, "56,57,58");
-                getConfig().addDefault("Bonus.ForPkOnTime", pkbonus);
-                
-                getConfig().addDefault("Protect.UseNewBieProtect",true);
-                getConfig().addDefault("Protect.NewBieProtectTime","10m");
-             
-		getConfig().options().copyDefaults(true);
-		saveConfig();
-                reloadConfig();
-	}
-    
-        private boolean setupPermissions() {
-            RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
-            permission = rsp.getProvider();
-            return permission != null;
-        }
+    private boolean setupPermissions() {
+        RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
+        permission = rsp.getProvider();
+        return permission != null;
+    }
 
-	private Boolean setupEconomy() {
-            RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(Economy.class);
-            if (economyProvider != null) {
-                    economy = economyProvider.getProvider();
-            }
-            return (economy != null);
-	}
-        
-        public String parseColor(String message) {
-             for (ChatColor color : ChatColor.values()) {
-                message = message.replaceAll(String.format("&%c", color.getChar()), color.toString());
-            }
-            return message;
+    private Boolean setupEconomy() {
+        RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(Economy.class);
+        if (economyProvider != null) {
+                economy = economyProvider.getProvider();
         }
+        return (economy != null);
+    }
+
+    public String parseColor(String message) {
+         for (ChatColor color : ChatColor.values()) {
+            message = message.replaceAll(String.format("&%c", color.getChar()), color.toString());
+        }
+        return message;
+    }
+    
+    public boolean hasPermission(String PlayerName,String Permission) {
+       return permission.has(getServer().getPlayer(PlayerName).getWorld(),PlayerName,Permission);
+    }
 }

@@ -1,0 +1,6 @@
+AlertMessage: '%player% is PK and is NEAR YOU'
+ProtectMessage: You r protect for %d%! Until %date%!
+PKMessage:
+  '2': '%player% first message'
+  '3': '%player% second message'
+  '4': '%player% third message'

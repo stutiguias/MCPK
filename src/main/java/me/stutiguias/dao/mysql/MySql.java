@@ -9,7 +9,6 @@ import java.util.logging.Level;
 import me.stutiguias.mcpk.Comuns;
 import me.stutiguias.mcpk.Mcpk;
 import me.stutiguias.mcpk.MCPlayer;
-import org.bukkit.plugin.Plugin;
 
 /**
  *

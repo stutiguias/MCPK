@@ -6,6 +6,7 @@ package me.stutiguias.dao.mysql;
 
 import java.sql.*;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 /**
  *
@@ -47,6 +48,11 @@ public class McpkDriver implements Driver {
     @Override
     public boolean jdbcCompliant() {
         return driver.jdbcCompliant();
+    }
+
+    @Override
+    public Logger getParentLogger() throws SQLFeatureNotSupportedException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
