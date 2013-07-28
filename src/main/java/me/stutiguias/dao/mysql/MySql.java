@@ -6,7 +6,7 @@ package me.stutiguias.dao.mysql;
 
 import java.sql.*;
 import java.util.logging.Level;
-import me.stutiguias.mcpk.Comuns;
+import me.stutiguias.mcpk.Util;
 import me.stutiguias.mcpk.Mcpk;
 import me.stutiguias.mcpk.MCPlayer;
 
@@ -212,7 +212,7 @@ public class MySql {
                     st.setInt(1, PlayerId);
                     st.setString(2, Detail);
                     st.setString(3, Val);
-                    Timestamp since = new Timestamp(new Comuns().now().getTime());
+                    Timestamp since = new Timestamp(new Util().now().getTime());
                     st.setTimestamp(4,since);
                     st.executeUpdate();
             } catch (SQLException e) {

@@ -68,7 +68,7 @@ public class McpkOnDeathListener implements Listener {
                plugin.permission.playerAddGroup(_Pkiller, plugin.GroupPk);
             }
             
-            for(Map.Entry<Integer,String> announcekills : plugin.translate.pkmsg.entrySet())
+            for(Map.Entry<Integer,String> announcekills : plugin.translate.PkMsg.entrySet())
             {
                if(plugin.MCPlayers.get(killer).getKills() == announcekills.getKey()) { 
                     plugin.getServer().broadcastMessage(plugin.parseColor(announcekills.getValue().replace("%player%", killer)));

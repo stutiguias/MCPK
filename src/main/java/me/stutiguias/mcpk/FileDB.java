@@ -21,7 +21,7 @@ import org.bukkit.entity.Player;
 public class FileDB {
 
     private File PlayerFile;
-    private String Path = "plugins"+ File.separator +"Minecraft Player Killer"+ File.separator +"userdata";
+    private String Path = "plugins"+ File.separator +"MCPK"+ File.separator +"userdata";
     private YamlConfiguration PlayerYML;
     
     public MCPlayer LoadPlayerFile(Player player) {
@@ -35,9 +35,7 @@ public class FileDB {
             return _MCPlayer;
         } catch (FileNotFoundException ex) {
            return null;
-        } catch (IOException ex) {
-           return null;
-        } catch (InvalidConfigurationException ex) {
+        } catch (IOException | InvalidConfigurationException ex) {
            return null;
         }
     }

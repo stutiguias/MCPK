@@ -11,7 +11,7 @@ import java.util.Calendar;
  *
  * @author Daniel
  */
-public class Comuns {
+public class Util {
         
     public Date addTime(String Time)
     {

@@ -16,9 +16,9 @@ import org.bukkit.configuration.ConfigurationSection;
 public class Translate {
     
     public ConfigAccessor Message;
-    public String protecmsg;
-    public String msg;
-    public HashMap<Integer, String> pkmsg;
+    public String ProtectMsg;
+    public String Msg;
+    public HashMap<Integer, String> PkMsg;
     
     public Translate(Mcpk instance,String language) {
         Message = new ConfigAccessor(instance,language + ".yml");
@@ -38,16 +38,16 @@ public class Translate {
     }
     
     private void LoadConfig() {
-        msg = Message.getConfig().getString("AlertMessage");
-        protecmsg = Message.getConfig().getString("ProtectMessage");
-        getMessages();
+        Msg = Message.getConfig().getString("AlertMessage");
+        ProtectMsg = Message.getConfig().getString("ProtectMessage");
+        GetMessages();
     }
     
-    public void getMessages(){
-        pkmsg = new HashMap<Integer, String>();
+    private void GetMessages(){
+        PkMsg = new HashMap<>();
         ConfigurationSection PKMessage = Message.getConfig().getConfigurationSection("PKMessage");
         for (String key : PKMessage.getKeys(false)){
-          pkmsg.put(Integer.parseInt(key), Message.getConfig().getString("PKMessage." + key));
+          PkMsg.put(Integer.parseInt(key), Message.getConfig().getString("PKMessage." + key));
         }
     }
 }

@@ -40,10 +40,10 @@ public class McpkPlayerListener implements Listener {
             Mcpk.logger.log(Level.WARNING, "[MCPK] Error get Player from Database: {0}", e.getMessage());
         }
         if(_MCPlayer == null) {
-            _MCPlayer = new MCPlayer(pl.getName(),plugin.comuns.now());
+            _MCPlayer = new MCPlayer(pl.getName(),plugin.util.now());
             
             if(!plugin.usenewbieprotect) {
-                plugin.DB.CreatePlayer(pl,new Timestamp(plugin.comuns.now().getTime()));
+                plugin.DB.CreatePlayer(pl,new Timestamp(plugin.util.now().getTime()));
                 _MCPlayer.setProtectAlreadyLeft(Boolean.TRUE);
                 Mcpk.logger.log(Level.INFO, "[MCPK] New Player {0}", pl.getName());
             }else{
@@ -72,7 +72,7 @@ public class McpkPlayerListener implements Listener {
             _MCPlayer.setIsPK(Boolean.FALSE);
             _MCPlayer.setKillPk(Boolean.FALSE);
             
-            if(plugin.comuns.now().before(_MCPlayer.getNewBieProtectUntil())) {
+            if(plugin.util.now().before(_MCPlayer.getNewBieProtectUntil())) {
                 _MCPlayer.setProtectAlreadyLeft(Boolean.FALSE);
                 SendProtectMessage(pl, _MCPlayer.getNewBieProtectUntil().toString() );
             }else{
@@ -84,11 +84,11 @@ public class McpkPlayerListener implements Listener {
     }
     
     public Timestamp ProtectUntil() {
-        return new Timestamp(plugin.comuns.addTime(plugin.NewbieProtectTime).getTime());
+        return new Timestamp(plugin.util.addTime(plugin.NewbieProtectTime).getTime());
     }
     
     private void SendProtectMessage(Player pl,String Date) {
         String Time = String.valueOf(plugin.NewbieProtectTime).replace("m","");
-        pl.sendMessage(plugin.translate.protecmsg.replace("%d%", Time).replace("%date%",Date));
+        pl.sendMessage(plugin.translate.ProtectMsg.replace("%d%", Time).replace("%date%",Date));
     }
 }

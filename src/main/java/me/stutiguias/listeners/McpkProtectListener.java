@@ -6,7 +6,7 @@ package me.stutiguias.listeners;
 
 import java.sql.Date;
 import java.util.logging.Level;
-import me.stutiguias.mcpk.Comuns;
+import me.stutiguias.mcpk.Util;
 import me.stutiguias.mcpk.MCPlayer;
 import me.stutiguias.mcpk.Mcpk;
 import org.bukkit.entity.Entity;
@@ -61,7 +61,7 @@ public class McpkProtectListener implements Listener {
                 }
                 MCPlayer dfPkPlayer = plugin.MCPlayers.get(df.getName());
                 MCPlayer atPkPlayer = plugin.MCPlayers.get(at.getName());
-                Date dt = plugin.comuns.now();
+                Date dt = plugin.util.now();
                 if(dfPkPlayer == null || atPkPlayer == null) {
                     return;
                 }

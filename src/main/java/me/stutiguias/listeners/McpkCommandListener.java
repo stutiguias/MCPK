@@ -14,11 +14,11 @@ import org.bukkit.entity.Player;
  *
  * @author Daniel
  */
-public class MCPKCommandListener implements CommandExecutor {
+public class McpkCommandListener implements CommandExecutor {
       
     public Mcpk plugin;
     
-    public MCPKCommandListener(Mcpk instance)
+    public McpkCommandListener(Mcpk instance)
     {
         plugin = instance;
     }

@@ -20,7 +20,7 @@ public class Bonus {
     }
     
     public void getBonusForPK(String killer,Player _Pkiller) {
-                if(plugin.pkbonus.get(plugin.MCPlayers.get(killer).getKills()) != null && plugin.UseBonusForPK) {
+                if(plugin.pkbonus.get(plugin.MCPlayers.get(killer).getKills()) != null && plugin.EnableBonusForPK) {
                 String bonus = plugin.pkbonus.get(plugin.MCPlayers.get(killer).getKills());
                 String[] ids = bonus.split(",");
                 for (int i = 0; i < ids.length; i++) {
