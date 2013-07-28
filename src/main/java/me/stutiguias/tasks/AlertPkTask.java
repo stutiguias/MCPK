@@ -73,7 +73,7 @@ public class AlertPkTask implements Runnable {
                     (playerZ > PkPlayerZ - (double)plugin.radius) &&
                      plugin.MCPlayers.get(player.getName()).getAlertMsg() && (player.getName().equals(key) == false) 
                 ) {
-                    player.sendMessage(plugin.parseColor(plugin.translate.Msg.replace("%player%", key)));
+                    player.sendMessage(plugin.parseColor(plugin.translate.AlertMsg.replace("%player%", key)));
                 }
         }
     }

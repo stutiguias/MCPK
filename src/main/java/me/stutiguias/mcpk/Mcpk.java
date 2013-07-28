@@ -14,6 +14,7 @@ import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -194,5 +195,9 @@ public class Mcpk extends JavaPlugin{
     
     public boolean hasPermission(String PlayerName,String Permission) {
        return permission.has(getServer().getPlayer(PlayerName).getWorld(),PlayerName,Permission);
+    }
+    
+    public boolean hasPermission(Player player, String Permission) {
+        return permission.has(player.getWorld(), player.getName(), Permission.toLowerCase());
     }
 }

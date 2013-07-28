@@ -17,7 +17,13 @@ public class Translate {
     
     public ConfigAccessor Message;
     public String ProtectMsg;
-    public String Msg;
+    public String AlertMsg;
+    public String YouRemovePKStatus;
+    public String AlertMsgOn;
+    public String AlertMsgOff;
+    public String TimePkMsgOn;
+    public String TimePkMsgOff;
+    
     public HashMap<Integer, String> PkMsg;
     
     public Translate(Mcpk instance,String language) {
@@ -38,8 +44,13 @@ public class Translate {
     }
     
     private void LoadConfig() {
-        Msg = Message.getConfig().getString("AlertMessage");
+        AlertMsg = Message.getConfig().getString("AlertMessage");
         ProtectMsg = Message.getConfig().getString("ProtectMessage");
+        YouRemovePKStatus = Message.getConfig().getString("YouRemovePKStatus");
+        AlertMsgOn = Message.getConfig().getString("AlertMsgOn");
+        AlertMsgOff = Message.getConfig().getString("AlertMsgOff");
+        TimePkMsgOn = Message.getConfig().getString("PKTimeMsgOn");
+        TimePkMsgOff = Message.getConfig().getString("PKTimeMsgOff");
         GetMessages();
     }
     

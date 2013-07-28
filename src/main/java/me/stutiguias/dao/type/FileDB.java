@@ -23,7 +23,7 @@ import org.bukkit.entity.Player;
 public class FileDB {
 
     private File PlayerFile;
-    private String Path = "plugins"+ File.separator +"MCPK"+ File.separator +"userdata";
+    private String Path = "plugins"+ File.separator + "Mcpk" + File.separator +"userdata";
     private YamlConfiguration PlayerYML;
     
     public MCPlayer LoadPlayerFile(Player player) {

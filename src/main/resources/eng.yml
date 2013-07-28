@@ -1,6 +1,12 @@
-AlertMessage: '%player% is PK and is NEAR YOU'
-ProtectMessage: You r protect for %d%! Until %date%!
+# You can use minecraft color codes here !
+AlertMessage: '&6 %player% is PK and is NEAR YOU'
+ProtectMessage: '&6 You r protect for %d%! Until %date%!'
+YouRemovePKStatus : '&6 You remove the mcpk status'
+AlertMsgOn: '&6 Now you will receve any Alert PK MSG'
+AlertMsgOff: '&6 Now you not will receve any Alert PK MSG'
+PKTimeMsgOn: '&6 Now you will receve any PK MSG'
+PKTimeMsgOff: '&6 Now you not will receve any PK MSG'
 PKMessage:
-  '2': '%player% first message'
-  '3': '%player% second message'
-  '4': '%player% third message'
+  '2': '&6 %player% first message'
+  '3': '&6 %player% second message'
+  '4': '&6 %player% third message'

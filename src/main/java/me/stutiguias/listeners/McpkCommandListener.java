@@ -31,30 +31,31 @@ public class McpkCommandListener implements CommandExecutor {
         if (!(sender instanceof Player)) return false;
         
         Player player = (Player) sender;
+        if (args.length == 0) return Help(player);
         
         switch(args[0]) {
             case "reload":
+                 if(!plugin.hasPermission(sender.getName(),"mcpk.command.reload")) return false;
                  return Reload(sender);
             case "alertmsg":
                 return AlertMsg(player);
             case "pkmsg":
                 return PKMsg(player);
             case "removepk":
-                if(!plugin.hasPermission(sender.getName(),"mcpk.command.leftpk"))
-                    return false;
+                if(!plugin.hasPermission(sender.getName(),"mcpk.command.leftpk")) return false;
                 RemovePkStatus(player);
                 return true;
             case "help":
             case "?":
             default:
-                return Help();
+                return Help(player);
         }
     }
     
     public void RemovePkStatus(Player player) {
         plugin.MCPlayers.get(player.getName()).setKills(0);
         plugin.MCPlayers.get(player.getName()).setIsPK(Boolean.FALSE);
-        player.sendMessage(plugin.parseColor("You remove the mcpk status"));
+        SendFormatMessage(plugin.translate.YouRemovePKStatus);
     }
     
     public boolean Reload(CommandSender cs) {
@@ -68,11 +69,11 @@ public class McpkCommandListener implements CommandExecutor {
         if(plugin.DB.getAlertMsg(player)) {
             plugin.DB.UpdateAlertMsg(player, Boolean.FALSE);
             plugin.MCPlayers.get(player.getName()).setAlertMsg(Boolean.FALSE);
-            player.sendMessage("Now you not will receve any Alert PK MSG");
+            SendFormatMessage(plugin.translate.AlertMsgOff);
         }else{
             plugin.DB.UpdateAlertMsg(player, Boolean.TRUE);
             plugin.MCPlayers.get(player.getName()).setAlertMsg(Boolean.TRUE);
-            player.sendMessage("Now you will receve any Alert PK MSG");
+            SendFormatMessage(plugin.translate.AlertMsgOn);
         }
         return true;
     }
@@ -81,28 +82,39 @@ public class McpkCommandListener implements CommandExecutor {
         if(plugin.DB.getPKMsg(player)) {
             plugin.DB.UpdatePKMsg(player, Boolean.FALSE);
             plugin.MCPlayers.get(player.getName()).setPKMsg(Boolean.FALSE);
-            player.sendMessage("Now you not will receve any PK MSG");
+            SendFormatMessage(plugin.translate.TimePkMsgOff);
         }else{
             plugin.DB.UpdatePKMsg(player, Boolean.TRUE);
             plugin.MCPlayers.get(player.getName()).setPKMsg(Boolean.TRUE);
-            player.sendMessage("Now you will receve any PK MSG");
+            SendFormatMessage(plugin.translate.TimePkMsgOn);
         }
         return true;
     }
     
-    public boolean Help() {
+    public boolean Help(Player player) {
         SendFormatMessage(plugin.MsgHr);
         SendFormatMessage(" &7MCPK ");
-        SendFormatMessage("&6/mru alertmsg - Turn On/Off Alert Msg");
-        SendFormatMessage("&6/mru pkmsg  - Turn On/Off Time PK Msg");
-        if (plugin.hasPermission(sender.getName(),"mcpk.command.leftpk")) {
-            SendFormatMessage("&6/mru removepk &7Remove PK Status");
+        
+        if(plugin.DB.getAlertMsg(player))
+            SendFormatMessage("&6/mru alertmsg - Turn &cOff&6 Alert Msg");
+        else
+            SendFormatMessage("&6/mru alertmsg - Turn &cOn&6 Alert Msg");
+        
+        if(plugin.DB.getPKMsg(player))
+            SendFormatMessage("&6/mru pkmsg  - Turn &cOff&6 Time PK Msg");
+        else
+            SendFormatMessage("&6/mru pkmsg  - Turn &cOn&6 Time PK Msg");
+        
+        if (plugin.hasPermission(player,"mcpk.command.leftpk")) {
+            SendFormatMessage("&6/mru removepk - Remove PK Status");
         }
         
-        SendFormatMessage(plugin.MsgHr);
-        SendFormatMessage(" &7Admin MCPK ");
-        SendFormatMessage("&6/mru reload - reload MCPK");
-
+        if(plugin.hasPermission(player,"mcpk.command.reload")) {
+            SendFormatMessage(plugin.MsgHr);
+            SendFormatMessage(" &7Admin MCPK ");
+            SendFormatMessage("&6/mru reload - reload MCPK");
+        }
+        
         SendFormatMessage(plugin.MsgHr);
         return true;
     }
