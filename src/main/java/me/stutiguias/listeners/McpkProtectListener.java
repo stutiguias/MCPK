@@ -6,7 +6,6 @@ package me.stutiguias.listeners;
 
 import java.sql.Date;
 import java.util.logging.Level;
-import me.stutiguias.mcpk.Util;
 import me.stutiguias.mcpk.MCPlayer;
 import me.stutiguias.mcpk.Mcpk;
 import org.bukkit.entity.Entity;

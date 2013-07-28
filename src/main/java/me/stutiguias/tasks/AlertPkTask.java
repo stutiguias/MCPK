@@ -25,6 +25,7 @@ public class AlertPkTask implements Runnable {
     public void run() {
       try{
             Player[] playerList = plugin.getServer().getOnlinePlayers();
+            if(plugin.getServer().getOnlinePlayers().length == 0) return;
             for (Map.Entry m : plugin.MCPlayers.entrySet()) {
                 String key=(String)m.getKey();
 
@@ -32,18 +33,13 @@ public class AlertPkTask implements Runnable {
                 MCPlayer Killer =(MCPlayer)m.getValue();
 
                 Player pkPlayer = plugin.getServer().getPlayer(key);
-                if(plugin.getServer().getOnlinePlayers().length > 0 && Killer.getIsPK())
-                {
-                    if(pkPlayer != null) {
-                            WarningPlayer(pkPlayer, playerList, key);
-                            Integer timeleft = Integer.parseInt(String.valueOf(plugin.MCPlayers.get(key).getPKTime() - plugin.GetCurrentMilli()));
-                            if(timeleft > 1000 && Killer.getPKMsg()) {
-                                timeleft = timeleft / 1000;
-                                pkPlayer.sendMessage("Time left on PK Status " + timeleft);
-                            }
-                    }
-                }else{
-                    continue;
+                if(pkPlayer == null || !Killer.getIsPK()) continue;
+                
+                WarningPlayer(pkPlayer, playerList, key);
+                Integer timeleft = Integer.parseInt(String.valueOf(plugin.MCPlayers.get(key).getPKTime() - plugin.GetCurrentMilli()));
+                if(timeleft > 1000 && Killer.getPKMsg()) {
+                    timeleft = timeleft / 1000;
+                    pkPlayer.sendMessage("Time left on PK Status " + timeleft);
                 }
 
                 if(plugin.GetCurrentMilli() > plugin.MCPlayers.get(key).getPKTime()) {
@@ -62,8 +58,7 @@ public class AlertPkTask implements Runnable {
       } catch (Exception ex) {
          ex.printStackTrace();
       }        
-        
-        
+
     }
     
     public void WarningPlayer(Player pkPlayer,Player[] playerList,String key) {
@@ -76,8 +71,7 @@ public class AlertPkTask implements Runnable {
                     (playerX > PkPlayerX - (double)plugin.radius) &&
                     (playerZ < PkPlayerZ + (double)plugin.radius) &&
                     (playerZ > PkPlayerZ - (double)plugin.radius) &&
-                     plugin.MCPlayers.get(player.getName()).getAlertMsg() &&
-                    (player.getName().equals(key) == false) 
+                     plugin.MCPlayers.get(player.getName()).getAlertMsg() && (player.getName().equals(key) == false) 
                 ) {
                     player.sendMessage(plugin.parseColor(plugin.translate.Msg.replace("%player%", key)));
                 }

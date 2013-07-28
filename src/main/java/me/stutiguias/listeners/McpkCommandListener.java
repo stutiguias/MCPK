@@ -17,74 +17,73 @@ import org.bukkit.entity.Player;
 public class McpkCommandListener implements CommandExecutor {
       
     public Mcpk plugin;
-    
+
     public McpkCommandListener(Mcpk instance)
     {
         plugin = instance;
     }
 
     @Override
-    public boolean onCommand(CommandSender cs, Command cmnd, String string, String[] args) {
+    public boolean onCommand(CommandSender sender, Command cmnd, String string, String[] args) {
+
+        if (sender.getName().equalsIgnoreCase("CONSOLE")) return true;
+        if (!(sender instanceof Player)) return false;
+        
+        Player player = (Player) sender;
+        
         switch(args[0]) {
             case "reload":
-                 Reload(cs);
-                 return true;
+                 return Reload(sender);
             case "alertmsg":
-                AlertMsg(cs);
-                return true;
+                return AlertMsg(player);
             case "pkmsg":
-                PKMsg(cs);
-                return true;
+                return PKMsg(player);
             case "removepk":
-                if(!plugin.hasPermission(cs.getName(),"mcpk.command.leftpk"))
+                if(!plugin.hasPermission(sender.getName(),"mcpk.command.leftpk"))
                     return false;
-                RemovePkStatus(cs);
+                RemovePkStatus(player);
                 return true;
             default:
                 return false;
         }
     }
     
-    public void RemovePkStatus(CommandSender cs) {
-        Player player = plugin.getServer().getPlayer(cs.getName());
+    public void RemovePkStatus(Player player) {
         plugin.MCPlayers.get(player.getName()).setKills(0);
         plugin.MCPlayers.get(player.getName()).setIsPK(Boolean.FALSE);
         player.sendMessage(plugin.parseColor("You remove the mcpk status"));
     }
     
-    public void Reload(CommandSender cs) {
+    public boolean Reload(CommandSender cs) {
         cs.sendMessage("Reloading!");
         plugin.OnReload();
         cs.sendMessage("Reload Done!");    
+        return true;
     }
     
-    public void AlertMsg(CommandSender cs) {
-        if(cs instanceof Player) {
-            Player _Player = (Player)cs;
-            if(plugin.DB.getAlertMsg(_Player)) {
-                plugin.DB.UpdateAlertMsg(_Player, Boolean.FALSE);
-                plugin.MCPlayers.get(_Player.getName()).setAlertMsg(Boolean.FALSE);
-                cs.sendMessage("Now you not will receve any Alert PK MSG");
-            }else{
-                plugin.DB.UpdateAlertMsg(_Player, Boolean.TRUE);
-                plugin.MCPlayers.get(_Player.getName()).setAlertMsg(Boolean.TRUE);
-                cs.sendMessage("Now you will receve any Alert PK MSG");
-            }
+    public boolean AlertMsg(Player player) {
+        if(plugin.DB.getAlertMsg(player)) {
+            plugin.DB.UpdateAlertMsg(player, Boolean.FALSE);
+            plugin.MCPlayers.get(player.getName()).setAlertMsg(Boolean.FALSE);
+            player.sendMessage("Now you not will receve any Alert PK MSG");
+        }else{
+            plugin.DB.UpdateAlertMsg(player, Boolean.TRUE);
+            plugin.MCPlayers.get(player.getName()).setAlertMsg(Boolean.TRUE);
+            player.sendMessage("Now you will receve any Alert PK MSG");
         }
+        return true;
     }
     
-    public void PKMsg(CommandSender cs) {
-        if(cs instanceof Player) {
-            Player _Player = (Player)cs;
-            if(plugin.DB.getPKMsg(_Player)) {
-                plugin.DB.UpdatePKMsg(_Player, Boolean.FALSE);
-                plugin.MCPlayers.get(_Player.getName()).setPKMsg(Boolean.FALSE);
-                cs.sendMessage("Now you not will receve any PK MSG");
-            }else{
-                plugin.DB.UpdatePKMsg(_Player, Boolean.TRUE);
-                plugin.MCPlayers.get(_Player.getName()).setPKMsg(Boolean.TRUE);
-                cs.sendMessage("Now you will receve any PK MSG");
-            }
+    public boolean PKMsg(Player player) {
+        if(plugin.DB.getPKMsg(player)) {
+            plugin.DB.UpdatePKMsg(player, Boolean.FALSE);
+            plugin.MCPlayers.get(player.getName()).setPKMsg(Boolean.FALSE);
+            player.sendMessage("Now you not will receve any PK MSG");
+        }else{
+            plugin.DB.UpdatePKMsg(player, Boolean.TRUE);
+            plugin.MCPlayers.get(player.getName()).setPKMsg(Boolean.TRUE);
+            player.sendMessage("Now you will receve any PK MSG");
         }
+        return true;
     }
 }
