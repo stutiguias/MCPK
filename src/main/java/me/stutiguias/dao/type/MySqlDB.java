@@ -2,10 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package me.stutiguias.dao.mysql;
+package me.stutiguias.dao.type;
 
 import java.sql.*;
 import java.util.logging.Level;
+import me.stutiguias.dao.mysql.McpkConnection;
+import me.stutiguias.dao.mysql.McpkConnectionPool;
 import me.stutiguias.mcpk.Util;
 import me.stutiguias.mcpk.Mcpk;
 import me.stutiguias.mcpk.MCPlayer;
@@ -14,20 +16,20 @@ import me.stutiguias.mcpk.MCPlayer;
  *
  * @author Daniel
  */
-public class MySql {
+public class MySqlDB {
             
     private McpkConnectionPool pool;
     public String dbHost;
     public String dbPort;
     public String dbDatabase;
     
-    public MySql(String dbHost, String dbUser, String dbPass, String dbPort, String dbDatabase) {
+    public MySqlDB(String dbHost, String dbUser, String dbPass, String dbPort, String dbDatabase) {
         try {
              this.dbHost = dbHost;
              this.dbDatabase = dbDatabase;
              this.dbPort = dbPort;
              pool = new McpkConnectionPool("com.mysql.jdbc.Driver", "jdbc:mysql://"+ dbHost +":"+ dbPort +"/"+ dbDatabase, dbUser, dbPass);
-        }catch(Exception e) { }
+        }catch(InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) { }
     }
     
     public McpkConnection GetConnection() throws SQLException {

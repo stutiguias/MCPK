@@ -17,7 +17,8 @@ import org.bukkit.entity.Player;
 public class McpkCommandListener implements CommandExecutor {
       
     public Mcpk plugin;
-
+    private CommandSender sender;
+    
     public McpkCommandListener(Mcpk instance)
     {
         plugin = instance;
@@ -25,7 +26,7 @@ public class McpkCommandListener implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmnd, String string, String[] args) {
-
+        this.sender = sender;
         if (sender.getName().equalsIgnoreCase("CONSOLE")) return true;
         if (!(sender instanceof Player)) return false;
         
@@ -43,8 +44,10 @@ public class McpkCommandListener implements CommandExecutor {
                     return false;
                 RemovePkStatus(player);
                 return true;
+            case "help":
+            case "?":
             default:
-                return false;
+                return Help();
         }
     }
     
@@ -85,5 +88,26 @@ public class McpkCommandListener implements CommandExecutor {
             player.sendMessage("Now you will receve any PK MSG");
         }
         return true;
+    }
+    
+    public boolean Help() {
+        SendFormatMessage(plugin.MsgHr);
+        SendFormatMessage(" &7MCPK ");
+        SendFormatMessage("&6/mru alertmsg - Turn On/Off Alert Msg");
+        SendFormatMessage("&6/mru pkmsg  - Turn On/Off Time PK Msg");
+        if (plugin.hasPermission(sender.getName(),"mcpk.command.leftpk")) {
+            SendFormatMessage("&6/mru removepk &7Remove PK Status");
+        }
+        
+        SendFormatMessage(plugin.MsgHr);
+        SendFormatMessage(" &7Admin MCPK ");
+        SendFormatMessage("&6/mru reload - reload MCPK");
+
+        SendFormatMessage(plugin.MsgHr);
+        return true;
+    }
+    
+    public void SendFormatMessage(String msg) {
+        sender.sendMessage(plugin.parseColor(msg));
     }
 }

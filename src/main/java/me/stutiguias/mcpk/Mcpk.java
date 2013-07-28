@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import me.stutiguias.dao.type.DBAccessor;
 import me.stutiguias.listeners.*;
 import me.stutiguias.metrics.Metrics;
 import me.stutiguias.tasks.AlertPkTask;
@@ -34,6 +35,8 @@ public class Mcpk extends JavaPlugin{
     public Boolean usenewbieprotect;
     public String NewbieProtectTime;
 
+    public String MsgHr = "&e-----------------------------------------------------";
+    
     public int time;
     public int radius;
     public int turnpk;

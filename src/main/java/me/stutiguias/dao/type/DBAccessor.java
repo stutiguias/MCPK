@@ -2,10 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package me.stutiguias.mcpk;
+package me.stutiguias.dao.type;
 
 import java.sql.Timestamp;
-import me.stutiguias.dao.mysql.MySql;
+import me.stutiguias.mcpk.MCPlayer;
 import org.bukkit.entity.Player;
 
 /**
@@ -15,103 +15,103 @@ import org.bukkit.entity.Player;
 public class DBAccessor {
     
     private Boolean UseMySql;
-    private FileDB _FileDB;
-    private MySql DataBase;
+    private FileDB _fileDB;
+    private MySqlDB _mySqlDB;
     
     public DBAccessor(Boolean UseMySql,String dbHost,String dbUser,String dbPass,String dbPort,String dbDatabase) {  
         this.UseMySql = UseMySql;
         if(UseMySql) {
-            DataBase = new MySql(dbHost,dbUser,dbPass,dbPort,dbDatabase);
-            DataBase.InitTables();
+            _mySqlDB = new MySqlDB(dbHost,dbUser,dbPass,dbPort,dbDatabase);
+            _mySqlDB.InitTables();
         }else{
-            _FileDB = new FileDB();
-            _FileDB.CheckDiretory();
+            _fileDB = new FileDB();
+            _fileDB.CheckDiretory();
         }
     }
     
     public MCPlayer getPlayer(Player pl) {
         if(getUseMySql()) {
-            return DataBase.getPlayer(pl.getName());
+            return _mySqlDB.getPlayer(pl.getName());
         }else{
-            return _FileDB.LoadPlayerFile(pl);
+            return _fileDB.LoadPlayerFile(pl);
         }
     }
     
     public void CreatePlayer(Player pl,Timestamp Protect) {
         if(getUseMySql()) {
-            DataBase.createPlayer(pl.getName(), "0", 0, Protect); 
+            _mySqlDB.createPlayer(pl.getName(), "0", 0, Protect); 
         }else{
-            _FileDB.CreatePlayer(pl, Protect);
+            _fileDB.CreatePlayer(pl, Protect);
         }
     }
     
     public void UpdateKill(Player pl,int Kills) {
         if(getUseMySql()) {
-            DataBase.UpdateKill(pl.getName(), Kills);
+            _mySqlDB.UpdateKill(pl.getName(), Kills);
         }else{
-            _FileDB.setKills(Kills);
+            _fileDB.setKills(Kills);
         }
     }
 
     public Boolean SetPKMsg(Player pl,Boolean PKMsg) {
         if(getUseMySql()) {
-            Integer index = DataBase.getPlayer(pl.getName()).getIndex();
-            DataBase.SetDetails(index,"PKMsg",PKMsg.toString());
+            Integer index = _mySqlDB.getPlayer(pl.getName()).getIndex();
+            _mySqlDB.SetDetails(index,"PKMsg",PKMsg.toString());
             return true;
         }else{
-            _FileDB.setPKMsg(PKMsg);
+            _fileDB.setPKMsg(PKMsg);
             return true;
         }
     }
     
     public Boolean UpdatePKMsg(Player pl,Boolean PKMsg) {
         if(getUseMySql()) {
-            Integer index = DataBase.getPlayer(pl.getName()).getIndex();
-            DataBase.UpdateDetails(index,"PKMsg",PKMsg.toString());
+            Integer index = _mySqlDB.getPlayer(pl.getName()).getIndex();
+            _mySqlDB.UpdateDetails(index,"PKMsg",PKMsg.toString());
             return true;
         }else{
-            _FileDB.setPKMsg(PKMsg);
+            _fileDB.setPKMsg(PKMsg);
             return true;
         }
     }
     
     public Boolean getPKMsg(Player pl) {
         if(getUseMySql()) {
-            Integer index = DataBase.getPlayer(pl.getName()).getIndex();
-            return Boolean.parseBoolean(DataBase.GetDetails(index,"PKMsg"));
+            Integer index = _mySqlDB.getPlayer(pl.getName()).getIndex();
+            return Boolean.parseBoolean(_mySqlDB.GetDetails(index,"PKMsg"));
         }else{
-            return _FileDB.getPKMsg();
+            return _fileDB.getPKMsg();
         }
     }
     
     public Boolean SetAlertMsg(Player pl,Boolean AlertMsg) {
         if(getUseMySql()) {
-            Integer index = DataBase.getPlayer(pl.getName()).getIndex();
-            DataBase.SetDetails(index,"AlertMsg",AlertMsg.toString());
+            Integer index = _mySqlDB.getPlayer(pl.getName()).getIndex();
+            _mySqlDB.SetDetails(index,"AlertMsg",AlertMsg.toString());
             return true;
         }else{
-            _FileDB.setAlertMsg(AlertMsg);
+            _fileDB.setAlertMsg(AlertMsg);
             return true;
         }
     }
     
     public Boolean UpdateAlertMsg(Player pl,Boolean AlertMsg) {
         if(getUseMySql()) {
-            Integer index = DataBase.getPlayer(pl.getName()).getIndex();
-            DataBase.UpdateDetails(index,"AlertMsg",AlertMsg.toString());
+            Integer index = _mySqlDB.getPlayer(pl.getName()).getIndex();
+            _mySqlDB.UpdateDetails(index,"AlertMsg",AlertMsg.toString());
             return true;
         }else{
-            _FileDB.setAlertMsg(AlertMsg);
+            _fileDB.setAlertMsg(AlertMsg);
             return true;
         }
     }
     
     public Boolean getAlertMsg(Player pl) {
         if(getUseMySql()) {
-            Integer index = DataBase.getPlayer(pl.getName()).getIndex();
-            return Boolean.parseBoolean(DataBase.GetDetails(index,"AlertMsg"));
+            Integer index = _mySqlDB.getPlayer(pl.getName()).getIndex();
+            return Boolean.parseBoolean(_mySqlDB.GetDetails(index,"AlertMsg"));
         }else{
-            return _FileDB.getAlertMsg();
+            return _fileDB.getAlertMsg();
         }
     }
     

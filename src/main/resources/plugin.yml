@@ -5,7 +5,7 @@ author: Stutiguias
 commands:
    mcpk:
      description: Command MCPK reload
-     usage: /mcpk reload
+     usage: Use /mcpk for Help
 permissions:
      mcpk.command.leftpk:
         description: Allow Command Remove PK Status

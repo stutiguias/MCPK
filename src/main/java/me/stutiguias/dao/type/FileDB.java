@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package me.stutiguias.mcpk;
+package me.stutiguias.dao.type;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.logging.Level;
+import me.stutiguias.mcpk.MCPlayer;
+import me.stutiguias.mcpk.Mcpk;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
