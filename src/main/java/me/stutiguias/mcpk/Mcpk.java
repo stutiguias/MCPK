@@ -103,7 +103,7 @@ public class Mcpk extends JavaPlugin{
         pm.registerEvents(new McpkOnDeathListener(this), this);
         pm.registerEvents(new McpkProtectListener(this), this);
 
-        logger.log(Level.INFO,logPrefix + " done.");
+        logger.log(Level.INFO,logPrefix + " reload done.");
     }
     
     public void onLoadConfig() {

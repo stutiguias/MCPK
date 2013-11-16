@@ -95,24 +95,26 @@ public class McpkCommandListener implements CommandExecutor {
         SendFormatMessage(plugin.MsgHr);
         SendFormatMessage(" &7MCPK ");
         
+        plugin.DB.getPlayer(player);
+        
         if(plugin.DB.getAlertMsg(player))
-            SendFormatMessage("&6/mru alertmsg - Turn &cOff&6 Alert Msg");
+            SendFormatMessage("&6/mcpk alertmsg - Turn &cOff&6 Alert Msg");
         else
-            SendFormatMessage("&6/mru alertmsg - Turn &cOn&6 Alert Msg");
+            SendFormatMessage("&6/mcpk alertmsg - Turn &cOn&6 Alert Msg");
         
         if(plugin.DB.getPKMsg(player))
-            SendFormatMessage("&6/mru pkmsg  - Turn &cOff&6 Time PK Msg");
+            SendFormatMessage("&6/mcpk pkmsg  - Turn &cOff&6 Time PK Msg");
         else
-            SendFormatMessage("&6/mru pkmsg  - Turn &cOn&6 Time PK Msg");
+            SendFormatMessage("&6/mcpk pkmsg  - Turn &cOn&6 Time PK Msg");
         
         if (plugin.hasPermission(player,"mcpk.command.leftpk")) {
-            SendFormatMessage("&6/mru removepk - Remove PK Status");
+            SendFormatMessage("&6/mcpk removepk - Remove PK Status");
         }
         
         if(plugin.hasPermission(player,"mcpk.command.reload")) {
             SendFormatMessage(plugin.MsgHr);
             SendFormatMessage(" &7Admin MCPK ");
-            SendFormatMessage("&6/mru reload - reload MCPK");
+            SendFormatMessage("&6/mcpk reload - reload MCPK");
         }
         
         SendFormatMessage(plugin.MsgHr);
