@@ -48,7 +48,7 @@ public class AlertPkTask implements Runnable {
                     if(plugin.UseScoreBoard){
                         WarningPK(pkPlayer, timeleft);
                     }else{
-                        pkPlayer.sendMessage("Time left on PK Status " + timeleft);
+                        pkPlayer.sendMessage(plugin.translate.TimeLeftOnPK + " " + timeleft);
                     }
                 }
 
@@ -78,7 +78,7 @@ public class AlertPkTask implements Runnable {
         Scoreboard board = manager.getNewScoreboard();
         Objective objective = board.registerNewObjective("mcpk","dummy");
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-        objective.setDisplayName("Time Left on PK");
+        objective.setDisplayName(plugin.translate.TimeLeftOnPK);
 
         Score score = objective.getScore(Bukkit.getOfflinePlayer(player.getName()));
         score.setScore(timeLeft); 

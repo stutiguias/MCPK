@@ -23,6 +23,7 @@ public class Translate {
     public String AlertMsgOff;
     public String TimePkMsgOn;
     public String TimePkMsgOff;
+    public String TimeLeftOnPK;
     
     public HashMap<Integer, String> PkMsg;
     
@@ -51,6 +52,7 @@ public class Translate {
         AlertMsgOff = Message.getConfig().getString("AlertMsgOff");
         TimePkMsgOn = Message.getConfig().getString("PKTimeMsgOn");
         TimePkMsgOff = Message.getConfig().getString("PKTimeMsgOff");
+        TimeLeftOnPK = Message.getConfig().getString("TimeLeftOnPK");
         GetMessages();
     }
     
