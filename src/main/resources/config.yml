@@ -10,6 +10,8 @@ MySQL:
 AboutPK:
   #Send Broadcast message to near players
   Alert: true
+  #Use ScoreBoard not chat
+  UseScoreBoard: true
   # Warning Frequency
   AlertFrequency: 30
   # Radius of warning

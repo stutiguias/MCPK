@@ -34,6 +34,8 @@ public class FileDB {
             MCPlayer _MCPlayer = new MCPlayer();
             _MCPlayer.setKills(getKills());
             _MCPlayer.setNewBieProtectUntil(getNewbieProtectUntil());
+            _MCPlayer.setAlertMsg(getAlertMsg());
+            _MCPlayer.setPKMsg(getPKMsg());
             return _MCPlayer;
         } catch (FileNotFoundException ex) {
            return null;

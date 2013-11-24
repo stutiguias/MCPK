@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
  */
 public class DBAccessor {
     
-    private Boolean UseMySql;
+    public Boolean UseMySql;
     private FileDB _fileDB;
     private MySqlDB _mySqlDB;
     

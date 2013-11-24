@@ -50,6 +50,8 @@ public class Mcpk extends JavaPlugin{
     public Boolean ChangePkGroup;
     public Boolean RemoveAllOtherGroup;
     public String GroupPk;
+    public Boolean UseScoreBoard;
+    public Boolean AlertMsg;
     
     public String language;
     public Translate translate;
@@ -112,18 +114,18 @@ public class Mcpk extends JavaPlugin{
             config.setupConfig();
             FileConfiguration fc = config.getConfig();
 
-            if(fc.getBoolean("AboutPK.Alert")) {
-                long AlertPKFrequency = fc.getLong("AboutPK.AlertFrequency");
-                getServer().getScheduler().runTaskTimerAsynchronously(this, new AlertPkTask(this), AlertPKFrequency, AlertPKFrequency);
-            }
-            
+            long AlertPKFrequency = fc.getLong("AboutPK.AlertFrequency");
+            getServer().getScheduler().runTaskTimerAsynchronously(this, new AlertPkTask(this), AlertPKFrequency, AlertPKFrequency);
+ 
             time                    =fc.getInt("AboutPK.TimeOn") * 1000;
             radius                  =fc.getInt("AboutPK.Radius");
             turnpk                  =fc.getInt("AboutPK.HowMuchForTurn");
             ChangePkGroup           =fc.getBoolean("AboutPK.ChangeGroupIf");
             GroupPk                 =fc.getString("AboutPK.NewGroup");
             RemoveAllOtherGroup     =fc.getBoolean("AboutPK.RemoveAllOthersGroup");
-
+            UseScoreBoard           =fc.getBoolean("AboutPK.UseScoreBoard");
+            AlertMsg                =fc.getBoolean("AboutPK.Alert");
+            
             EnableBonusForPK        =fc.getBoolean("AboutPK.Bonus.Enable");
             if(EnableBonusForPK) {
                 GetBonusForPK();
@@ -166,8 +168,7 @@ public class Mcpk extends JavaPlugin{
     }
     
     public void OnReload() {
-        this.reloadConfig();
-        saveConfig();
+        config.reloadConfig();
         getServer().getPluginManager().disablePlugin(this);
         getServer().getPluginManager().enablePlugin(this);
     }

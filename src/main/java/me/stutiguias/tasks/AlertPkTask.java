@@ -7,7 +7,14 @@ package me.stutiguias.tasks;
 import java.util.Map;
 import me.stutiguias.mcpk.MCPlayer;
 import me.stutiguias.mcpk.Mcpk;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Score;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
 
 /**
  *
@@ -27,41 +34,60 @@ public class AlertPkTask implements Runnable {
             Player[] playerList = plugin.getServer().getOnlinePlayers();
             if(plugin.getServer().getOnlinePlayers().length == 0) return;
             for (Map.Entry m : plugin.MCPlayers.entrySet()) {
-                String key=(String)m.getKey();
-
-                // getValue is used to get value of key in Map
-                MCPlayer Killer =(MCPlayer)m.getValue();
-
-                Player pkPlayer = plugin.getServer().getPlayer(key);
-                if(pkPlayer == null || !Killer.getIsPK()) continue;
+                MCPlayer McpkPlayer =(MCPlayer)m.getValue();
+                Player pkPlayer = plugin.getServer().getPlayer((String)m.getKey());
                 
-                WarningPlayer(pkPlayer, playerList, key);
-                Integer timeleft = Integer.parseInt(String.valueOf(plugin.MCPlayers.get(key).getPKTime() - plugin.GetCurrentMilli()));
-                if(timeleft > 1000 && Killer.getPKMsg()) {
+                if(pkPlayer == null || !McpkPlayer.getIsPK()) continue;
+                
+                if(plugin.AlertMsg) WarningPlayer(pkPlayer, playerList);
+                
+                Integer timeleft = Integer.parseInt(String.valueOf(plugin.MCPlayers.get(pkPlayer.getName()).getPKTime() - plugin.GetCurrentMilli()));
+                
+                if(McpkPlayer.getIsPK() && McpkPlayer.getPKMsg()) {
                     timeleft = timeleft / 1000;
-                    pkPlayer.sendMessage("Time left on PK Status " + timeleft);
+                    if(plugin.UseScoreBoard){
+                        WarningPK(pkPlayer, timeleft);
+                    }else{
+                        pkPlayer.sendMessage("Time left on PK Status " + timeleft);
+                    }
                 }
 
-                if(plugin.GetCurrentMilli() > plugin.MCPlayers.get(key).getPKTime()) {
-                    Player _PKiller = plugin.getServer().getPlayer(key);
-                    String[] playersgroups = plugin.MCPlayers.get(key).getPkOldGroups();
+                if(plugin.GetCurrentMilli() > McpkPlayer.getPKTime()) {
+                    String[] playersgroups = McpkPlayer.getPkOldGroups();
                     if(playersgroups != null && plugin.RemoveAllOtherGroup) {
                         for (int i = 0; i < playersgroups.length; i++) {
-                             plugin.permission.playerAddGroup(_PKiller, playersgroups[i]);
+                             plugin.permission.playerAddGroup(pkPlayer, playersgroups[i]);
                         }
                     }
-                    plugin.permission.playerRemoveGroup(_PKiller, plugin.GroupPk);
-                    plugin.MCPlayers.get(key).setIsPK(Boolean.FALSE);
-                    plugin.MCPlayers.get(key).setKills(0);
+                    plugin.permission.playerRemoveGroup(pkPlayer, plugin.GroupPk);
+                    plugin.MCPlayers.get(pkPlayer.getName()).setIsPK(Boolean.FALSE);
+                    plugin.MCPlayers.get(pkPlayer.getName()).setKills(0);
+                    plugin.DB.UpdateKill(pkPlayer, 0);
+                    ScoreboardManager manager = Bukkit.getScoreboardManager();
+                    pkPlayer.setScoreboard(manager.getNewScoreboard());
                 }
             }
-      } catch (Exception ex) {
+      } catch (IllegalArgumentException | IllegalStateException ex) {
          ex.printStackTrace();
       }        
 
     }
     
-    public void WarningPlayer(Player pkPlayer,Player[] playerList,String key) {
+    public void WarningPK(Player player,int timeLeft) {
+        ScoreboardManager manager = Bukkit.getScoreboardManager();
+        Scoreboard board = manager.getNewScoreboard();
+        Objective objective = board.registerNewObjective("mcpk","dummy");
+        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+        objective.setDisplayName("Time Left on PK");
+
+        Score score = objective.getScore(Bukkit.getOfflinePlayer(player.getName()));
+        score.setScore(timeLeft); 
+
+        player.setScoreboard(board);
+    }
+    
+    
+    public void WarningPlayer(Player pkPlayer,Player[] playerList) {
         Double PkPlayerX = pkPlayer.getLocation().getX();
         Double PkPlayerZ = pkPlayer.getLocation().getZ();
         for (Player player : playerList) {
@@ -71,9 +97,9 @@ public class AlertPkTask implements Runnable {
                     (playerX > PkPlayerX - (double)plugin.radius) &&
                     (playerZ < PkPlayerZ + (double)plugin.radius) &&
                     (playerZ > PkPlayerZ - (double)plugin.radius) &&
-                     plugin.MCPlayers.get(player.getName()).getAlertMsg() && (player.getName().equals(key) == false) 
+                     plugin.MCPlayers.get(player.getName()).getAlertMsg() && (player.getName().equals(pkPlayer.getName()) == false) 
                 ) {
-                    player.sendMessage(plugin.parseColor(plugin.translate.AlertMsg.replace("%player%", key)));
+                    player.sendMessage(plugin.parseColor(plugin.translate.AlertMsg.replace("%player%", pkPlayer.getName())));
                 }
         }
     }
