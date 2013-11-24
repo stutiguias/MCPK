@@ -66,10 +66,14 @@ public class McpkPlayerListener implements Listener {
             
         }else {
             
-            _MCPlayer.setKills(0);
             _MCPlayer.setAlertMsg(plugin.DB.getAlertMsg(pl));
             _MCPlayer.setPKMsg(plugin.DB.getPKMsg(pl));
-            _MCPlayer.setIsPK(Boolean.FALSE);
+            
+            if(_MCPlayer.getKills() > 0) 
+                _MCPlayer.setIsPK(Boolean.TRUE);
+            else
+                _MCPlayer.setIsPK(Boolean.FALSE);
+            
             _MCPlayer.setKillPk(Boolean.FALSE);
             
             if(plugin.util.now().before(_MCPlayer.getNewBieProtectUntil())) {

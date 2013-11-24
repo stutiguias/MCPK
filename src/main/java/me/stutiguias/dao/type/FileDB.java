@@ -36,10 +36,8 @@ public class FileDB {
             _MCPlayer.setNewBieProtectUntil(getNewbieProtectUntil());
             return _MCPlayer;
         } catch (FileNotFoundException ex) {
-           ex.printStackTrace();
            return null;
         } catch (IOException | InvalidConfigurationException ex) {
-            ex.printStackTrace();
            return null;
         }
     }
