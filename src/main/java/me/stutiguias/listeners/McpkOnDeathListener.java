@@ -40,7 +40,13 @@ public class McpkOnDeathListener implements Listener {
         String victim = event.getEntity().getName();
         
         // Add the kill
-        plugin.MCPlayers.get(killer).addKills(1); 
+        
+        try{
+            plugin.MCPlayers.get(killer).addKills(1); 
+        }catch(NullPointerException ex) {
+            return;
+        }
+        
         int kills = plugin.DB.getPlayer(_Pkiller).getKills();
         plugin.DB.UpdateKill(_Pkiller, kills + 1);
         
