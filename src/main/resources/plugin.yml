@@ -13,3 +13,6 @@ permissions:
      mcpk.command.reload:
         description: Allow Command Reload
         default: false
+     mcpk.update:
+        description: Allow update
+        default: false

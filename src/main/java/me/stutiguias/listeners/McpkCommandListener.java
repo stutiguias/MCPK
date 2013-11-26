@@ -45,11 +45,19 @@ public class McpkCommandListener implements CommandExecutor {
                 if(!plugin.hasPermission(sender.getName(),"mcpk.command.leftpk")) return false;
                 RemovePkStatus(player);
                 return true;
+            case "update":
+                if(!plugin.hasPermission(sender.getName(),"mcpk.update")) return false;
+                return Update();
             case "help":
             case "?":
             default:
                 return Help(player);
         }
+    }
+    
+    public boolean Update() {
+        plugin.Update();
+        return true;
     }
     
     public void RemovePkStatus(Player player) {

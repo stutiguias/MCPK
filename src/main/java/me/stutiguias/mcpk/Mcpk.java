@@ -10,6 +10,7 @@ import me.stutiguias.dao.type.DBAccessor;
 import me.stutiguias.listeners.*;
 import me.stutiguias.metrics.Metrics;
 import me.stutiguias.tasks.AlertPkTask;
+import me.stutiguias.updater.Updater;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.ChatColor;
@@ -52,6 +53,7 @@ public class Mcpk extends JavaPlugin{
     public String GroupPk;
     public Boolean UseScoreBoard;
     public Boolean AlertMsg;
+    public Boolean UpdaterNotify;
     
     public String language;
     public Translate translate;
@@ -61,6 +63,12 @@ public class Mcpk extends JavaPlugin{
     public Permission permission = null;
     public Economy economy = null;
    
+    public static boolean update = false;
+    public static String name = "";
+    public static String type = "";
+    public static String version = "";
+    public static String link = "";
+    
     public long GetCurrentMilli() {
             return System.currentTimeMillis();
     }
@@ -104,8 +112,17 @@ public class Mcpk extends JavaPlugin{
         pm.registerEvents(new McpkPlayerListener(this), this);
         pm.registerEvents(new McpkOnDeathListener(this), this);
         pm.registerEvents(new McpkProtectListener(this), this);
+        
+        if(UpdaterNotify){
+            Updater updater = new Updater(this, 38364, this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false); // Start Updater but just do a version check
 
-        logger.log(Level.INFO,logPrefix + " reload done.");
+            update = updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE; // Determine if there is an update ready for us
+            name = updater.getLatestName(); // Get the latest name
+            version = updater.getLatestGameVersion(); // Get the latest game version
+            type = updater.getLatestType(); // Get the latest game version
+            link = updater.getLatestFileLink(); // Get the latest link
+        }
+        logger.log(Level.INFO,logPrefix + " done.");
     }
     
     public void onLoadConfig() {
@@ -113,10 +130,16 @@ public class Mcpk extends JavaPlugin{
             config = new ConfigAccessor(this,"config.yml");
             config.setupConfig();
             FileConfiguration fc = config.getConfig();
-
+            
+            if(!fc.isSet("configversion") || fc.getInt("configversion") != 1){ 
+                config.MakeOld();
+                config.setupConfig();
+                fc = config.getConfig();
+            }
+            
             long AlertPKFrequency = fc.getLong("AboutPK.AlertFrequency");
             getServer().getScheduler().runTaskTimerAsynchronously(this, new AlertPkTask(this), AlertPKFrequency, AlertPKFrequency);
- 
+            
             time                    =fc.getInt("AboutPK.TimeOn") * 1000;
             radius                  =fc.getInt("AboutPK.Radius");
             turnpk                  =fc.getInt("AboutPK.HowMuchForTurn");
@@ -125,11 +148,10 @@ public class Mcpk extends JavaPlugin{
             RemoveAllOtherGroup     =fc.getBoolean("AboutPK.RemoveAllOthersGroup");
             UseScoreBoard           =fc.getBoolean("AboutPK.UseScoreBoard");
             AlertMsg                =fc.getBoolean("AboutPK.Alert");
-            
+            UpdaterNotify           =fc.getBoolean("UpdaterNotify");
             EnableBonusForPK        =fc.getBoolean("AboutPK.Bonus.Enable");
-            if(EnableBonusForPK) {
-                GetBonusForPK();
-            }
+
+            if(EnableBonusForPK) GetBonusForPK();
             
             NewbieProtectTime       =fc.getString("AboutPlayer.NewBieProtect.Enable");
             usenewbieprotect        =fc.getBoolean("AboutPlayer.NewBieProtect.NewBieProtectTime");
@@ -201,4 +223,9 @@ public class Mcpk extends JavaPlugin{
     public boolean hasPermission(Player player, String Permission) {
         return permission.has(player.getWorld(), player.getName(), Permission.toLowerCase());
     }
+    
+    public void Update() {
+        Updater updater = new Updater(this, 38364, this.getFile(), Updater.UpdateType.NO_VERSION_CHECK, true);
+    }
+    
 }

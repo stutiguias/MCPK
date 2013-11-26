@@ -92,6 +92,13 @@ public class ConfigAccessor {
         if (!configFile.exists()) {            
             this.plugin.saveResource(fileName, false);
         }
-    }
 
+    }
+    
+    public boolean MakeOld() {
+        File file = new File(plugin.getDataFolder(),fileName + "_old");
+        file.delete();
+        return configFile.renameTo(new File(plugin.getDataFolder(),fileName + "_old"));
+    }
+    
 }

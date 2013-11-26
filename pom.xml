@@ -48,7 +48,7 @@
   </dependencies>
   
   <build>
-    <finalName>${project.name}.${project.version}</finalName>
+    <finalName>${project.name}</finalName>
     <sourceDirectory>${basedir}/src/main/java/</sourceDirectory>
     
     <resources>

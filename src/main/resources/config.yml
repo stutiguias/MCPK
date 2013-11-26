@@ -1,3 +1,4 @@
+configversion: 1
 #Setup Mysql If you want to use Mysql set true
 MySQL:
   Use: false
@@ -6,7 +7,10 @@ MySQL:
   Password: password_here
   Port: '3306'
   Database: minecraft
-  
+
+#Enable / Disable Updater
+UpdaterNotify: true
+
 AboutPK:
   #Send Broadcast message to near players
   Alert: true
