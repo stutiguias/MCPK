@@ -122,6 +122,9 @@ public class McpkCommandListener implements CommandExecutor {
         if(plugin.hasPermission(player,"mcpk.command.reload")) {
             SendFormatMessage(plugin.MsgHr);
             SendFormatMessage(" &7Admin MCPK ");
+            if (plugin.hasPermission(player,"mcpk.update")) {
+                SendFormatMessage("&6/mcpk update - Update plugin");
+            }
             SendFormatMessage("&6/mcpk reload - reload MCPK");
         }
         

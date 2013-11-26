@@ -37,8 +37,8 @@ public class McpkPlayerListener implements Listener {
  
         if(plugin.UpdaterNotify && plugin.hasPermission(pl,"mcpk.update") && Mcpk.update)
         {
-          pl.sendMessage("An update is available: " + Mcpk.name + ", a " + Mcpk.type + " for " + Mcpk.version + " available at " + Mcpk.link);
-          pl.sendMessage("Type /mcpk update if you would like to automatically update.");
+          pl.sendMessage(plugin.parseColor("&6An update is available: " + Mcpk.name + ", a " + Mcpk.type + " for " + Mcpk.version + " available at " + Mcpk.link));
+          pl.sendMessage(plugin.parseColor("&6Type /mcpk update if you would like to automatically update."));
         }
           
         try {

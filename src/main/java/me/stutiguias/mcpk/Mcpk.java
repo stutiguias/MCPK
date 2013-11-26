@@ -115,7 +115,7 @@ public class Mcpk extends JavaPlugin{
         
         if(UpdaterNotify){
             Updater updater = new Updater(this, 38364, this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false); // Start Updater but just do a version check
-
+            
             update = updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE; // Determine if there is an update ready for us
             name = updater.getLatestName(); // Get the latest name
             version = updater.getLatestGameVersion(); // Get the latest game version
