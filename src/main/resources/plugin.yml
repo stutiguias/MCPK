@@ -1,6 +1,6 @@
 name: Mcpk
 main: me.stutiguias.mcpk.Mcpk
-version: 0.5.4
+version: ${project.version}
 author: Stutiguias
 commands:
    mcpk:
