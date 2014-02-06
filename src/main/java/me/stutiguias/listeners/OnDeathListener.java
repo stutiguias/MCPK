@@ -53,6 +53,8 @@ public class OnDeathListener implements Listener {
         
         if(!mcVictim.IsPK() && mcKiller.getKills() >= plugin.turnpk) {
             mcKiller.setIsPK(Boolean.TRUE);
+            if(plugin.AlertNewPK) 
+                plugin.getServer().broadcastMessage(plugin.parseColor(plugin.translate.AlertNewPKMsg.replace("%player%", mcKiller.getName())));
         }
         
         if(mcKiller.IsPK()){

@@ -91,10 +91,9 @@ public class PlayerListener implements Listener {
             mcPlayer.setProtectAlreadyLeft(Boolean.TRUE);
             Mcpk.logger.log(Level.INFO, "[MCPK] New Player {0}", pl.getName());
         }else{
+            
             Timestamp ProtectUntil = ProtectUntil();
-
             plugin.DB.CreatePlayer(pl, ProtectUntil);
-
             mcPlayer.setNewBieProtectUntil(ProtectUntil);
             mcPlayer.setProtectAlreadyLeft(Boolean.FALSE);
             SendProtectMessage(pl,ProtectUntil.toString());

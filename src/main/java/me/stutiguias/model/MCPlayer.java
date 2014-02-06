@@ -101,7 +101,7 @@ public class MCPlayer {
     }
 
     /**
-     * @param newBie the newBie to set
+     * @param newBieProtectUntil
      */
     public void setNewBieProtectUntil(Date newBieProtectUntil) {
         this.newBieProtectUntil = newBieProtectUntil;

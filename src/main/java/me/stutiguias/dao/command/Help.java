@@ -47,6 +47,11 @@ public class Help extends CommandHandler {
             SendMessage("&6/mcpk removepk - Remove PK Status");
         }
         
+        if (plugin.hasPermission(player, "mcpk.command.check")) {
+            SendMessage("&6/mcpk checkprotect - Check if you is protected");
+            SendMessage("&6/mcpk checkprotect <name> - Check protected");
+        }
+        
         if(plugin.hasPermission(player,"mcpk.command.reload")) {
             SendMessage(plugin.MsgHr);
             SendMessage(" &7Admin MCPK ");

@@ -1,4 +1,4 @@
-configversion: 1
+configversion: 2
 #Setup Mysql If you want to use Mysql set true
 MySQL:
   Use: false
@@ -24,6 +24,8 @@ AboutPK:
   TimeOn: 25
   # How Much the player need to kill to turn into PK
   HowMuchForTurn: 3
+  # Alert ALL if any enter pk state
+  AlertNewPK: false
   # Change Group if Player turn into PK
   ChangeGroup: false
   # Remove all others group if player turn into PK

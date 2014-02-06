@@ -7,6 +7,7 @@ AlertMsgOff: '&6 Now you not will receve any Alert PK MSG'
 PKTimeMsgOn: '&6 Now you will receve any PK MSG'
 PKTimeMsgOff: '&6 Now you not will receve any PK MSG'
 TimeLeftOnPK : 'Time Left on PK'
+AlertNewPKMsg: '&6 %player% just enter pk state'
 PKMessage:
   '2': '&6 %player% first message'
   '3': '&6 %player% second message'

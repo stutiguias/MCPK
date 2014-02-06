@@ -56,6 +56,7 @@ public class Mcpk extends JavaPlugin{
     public Boolean UseScoreBoard;
     public Boolean AlertMsg;
     public Boolean UpdaterNotify;
+    public Boolean AlertNewPK;
     
     public String language;
     public Translate translate;
@@ -133,7 +134,7 @@ public class Mcpk extends JavaPlugin{
             config.setupConfig();
             FileConfiguration fc = config.getConfig();
             
-            if(!fc.isSet("configversion") || fc.getInt("configversion") != 1){ 
+            if(!fc.isSet("configversion") || fc.getInt("configversion") != 2){ 
                 config.MakeOld();
                 config.setupConfig();
                 fc = config.getConfig();
@@ -152,7 +153,8 @@ public class Mcpk extends JavaPlugin{
             AlertMsg                =fc.getBoolean("AboutPK.Alert");
             UpdaterNotify           =fc.getBoolean("UpdaterNotify");
             EnableBonusForPK        =fc.getBoolean("AboutPK.Bonus.Enable");
-
+            AlertNewPK              =fc.getBoolean("AboutPK.AlertNewPK");
+            
             if(EnableBonusForPK) GetBonusForPK();
             
             NewbieProtectTime       =fc.getString("AboutPlayer.NewBieProtect.Enable");
