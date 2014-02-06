@@ -2,6 +2,8 @@ name: Mcpk
 main: me.stutiguias.mcpk.Mcpk
 version: ${project.version}
 author: Stutiguias
+depend : [Vault]
+softdepend : [TagAPI]
 commands:
    mcpk:
      description: Command MCPK reload

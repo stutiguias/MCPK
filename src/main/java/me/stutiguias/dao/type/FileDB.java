@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.logging.Level;
-import me.stutiguias.mcpk.MCPlayer;
+import me.stutiguias.model.MCPlayer;
 import me.stutiguias.mcpk.Mcpk;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -23,7 +23,7 @@ import org.bukkit.entity.Player;
 public class FileDB {
 
     private File PlayerFile;
-    private String Path = "plugins"+ File.separator + "Mcpk" + File.separator +"userdata";
+    private final String Path = "plugins"+ File.separator + "Mcpk" + File.separator +"userdata";
     private YamlConfiguration PlayerYML;
     
     public MCPlayer LoadPlayerFile(Player player) {

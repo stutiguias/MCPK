@@ -1,5 +1,7 @@
 package me.stutiguias.mcpk;
 
+import me.stutiguias.model.MCPlayer;
+import me.stutiguias.dao.command.McpkCommandListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -83,7 +85,7 @@ public class Mcpk extends JavaPlugin{
         }
         onLoadConfig();
 
-        util  = new Util();
+        util  = new Util(this);
 
         getCommand("mcpk").setExecutor(new McpkCommandListener(this));
         
@@ -109,9 +111,9 @@ public class Mcpk extends JavaPlugin{
         setupEconomy();
         setupPermissions();
         
-        pm.registerEvents(new McpkPlayerListener(this), this);
-        pm.registerEvents(new McpkOnDeathListener(this), this);
-        pm.registerEvents(new McpkProtectListener(this), this);
+        pm.registerEvents(new PlayerListener(this), this);
+        pm.registerEvents(new OnDeathListener(this), this);
+        pm.registerEvents(new ProtectListener(this), this);
         
         if(UpdaterNotify){
             Updater updater = new Updater(this, 38364, this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false); // Start Updater but just do a version check
@@ -166,7 +168,7 @@ public class Mcpk extends JavaPlugin{
             String dbDatabase   = fc.getString("MySQL.Database");
             boolean dbMySqlUse  = fc.getBoolean("MySQL.Use");
 
-            DB = new DBAccessor(dbMySqlUse,dbHost,dbUser,dbPass,dbPort,dbDatabase);
+            DB = new DBAccessor(this,dbMySqlUse,dbHost,dbUser,dbPass,dbPort,dbDatabase);
             
         }catch(IOException ex) {
             ex.printStackTrace();

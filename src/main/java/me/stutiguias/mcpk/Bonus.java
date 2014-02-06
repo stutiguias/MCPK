@@ -23,10 +23,10 @@ public class Bonus {
                 if(plugin.pkbonus.get(plugin.MCPlayers.get(killer).getKills()) != null && plugin.EnableBonusForPK) {
                 String bonus = plugin.pkbonus.get(plugin.MCPlayers.get(killer).getKills());
                 String[] ids = bonus.split(",");
-                for (int i = 0; i < ids.length; i++) {
+                for (String id : ids) {
                     int amount = 1;
                     short data = 0;
-                    ItemStack Item = new ItemStack(Integer.parseInt(ids[i]), amount , data );
+                    ItemStack Item = new ItemStack(Integer.parseInt(id), amount, data);
                     _Pkiller.getInventory().addItem(Item);
                     _Pkiller.updateInventory();
                 }

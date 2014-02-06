@@ -5,7 +5,8 @@
 package me.stutiguias.dao.type;
 
 import java.sql.Timestamp;
-import me.stutiguias.mcpk.MCPlayer;
+import me.stutiguias.mcpk.Mcpk;
+import me.stutiguias.model.MCPlayer;
 import org.bukkit.entity.Player;
 
 /**
@@ -18,10 +19,10 @@ public class DBAccessor {
     private FileDB _fileDB;
     private MySqlDB _mySqlDB;
     
-    public DBAccessor(Boolean UseMySql,String dbHost,String dbUser,String dbPass,String dbPort,String dbDatabase) {  
+    public DBAccessor(Mcpk plugin,Boolean UseMySql,String dbHost,String dbUser,String dbPass,String dbPort,String dbDatabase) {  
         this.UseMySql = UseMySql;
         if(UseMySql) {
-            _mySqlDB = new MySqlDB(dbHost,dbUser,dbPass,dbPort,dbDatabase);
+            _mySqlDB = new MySqlDB(plugin,dbHost,dbUser,dbPass,dbPort,dbDatabase);
             _mySqlDB.InitTables();
         }else{
             _fileDB = new FileDB();

@@ -10,20 +10,21 @@ import me.stutiguias.dao.mysql.McpkConnection;
 import me.stutiguias.dao.mysql.McpkConnectionPool;
 import me.stutiguias.mcpk.Util;
 import me.stutiguias.mcpk.Mcpk;
-import me.stutiguias.mcpk.MCPlayer;
+import me.stutiguias.model.MCPlayer;
 
 /**
  *
  * @author Daniel
  */
-public class MySqlDB {
+public class MySqlDB extends Util {
             
     private McpkConnectionPool pool;
     public String dbHost;
     public String dbPort;
     public String dbDatabase;
     
-    public MySqlDB(String dbHost, String dbUser, String dbPass, String dbPort, String dbDatabase) {
+    public MySqlDB(Mcpk plugin,String dbHost, String dbUser, String dbPass, String dbPort, String dbDatabase) {
+        super(plugin);
         try {
              this.dbHost = dbHost;
              this.dbDatabase = dbDatabase;
@@ -214,7 +215,7 @@ public class MySqlDB {
                     st.setInt(1, PlayerId);
                     st.setString(2, Detail);
                     st.setString(3, Val);
-                    Timestamp since = new Timestamp(new Util().now().getTime());
+                    Timestamp since = new Timestamp(plugin.util.now().getTime());
                     st.setTimestamp(4,since);
                     st.executeUpdate();
             } catch (SQLException e) {

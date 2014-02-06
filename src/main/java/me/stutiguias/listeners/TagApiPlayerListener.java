@@ -8,7 +8,7 @@ import me.stutiguias.mcpk.Mcpk;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.kitteh.tag.PlayerReceiveNameTagEvent;
+import org.kitteh.tag.AsyncPlayerReceiveNameTagEvent;
 
 /**
  *
@@ -23,11 +23,11 @@ public class TagApiPlayerListener implements Listener {
     }
     
     @EventHandler
-    public void onNameTag(PlayerReceiveNameTagEvent event) {
+    public void onNameTag(AsyncPlayerReceiveNameTagEvent event) {
         String Name = event.getNamedPlayer().getName();
-        if(plugin.MCPlayers.get(Name).getIsPK()) {
+        if(plugin.MCPlayers.get(Name).IsPK()) {
             event.setTag( ChatColor.RED + Name );
-        }else if(plugin.TurnGreenAfterKillPk && plugin.MCPlayers.get(Name).getKillPk() && !plugin.MCPlayers.get(Name).getIsPK()){
+        }else if(plugin.TurnGreenAfterKillPk && plugin.MCPlayers.get(Name).getKillPk() && !plugin.MCPlayers.get(Name).IsPK()){
             event.setTag( ChatColor.GREEN + Name );
         }else{
             event.setTag( Name );

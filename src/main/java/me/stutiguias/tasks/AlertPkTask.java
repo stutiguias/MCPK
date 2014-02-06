@@ -5,7 +5,7 @@
 package me.stutiguias.tasks;
 
 import java.util.Map;
-import me.stutiguias.mcpk.MCPlayer;
+import me.stutiguias.model.MCPlayer;
 import me.stutiguias.mcpk.Mcpk;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -36,13 +36,13 @@ public class AlertPkTask implements Runnable {
                 MCPlayer McpkPlayer =(MCPlayer)m.getValue();
                 Player pkPlayer = plugin.getServer().getPlayer((String)m.getKey());
                 
-                if(pkPlayer == null || !McpkPlayer.getIsPK()) continue;
+                if(pkPlayer == null || !McpkPlayer.IsPK()) continue;
                 
                 if(plugin.AlertMsg) WarningPlayer(pkPlayer, playerList);
                 
                 Integer timeleft = Integer.parseInt(String.valueOf(plugin.MCPlayers.get(pkPlayer.getName()).getPKTime() - plugin.GetCurrentMilli()));
                 
-                if(McpkPlayer.getIsPK() && McpkPlayer.getPKMsg()) {
+                if(McpkPlayer.IsPK() && McpkPlayer.getPKMsg()) {
                     timeleft = timeleft / 1000;
                     if(plugin.UseScoreBoard){
                         WarningPK(pkPlayer, timeleft);
@@ -54,8 +54,8 @@ public class AlertPkTask implements Runnable {
                 if(plugin.GetCurrentMilli() > McpkPlayer.getPKTime()) {
                     String[] playersgroups = McpkPlayer.getPkOldGroups();
                     if(playersgroups != null && plugin.RemoveAllOtherGroup) {
-                        for (int i = 0; i < playersgroups.length; i++) {
-                             plugin.permission.playerAddGroup(pkPlayer, playersgroups[i]);
+                        for (String playersgroup : playersgroups) {
+                            plugin.permission.playerAddGroup(pkPlayer, playersgroup);
                         }
                     }
                     plugin.permission.playerRemoveGroup(pkPlayer, plugin.GroupPk);
