@@ -18,3 +18,9 @@ permissions:
      mcpk.update:
         description: Allow update
         default: false
+     mcpk.admin:
+         description: Admin
+         children:
+             mcpk.command.leftpk: true
+             mcpk.command.reload: true
+             mcpk.update: true
