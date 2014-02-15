@@ -51,25 +51,31 @@ public class AlertPkTask implements Runnable {
                     }
                 }
 
-                if(plugin.GetCurrentMilli() > McpkPlayer.getPKTime()) {
-                    String[] playersgroups = McpkPlayer.getPkOldGroups();
-                    if(playersgroups != null && plugin.RemoveAllOtherGroup) {
-                        for (String playersgroup : playersgroups) {
-                            plugin.permission.playerAddGroup(pkPlayer, playersgroup);
-                        }
-                    }
-                    plugin.permission.playerRemoveGroup(pkPlayer, plugin.GroupPk);
-                    plugin.MCPlayers.get(pkPlayer.getName()).setIsPK(Boolean.FALSE);
-                    plugin.MCPlayers.get(pkPlayer.getName()).setKills(0);
-                    plugin.DB.UpdateKill(pkPlayer, 0);
-                    ScoreboardManager manager = Bukkit.getScoreboardManager();
-                    pkPlayer.setScoreboard(manager.getNewScoreboard());
-                }
+                if(PkExpire(McpkPlayer)) RemovePkStatus(McpkPlayer, pkPlayer);
             }
-      } catch (IllegalArgumentException | IllegalStateException ex) {
+      } catch (NumberFormatException ex) {
          ex.printStackTrace();
       }        
 
+    }
+    
+    private boolean PkExpire(MCPlayer mcpkPlayer) {
+        return plugin.GetCurrentMilli() > mcpkPlayer.getPKTime();
+    }
+    
+    private void RemovePkStatus(MCPlayer mcpkPlayer,Player pkPlayer) {
+        String[] playersgroups = mcpkPlayer.getPkOldGroups();
+        if(playersgroups != null && plugin.RemoveAllOtherGroup) {
+            for (String playersgroup : playersgroups) {
+                plugin.permission.playerAddGroup(pkPlayer, playersgroup);
+            }
+        }
+        plugin.permission.playerRemoveGroup(pkPlayer, plugin.GroupPk);
+        plugin.MCPlayers.get(pkPlayer.getName()).setIsPK(Boolean.FALSE);
+        plugin.MCPlayers.get(pkPlayer.getName()).setKills(0);
+        plugin.DB.UpdateKill(pkPlayer, 0);
+        ScoreboardManager manager = Bukkit.getScoreboardManager();
+        pkPlayer.setScoreboard(manager.getNewScoreboard());
     }
     
     public void WarningPK(Player player,int timeLeft) {
