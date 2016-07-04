@@ -2,16 +2,16 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>me.stutiguias</groupId>
   <artifactId>Mcpk</artifactId>
-  <version>0.5.5</version>
-  <name>Mcpk</name>
+  <version>0.5.6</version>
+  <name>Mcpk-${project.version}</name>
   <description>Minecraft Player Killer</description>
   
   <repositories>
   
     <!-- Bukkit -->
     <repository>
-      <id>bukkit-repo</id>
-      <url>http://repo.bukkit.org/content/groups/public/</url>
+      <id>spigot-repo</id>
+      <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
     </repository>
     
     <!-- TagApi -->
@@ -28,11 +28,9 @@
     <dependency>
         <groupId>org.bukkit</groupId>
         <artifactId>bukkit</artifactId>
-        <version>LATEST</version>
-        <type>jar</type>
-        <scope>compile</scope>
+        <version>1.10.2-R0.1-SNAPSHOT</version>
     </dependency>
-    
+        
     <dependency>
       <groupId>org.kitteh</groupId>
       <artifactId>tagapi</artifactId>

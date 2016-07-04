@@ -4,6 +4,7 @@
  */
 package me.stutiguias.tasks;
 
+import java.util.Collection;
 import java.util.Map;
 import me.stutiguias.model.MCPlayer;
 import me.stutiguias.mcpk.Mcpk;
@@ -30,8 +31,8 @@ public class AlertPkTask implements Runnable {
     @Override
     public void run() {
       try{
-            Player[] playerList = plugin.getServer().getOnlinePlayers();
-            if(plugin.getServer().getOnlinePlayers().length == 0) return;
+            Collection<? extends Player> playerList = plugin.getServer().getOnlinePlayers();
+            if(plugin.getServer().getOnlinePlayers().isEmpty()) return;
             for (Map.Entry m : plugin.MCPlayers.entrySet()) {
                 MCPlayer McpkPlayer =(MCPlayer)m.getValue();
                 Player pkPlayer = plugin.getServer().getPlayer((String)m.getKey());
@@ -92,7 +93,7 @@ public class AlertPkTask implements Runnable {
     }
     
     
-    public void WarningPlayer(Player pkPlayer,Player[] playerList) {
+    public void WarningPlayer(Player pkPlayer,Collection<? extends Player> playerList) {
         Double PkPlayerX = pkPlayer.getLocation().getX();
         Double PkPlayerZ = pkPlayer.getLocation().getZ();
         for (Player player : playerList) {
