@@ -35,12 +35,6 @@ public class PlayerListener implements Listener {
         Player pl = event.getPlayer();
         MCPlayer _MCPlayer = null;
  
-        if(plugin.UpdaterNotify && plugin.hasPermission(pl,"mcpk.update") && Mcpk.update)
-        {
-          pl.sendMessage(plugin.parseColor("&6An update is available: " + Mcpk.name + ", a " + Mcpk.type + " for " + Mcpk.version + " available at " + Mcpk.link));
-          pl.sendMessage(plugin.parseColor("&6Type /mcpk update if you would like to automatically update."));
-        }
-          
         try {
             _MCPlayer = plugin.DB.getPlayer(pl);
         }catch(Exception e){

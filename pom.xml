@@ -14,12 +14,6 @@
       <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
     </repository>
     
-    <!-- TagApi -->
-    <repository>
-      <id>tagapi</id>
-      <url>http://repo.kitteh.org/content/repositories/public/</url>
-    </repository>
-      
     <!-- vault -->
     <repository>
             <id>vault-repo</id>
@@ -35,13 +29,7 @@
         <artifactId>bukkit</artifactId>
         <version>1.12.2-R0.1-SNAPSHOT</version>
     </dependency>
-        
-    <dependency>
-      <groupId>org.kitteh</groupId>
-      <artifactId>tagapi</artifactId>
-      <version>3.0</version>
-    </dependency>
-    
+
     <dependency>
         <groupId>net.milkbowl.vault</groupId>
         <artifactId>Vault</artifactId>

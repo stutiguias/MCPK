@@ -43,8 +43,7 @@ public class Mcpk extends JavaPlugin{
     public int time;
     public int radius;
     public int turnpk;
-    
-    public Boolean UseTagAPI;
+
     public Boolean TurnGreenAfterKillPk;
             
     public HashMap<Integer, String> pkbonus = new HashMap<>();
@@ -64,12 +63,7 @@ public class Mcpk extends JavaPlugin{
     //Vault
     public Permission permission = null;
     public Economy economy = null;
-   
-    public static boolean update = false;
-    public static String name = "";
-    public static String type = "";
-    public static String version = "";
-    public static String link = "";
+  
     
     public long GetCurrentMilli() {
             return System.currentTimeMillis();
@@ -90,15 +84,9 @@ public class Mcpk extends JavaPlugin{
         getCommand("mcpk").setExecutor(new McpkCommandListener(this));
         
         PluginManager pm = getServer().getPluginManager();
- 
-        UseTagAPI = getConfig().getBoolean("TagAPI.Use"); 
+
         TurnGreenAfterKillPk = getConfig().getBoolean("TagAPI.TurnGreenAfterKillPk"); 
-        
-        if(UseTagAPI) {
-            pm.registerEvents(new TagApiPlayerListener(this), this);
-            logger.info(logPrefix + " Using TagApi");
-        }
-        
+              
         // Metrics 
         try {
          logger.log(Level.INFO, "{0} {1} - Sending Metrics, Thank You!", new Object[]{logPrefix, "[Metrics]"});
@@ -124,7 +112,7 @@ public class Mcpk extends JavaPlugin{
             config.setupConfig();
             FileConfiguration fc = config.getConfig();
             
-            if(!fc.isSet("configversion") || fc.getInt("configversion") != 2){ 
+            if(!fc.isSet("configversion") || fc.getInt("configversion") != 3){ 
                 config.MakeOld();
                 config.setupConfig();
                 fc = config.getConfig();

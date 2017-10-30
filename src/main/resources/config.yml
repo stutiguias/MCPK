@@ -1,4 +1,4 @@
-configversion: 2
+configversion: 3
 #Setup Mysql If you want to use Mysql set true
 MySQL:
   Use: false
@@ -44,11 +44,6 @@ AboutPK:
       
 # Set language file you use 
 Language: eng
-
-# Use TagAPI plugin
-TagAPI:
-  Use: false
-  TurnGreenAfterKillPk: false
 
 AboutPlayer:
   NewBieProtect: 
