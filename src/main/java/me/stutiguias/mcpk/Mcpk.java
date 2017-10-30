@@ -12,7 +12,6 @@ import me.stutiguias.dao.type.DBAccessor;
 import me.stutiguias.listeners.*;
 import me.stutiguias.metrics.Metrics;
 import me.stutiguias.tasks.AlertPkTask;
-import me.stutiguias.updater.Updater;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.ChatColor;
@@ -116,15 +115,6 @@ public class Mcpk extends JavaPlugin{
         pm.registerEvents(new OnDeathListener(this), this);
         pm.registerEvents(new ProtectListener(this), this);
         
-        if(UpdaterNotify){
-            Updater updater = new Updater(this, 38364, this.getFile(), Updater.UpdateType.NO_DOWNLOAD, false); // Start Updater but just do a version check
-            
-            update = updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE; // Determine if there is an update ready for us
-            name = updater.getLatestName(); // Get the latest name
-            version = updater.getLatestGameVersion(); // Get the latest game version
-            type = updater.getLatestType(); // Get the latest game version
-            link = updater.getLatestFileLink(); // Get the latest link
-        }
         logger.log(Level.INFO,logPrefix + " done.");
     }
     
@@ -226,10 +216,6 @@ public class Mcpk extends JavaPlugin{
     
     public boolean hasPermission(Player player, String Permission) {
         return permission.has(player.getWorld(), player.getName(), Permission.toLowerCase());
-    }
-    
-    public void Update() {
-        Updater updater = new Updater(this, 38364, this.getFile(), Updater.UpdateType.NO_VERSION_CHECK, true);
     }
     
 }

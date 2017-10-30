@@ -30,7 +30,6 @@ public class McpkCommandListener extends Util implements CommandExecutor {
         avaibleCommands.put("pkmsg", new PkMsg(plugin));
         avaibleCommands.put("reload", new Reload(plugin));
         avaibleCommands.put("removepk", new RemovePK(plugin));
-        avaibleCommands.put("update", new Update(plugin));
         avaibleCommands.put("checkprotect", new CheckProtect(plugin));
     }
 

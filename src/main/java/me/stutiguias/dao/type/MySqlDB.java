@@ -29,7 +29,7 @@ public class MySqlDB extends Util {
              this.dbHost = dbHost;
              this.dbDatabase = dbDatabase;
              this.dbPort = dbPort;
-             pool = new McpkConnectionPool("com.mysql.jdbc.Driver", "jdbc:mysql://"+ dbHost +":"+ dbPort +"/"+ dbDatabase, dbUser, dbPass);
+             pool = new McpkConnectionPool("com.mysql.jdbc.Driver", "jdbc:mysql://"+ dbHost +":"+ dbPort +"/"+ dbDatabase + "?useSSL=false", dbUser, dbPass);
         }catch(InstantiationException | IllegalAccessException | ClassNotFoundException | SQLException e) { }
     }
     
