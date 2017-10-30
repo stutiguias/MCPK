@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>me.stutiguias</groupId>
   <artifactId>Mcpk</artifactId>
-  <version>0.5.7</version>
+  <version>0.6.0</version>
   <name>Mcpk-${project.version}</name>
   <description>Minecraft Player Killer</description>
   
