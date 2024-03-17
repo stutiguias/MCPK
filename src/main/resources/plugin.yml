@@ -3,6 +3,7 @@ main: me.stutiguias.mcpk.Mcpk
 version: ${project.version}
 author: Stutiguias
 depend : [Vault]
+api-version: 1.20
 commands:
    mcpk:
      description: Command MCPK reload
