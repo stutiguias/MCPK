@@ -90,12 +90,12 @@ public class Mcpk extends JavaPlugin{
         // Metrics 
         try {
          logger.log(Level.INFO, "{0} {1} - Sending Metrics, Thank You!", new Object[]{logPrefix, "[Metrics]"});
-         Metrics metrics = new Metrics(this);
-         metrics.start();
-        } catch (IOException e) {
+            int pluginId = 21352; //
+            Metrics metrics = new Metrics(this, pluginId);
+        } catch (Exception e) {
          logger.log(Level.WARNING, "{0} {1} !! Failed to submit the stats !! ", new Object[]{logPrefix, "[Metrics]"});
         }
-        
+
         setupEconomy();
         setupPermissions();
         
@@ -198,12 +198,8 @@ public class Mcpk extends JavaPlugin{
         return message;
     }
     
-    public boolean hasPermission(String PlayerName,String Permission) {
-       return permission.has(getServer().getPlayer(PlayerName).getWorld(),PlayerName,Permission);
-    }
-    
     public boolean hasPermission(Player player, String Permission) {
-        return permission.has(player.getWorld(), player.getName(), Permission.toLowerCase());
+        return permission.has(player, Permission.toLowerCase());
     }
     
 }

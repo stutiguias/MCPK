@@ -65,7 +65,7 @@ public class CheckProtect extends CommandHandler {
     
     @Override
     protected Boolean isInvalid(CommandSender sender, String[] args) {
-        if(!plugin.hasPermission(sender.getName(),"mcpk.command.check")) {
+        if(!sender.hasPermission("mcpk.command.check")) {
             SendMessage("&6You don't have permission");
             return true;
         }

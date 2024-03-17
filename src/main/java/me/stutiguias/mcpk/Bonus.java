@@ -4,8 +4,11 @@
  */
 package me.stutiguias.mcpk;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.Objects;
 
 /**
  *
@@ -22,11 +25,11 @@ public class Bonus {
     public void getBonusForPK(String killer,Player _Pkiller) {
                 if(plugin.pkbonus.get(plugin.MCPlayers.get(killer).getKills()) != null && plugin.EnableBonusForPK) {
                 String bonus = plugin.pkbonus.get(plugin.MCPlayers.get(killer).getKills());
-                String[] ids = bonus.split(",");
-                for (String id : ids) {
+                String[] materials = bonus.split(",");
+                for (String materialstring : materials) {
                     int amount = 1;
-                    short data = 0;
-                    ItemStack Item = new ItemStack(Integer.parseInt(id), amount, data);
+                    Material material = Material.matchMaterial(materialstring);
+                    ItemStack Item = new ItemStack(Objects.requireNonNull(material), amount);
                     _Pkiller.getInventory().addItem(Item);
                     _Pkiller.updateInventory();
                 }

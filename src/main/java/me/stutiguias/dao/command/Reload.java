@@ -34,7 +34,7 @@ public class Reload extends CommandHandler {
 
     @Override
     protected Boolean isInvalid(CommandSender sender, String[] args) {
-        if(!plugin.hasPermission(sender.getName(),"mcpk.command.reload")) {
+        if(!sender.hasPermission("mcpk.command.reload")) {
             SendMessage("&6You don't have permission");
             return true;
         }

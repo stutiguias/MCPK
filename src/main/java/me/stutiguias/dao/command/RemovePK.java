@@ -37,7 +37,7 @@ public class RemovePK extends CommandHandler {
 
     @Override
     protected Boolean isInvalid(CommandSender sender, String[] args) {
-        if(!plugin.hasPermission(sender.getName(),"mcpk.command.leftpk")) {
+        if(!sender.hasPermission("mcpk.command.leftpk")) {
             SendMessage("&6You don't have permission");
             return true;
         }

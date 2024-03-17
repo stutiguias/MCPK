@@ -37,10 +37,10 @@ AboutPK:
     # Enable Bonus for Player Killer
     Enable: false
     OnKill:
-    # NumberOfKill : Id_Item,Id_Item
-      '2': 34,35,36
-      '3': 45
-      '4': 56,57,58
+    # NumberOfKill : Material_id,Material_id
+      '2': DIAMOND
+      '3': DIAMOND_HELMET
+      '4': DIAMOND_HOE,DIAMOND_PICKAXE
       
 # Set language file you use 
 Language: eng
