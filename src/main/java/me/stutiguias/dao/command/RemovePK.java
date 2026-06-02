@@ -30,6 +30,7 @@ public class RemovePK extends CommandHandler {
         
         plugin.MCPlayers.get(player.getName()).setKills(0);
         plugin.MCPlayers.get(player.getName()).setIsPK(Boolean.FALSE);
+        plugin.DB.UpdateKill(player, 0);
         SendMessage(plugin.translate.YouRemovePKStatus);
         
         return true;

@@ -41,6 +41,10 @@ AboutPK:
       '2': DIAMOND
       '3': DIAMOND_HELMET
       '4': DIAMOND_HOE,DIAMOND_PICKAXE
+    # Bonus for killing a player that is in PK status
+    KillPK:
+      Enable: false
+      Items: DIAMOND,EMERALD
       
 # Set language file you use 
 Language: eng

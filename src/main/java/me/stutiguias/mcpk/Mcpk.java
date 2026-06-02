@@ -48,6 +48,8 @@ public class Mcpk extends JavaPlugin{
             
     public HashMap<Integer, String> pkbonus = new HashMap<>();
     public Boolean EnableBonusForPK;
+    public Boolean EnableBonusForKillPK;
+    public String BonusForKillPK;
     public Boolean ChangePkGroup;
     public Boolean RemoveAllOtherGroup;
     public String GroupPk;
@@ -119,24 +121,26 @@ public class Mcpk extends JavaPlugin{
             }
             
             long AlertPKFrequency = fc.getLong("AboutPK.AlertFrequency");
-            getServer().getScheduler().runTaskTimerAsynchronously(this, new AlertPkTask(this), AlertPKFrequency, AlertPKFrequency);
+            getServer().getScheduler().runTaskTimer(this, new AlertPkTask(this), AlertPKFrequency, AlertPKFrequency);
             
             time                    =fc.getInt("AboutPK.TimeOn") * 1000;
             radius                  =fc.getInt("AboutPK.Radius");
             turnpk                  =fc.getInt("AboutPK.HowMuchForTurn");
-            ChangePkGroup           =fc.getBoolean("AboutPK.ChangeGroupIf");
+            ChangePkGroup           =fc.getBoolean("AboutPK.ChangeGroup");
             GroupPk                 =fc.getString("AboutPK.NewGroup");
             RemoveAllOtherGroup     =fc.getBoolean("AboutPK.RemoveAllOthersGroup");
             UseScoreBoard           =fc.getBoolean("AboutPK.UseScoreBoard");
             AlertMsg                =fc.getBoolean("AboutPK.Alert");
             UpdaterNotify           =fc.getBoolean("UpdaterNotify");
             EnableBonusForPK        =fc.getBoolean("AboutPK.Bonus.Enable");
+            EnableBonusForKillPK    =fc.getBoolean("AboutPK.Bonus.KillPK.Enable");
+            BonusForKillPK          =fc.getString("AboutPK.Bonus.KillPK.Items");
             AlertNewPK              =fc.getBoolean("AboutPK.AlertNewPK");
             
             if(EnableBonusForPK) GetBonusForPK();
             
-            NewbieProtectTime       =fc.getString("AboutPlayer.NewBieProtect.Enable");
-            usenewbieprotect        =fc.getBoolean("AboutPlayer.NewBieProtect.NewBieProtectTime");
+            usenewbieprotect        =fc.getBoolean("AboutPlayer.NewBieProtect.Enable");
+            NewbieProtectTime       =fc.getString("AboutPlayer.NewBieProtect.NewBieProtectTime");
 
             language = fc.getString("Language");
             translate = new Translate(this, language);
@@ -168,6 +172,9 @@ public class Mcpk extends JavaPlugin{
     @Override
     public void onDisable() {
 		getServer().getScheduler().cancelTasks(this);
+        if(DB != null) {
+            DB.Close();
+        }
 		logger.log(Level.INFO, logPrefix + " Disabled.");
     }
     

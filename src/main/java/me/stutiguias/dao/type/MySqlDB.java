@@ -110,6 +110,12 @@ public class MySqlDB extends Util {
         }
     }
     
+    public void Close() {
+        if(pool != null) {
+            pool.closeConnection();
+        }
+    }
+    
     public void createPlayer(String player, String pass, int pkCount, Timestamp newbieCount) {
             McpkConnection conn = null;
             PreparedStatement st = null;

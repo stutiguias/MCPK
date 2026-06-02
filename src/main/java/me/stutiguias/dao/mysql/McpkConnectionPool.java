@@ -25,7 +25,7 @@ public class McpkConnectionPool {
             return instance;
     }
     
-    private boolean ready = false;
+    private volatile boolean ready = false;
     private static int poolsize = 10;
     private static List<McpkConnection> connections;
     private static long timeToLive = 300000;
@@ -66,8 +66,9 @@ public class McpkConnectionPool {
 			if (conn.lease()) {
 				if (conn.isValid())
 					return conn;
-				connections.remove(conn);
+				connections.remove(i);
 				conn.terminate();
+                i--;
 			}
 		}
 		conn = new McpkConnection(DriverManager.getConnection(url, username, password));
@@ -86,6 +87,7 @@ public class McpkConnectionPool {
     
     public synchronized void closeConnection() {
             ready = false;
+            reaper.interrupt();
             for (McpkConnection conn : connections) {
                     conn.terminate();
             }
@@ -95,20 +97,18 @@ public class McpkConnectionPool {
     private synchronized void reapConnections() {
 		if(!ready) return;
 		final long stale = System.currentTimeMillis() - timeToLive;
-		int count = 0;
-		int i = 1;
-		for (final McpkConnection conn : connections) {
+		for (int i = connections.size() - 1; i >= 0; i--) {
+            final McpkConnection conn = connections.get(i);
 			if (conn.inUse() && stale > conn.getLastUse() && !conn.isValid()) {
-				connections.remove(conn);
-				count++;
+				connections.remove(i);
+                conn.terminate();
+                continue;
 			}
 
-			if (i > poolsize) {
-				connections.remove(conn);
-				count++;
+			if (i >= poolsize) {
+				connections.remove(i);
 				conn.terminate();
 			}
-			i++;
 		}
 	
     }
@@ -116,10 +116,11 @@ public class McpkConnectionPool {
     private class ConnectionReaper extends Thread {
             @Override
             public void run() {
-                    while (true) {
+                    while (ready) {
                             try {
                                 Thread.sleep(300000);
                             } catch (final InterruptedException e) {
+                                return;
                             }
                             reapConnections();
                     }

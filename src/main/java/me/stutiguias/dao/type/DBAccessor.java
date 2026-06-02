@@ -50,7 +50,7 @@ public class DBAccessor {
         if(getUseMySql()) {
             _mySqlDB.UpdateKill(pl.getName(), Kills);
         }else{
-            _fileDB.setKills(Kills);
+            _fileDB.setKills(pl, Kills);
         }
     }
 
@@ -60,7 +60,7 @@ public class DBAccessor {
             _mySqlDB.SetDetails(index,"PKMsg",PKMsg.toString());
             return true;
         }else{
-            _fileDB.setPKMsg(PKMsg);
+            _fileDB.setPKMsg(pl, PKMsg);
             return true;
         }
     }
@@ -71,7 +71,7 @@ public class DBAccessor {
             _mySqlDB.UpdateDetails(index,"PKMsg",PKMsg.toString());
             return true;
         }else{
-            _fileDB.setPKMsg(PKMsg);
+            _fileDB.setPKMsg(pl, PKMsg);
             return true;
         }
     }
@@ -81,7 +81,7 @@ public class DBAccessor {
             Integer index = _mySqlDB.getPlayer(pl.getName()).getIndex();
             return Boolean.parseBoolean(_mySqlDB.GetDetails(index,"PKMsg"));
         }else{
-            return _fileDB.getPKMsg();
+            return _fileDB.getPKMsg(pl);
         }
     }
     
@@ -91,7 +91,7 @@ public class DBAccessor {
             _mySqlDB.SetDetails(index,"AlertMsg",AlertMsg.toString());
             return true;
         }else{
-            _fileDB.setAlertMsg(AlertMsg);
+            _fileDB.setAlertMsg(pl, AlertMsg);
             return true;
         }
     }
@@ -102,7 +102,7 @@ public class DBAccessor {
             _mySqlDB.UpdateDetails(index,"AlertMsg",AlertMsg.toString());
             return true;
         }else{
-            _fileDB.setAlertMsg(AlertMsg);
+            _fileDB.setAlertMsg(pl, AlertMsg);
             return true;
         }
     }
@@ -112,7 +112,13 @@ public class DBAccessor {
             Integer index = _mySqlDB.getPlayer(pl.getName()).getIndex();
             return Boolean.parseBoolean(_mySqlDB.GetDetails(index,"AlertMsg"));
         }else{
-            return _fileDB.getAlertMsg();
+            return _fileDB.getAlertMsg(pl);
+        }
+    }
+    
+    public void Close() {
+        if(getUseMySql() && _mySqlDB != null) {
+            _mySqlDB.Close();
         }
     }
     

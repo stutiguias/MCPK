@@ -27,26 +27,22 @@ public class FileDB {
     private YamlConfiguration PlayerYML;
     
     public MCPlayer LoadPlayerFile(Player player) {
-        try {
-            PlayerFile = new File( Path + File.separator + player.getName() +".yml");
-            PlayerYML = new YamlConfiguration();
-            PlayerYML.load(PlayerFile);
-            MCPlayer _MCPlayer = new MCPlayer();
-            _MCPlayer.setKills(getKills());
-            _MCPlayer.setNewBieProtectUntil(getNewbieProtectUntil());
-            _MCPlayer.setAlertMsg(getAlertMsg());
-            _MCPlayer.setPKMsg(getPKMsg());
-            return _MCPlayer;
-        } catch (FileNotFoundException ex) {
-           return null;
-        } catch (IOException | InvalidConfigurationException ex) {
-           return null;
-        }
+        PlayerFile = getPlayerFile(player);
+        if(!PlayerFile.exists()) return null;
+        
+        LoadYML();
+        MCPlayer _MCPlayer = new MCPlayer();
+        _MCPlayer.setName(player.getName());
+        _MCPlayer.setKills(getKills());
+        _MCPlayer.setNewBieProtectUntil(getNewbieProtectUntil());
+        _MCPlayer.setAlertMsg(getAlertMsg());
+        _MCPlayer.setPKMsg(getPKMsg());
+        return _MCPlayer;
     }
     
     public void CreatePlayer(Player player,Timestamp newBieProtectUntil) {
         try {
-            PlayerFile = new File( Path + File.separator + player.getName() +".yml");
+            PlayerFile = getPlayerFile(player);
             PlayerFile.createNewFile();
             LoadYML();
             SetupYML(0,newBieProtectUntil);
@@ -64,25 +60,38 @@ public class FileDB {
         PlayerYML.set("AlertMsg",true);
     }
     
-    public Boolean getPKMsg() {
+    public Boolean getPKMsg(Player player) {
+        LoadYML(player);
+        return getPKMsg();
+    }
+    
+    private Boolean getPKMsg() {
         return PlayerYML.getBoolean("PKMsg");
     }
     
-    public void setPKMsg(Boolean PKMsg) {
+    public void setPKMsg(Player player, Boolean PKMsg) {
+        LoadYML(player);
         PlayerYML.set("PKMsg", PKMsg);
         SaveYML();
     }
     
-    public Boolean getAlertMsg() {
+    public Boolean getAlertMsg(Player player) {
+        LoadYML(player);
+        return getAlertMsg();
+    }
+    
+    private Boolean getAlertMsg() {
         return PlayerYML.getBoolean("AlertMsg");
     }
     
-    public void setAlertMsg(Boolean AlertMsg) {
+    public void setAlertMsg(Player player, Boolean AlertMsg) {
+        LoadYML(player);
         PlayerYML.set("AlertMsg", AlertMsg);
         SaveYML();
     }
     
-    public void setKills(int Kills) {
+    public void setKills(Player player, int Kills) {
+        LoadYML(player);
         PlayerYML.set("kills", Kills);
         SaveYML();
     }
@@ -101,6 +110,15 @@ public class FileDB {
             Mcpk.logger.log(Level.INFO, "{0} Diretory not exist creating new one", Mcpk.logPrefix);
             f.mkdirs();
         }
+    }
+    
+    private File getPlayerFile(Player player) {
+        return new File(Path + File.separator + player.getName() + ".yml");
+    }
+    
+    private void LoadYML(Player player) {
+        PlayerFile = getPlayerFile(player);
+        LoadYML();
     }
     
     private void LoadYML() {

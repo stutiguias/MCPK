@@ -50,6 +50,10 @@ public class OnDeathListener implements Listener {
         int kills = plugin.DB.getPlayer(killer).getKills();
         plugin.DB.UpdateKill(killer, kills + 1);
         
+        if(mcVictim.IsPK()) {
+            mcKiller.setKillPk(Boolean.TRUE);
+            _Bonus.getBonusForKillPK(killer);
+        }
         
         if(!mcVictim.IsPK() && mcKiller.getKills() >= plugin.turnpk) {
             mcKiller.setIsPK(Boolean.TRUE);
@@ -70,8 +74,6 @@ public class OnDeathListener implements Listener {
             
             BroadcastDeathMessage(mcKiller);
             
-        }else if (mcVictim.IsPK()){
-            mcKiller.setKillPk(Boolean.TRUE);
         }
         
     }
